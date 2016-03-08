@@ -1,0 +1,25 @@
+{
+    "professor":[
+        {   "name": "Satish Rao",
+            "website": "http://www.cs.berkeley.edu/~satishr/",
+            "email": "satishr@cs.berkeley.edu",
+            "office": "257 Cory Hall",
+            "office_hours": "TuW-2:30-3:30"
+        }, {
+            "name": "Jean Walrand",
+            "website": "https://sites.google.com/site/walrandberkeley/",
+            "email": "walrand@berkeley.edu",
+            "office": "687 Soda Hall",
+            "office_hours": "MoTh-3:00-4:00"
+        }
+    ],
+
+    "ta": [
+        {   "name": "Allen Tang",
+            "admin_ta": true,
+            "email": "chen.tang@berkeley.edu",
+            "section": "N/A",
+            "office_hours": "M 10-11am, F 10-11am"
+        }
+    ]
+}
