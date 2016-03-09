@@ -1,0 +1,377 @@
+\documentclass[11pt]{article}
+\usepackage{../cs70,latexsym,epsf}
+\lecture{17}
+\def\title{Lecture \the\lecturenumber}
+
+%%% Alistair's Macros
+\makeatletter
+\def\eqalign#1{\,\vcenter{\openup\jot\m@th
+  \ialign{\strut\hfil${##}$&${{}##}$\hfil
+      \crcr#1\crcr}}\,}
+\def\eqalignno#1{\displ@y \tabskip\@centering
+  \halign to\displaywidth{\hfil${##}$\tabskip\z@skip
+    &${{}##}$\hfil\tabskip\@centering
+    &\llap{$##$}\tabskip\z@skip\crcr
+    #1\crcr}}
+\makeatother
+\def\third{{\textstyle{1\over 3}}}
+\def\half{{\textstyle{1\over 2}}}
+\def\quarter{{\textstyle{1\over 4}}}
+\def\ul#1{\underline{#1}}
+\def\VarOmega{\mathchar"10A }
+\def\varOmega{\mathchar"10A }
+\newenvironment{proposition}{\par\global\advance\theoremnumber by 1
+{\bf Proposition \the\lecturenumber.\the\theoremnumber}:
+\begingroup\em}%
+{\endgroup}
+\def\ignore#1{}
+\def\Ex#1{{\rm E}(#1)}
+\def\Var#1{{\rm Var}(#1)}
+\def\Aset{{\cal A}}
+\iffalse
+\newenvironment{corollary}{\par\global\advance\theoremnumber by 1
+{\bf Corollary \the\lecturenumber.\the\theoremnumber}:
+\begingroup\em}%
+{\endgroup}
+%%% End Alistair's Macros
+\fi
+
+\newcounter{thm}
+\addtocounter{thm}{\the\lecturenumber}
+\newtheorem{claim}{Claim}[thm]
+\newtheorem{theorem}{Theorem}[thm]
+\newtheorem{definition}{Definition}[thm]
+
+
+
+\begin{document}
+\maketitle
+
+
+\section*{Variance}
+
+We have seen in the previous note that if we toss a coin $n$ times with bias $p$, then
+the expected number of heads is $np$. What this means is that if we repeat the experiment multiple times, where
+in each experiment we toss the coin $n$ times, then on average we get $np$ heads. But in any single experiment,
+the number of heads observed can be any value between $0$ and $n$. What can we say about how far off we are
+from the expected value? That is, what is the typical deviation of the number of heads from $np$?
+
+\medskip
+
+{\bf Random Walk}
+
+\smallskip
+
+Let us consider a simpler setting that is equivalent to tossing a fair coin $n$ times, but is more amenable
+to analysis. Suppose we have a particle that starts at position $0$ and performs a random walk. At each time step,
+the particle moves either one step to the right or one step to the left with equal probability, and the move at each
+time step is independent of all other moves. We think of these random moves 
+as taking place according to whether a fair coin comes up heads or tails. 
+The expected position of the particle after $n$ moves is back at $0$, but
+how far from $0$ should we typically expect the particle to end up at?
+
+Denoting a right-move by~$+1$ and a left-move by~$-1$, we can describe
+the probability space here as the set of all sequences of length~$n$ over
+the alphabet $\{\pm 1\}$, each having equal probability~$1\over{2^n}$.
+Let the r.v.~$X$ denote the position of the particle (relative to our starting point~0)
+after $n$ moves.  Thus, we can write
+\begin{equation}\label{eq:randomwalk}
+X=X_1+X_2+\cdots +X_n,
+\end{equation}
+where $X_i=+1$ if the $i$-th move is to the right and $X_i = -1$ otherwise.
+
+Now obviously we have $\Ex{X}=0$.  The easiest way to see this is to
+note that $\Ex{X_i}=(\half\times 1)+(\half\times(-1))=0$, so by
+linearity of expectation $\Ex{X}=\sum_{i=1}^n \Ex{X_i}=0$. But of course this is
+not very informative, and is due to the fact that positive and
+negative deviations from~0 cancel out.
+
+What we are really asking is: What is the expected
+value of~$|X|$, the {\em distance} of the particle from~0?  Rather than
+consider the r.v.~$|X|$, which is a little difficult to work with due to the
+absolute value operator, we will instead look at the r.v.~$X^2$.
+Notice that this also has the effect of making all deviations from~0
+positive, so it should also give a good measure of the distance
+from $0$.  However, because it is the {\it squared\/} distance, we
+will need to take a square root at the end.
+
+We will now show that the expected square distance after $n$ steps is equal to $n$:
+
+\begin{claim}
+For the random variable $X$ defined in~\eqref{eq:randomwalk}, we have $\Ex{X^2} = n$.
+\end{claim}
+\begin{proof}
+We use the expression~\eqref{eq:randomwalk} and expand the square:  $$
+\eqalign{\Ex{X^2}&=\Ex{(X_1+X_2+\cdots+X_n)^2}\cr
+                 &=\Ex{\sum_{i=1}^n X_i^2 + \sum_{i\ne j} X_iX_j}\cr
+                 &=\sum_{i=1}^n \Ex{X_i^2} + \sum_{i\ne j}\Ex{X_iX_j}\cr} $$
+In the last line we have used linearity of expectation.  To
+proceed, we need to compute $\Ex{X_i^2}$ and $\Ex{X_iX_j}$ (for
+$i\ne j$). Let's consider first $X_i^2$.  Since $X_i$ can take on
+only values~$\pm 1$, clearly $X_i^2=1$ always, so $\Ex{X_i^2}=1$.
+What about $\Ex{X_iX_j}$? Well, $X_iX_j=+1$ when $X_i=X_j=+1$ or
+$X_i=X_j=-1$, and otherwise $X_iX_j=-1$.  Therefore, $$
+  \eqalign{\Pr[X_i X_j = 1]
+    &= \Pr[(X_i=X_j=+1) \vee (X_i=X_j=-1)] \cr
+    &= \Pr[X_i=X_j=+1] \:+\: \Pr[X_i=X_j=-1] \cr
+    &= \Pr[X_i = +1] \times \Pr[X_j = +1] \:+\: \Pr[X_i = -1] \times \Pr[X_j = -1] \cr
+    &= \frac{1}{4}+\frac{1}{4} 
+    = \frac{1}{2},} $$
+where in the above calculation we used
+the fact that the events $X_i=+1$ and $X_j=+1$ are independent,
+and similarly the events $X_i=-1$ and $X_j=-1$ are independent.
+Thus $\Pr[X_iX_j=-1] = \frac{1}{2}$ as well, and hence $\Ex{X_iX_j}=0$.
+
+Plugging these values into the above equation gives $$
+\Ex{X^2} = \sum_{i=1}^n 1 + \sum_{i\ne j} 0 = n,$$
+as claimed.
+\end{proof}
+   
+So we see that \ul{our expected squared distance from~0 is $n$}. One
+interpretation of this is that we might expect to be a distance of
+about $\sqrt{n}$ away from~0 after $n$ steps.  However, we have to
+be careful here: we {\bf cannot\/} simply argue that
+$\Ex{|X|}=\sqrt{\Ex{X^2}}=\sqrt{n}$.  (Why not?)  We will see later
+in the lecture how to make precise deductions about $|X|$ from
+knowledge of $\Ex{X^2}$.
+
+For the moment, however, let's agree to view $\Ex{X^2}$ as an
+intuitive measure of ``spread'' of the r.v.~$X$.  In fact, for a
+more general r.v.\ with expectation $\Ex{X}=\mu$, what we are
+really interested in is $\Ex{(X-\mu)^2}$, the expected squared distance
+{\it from the mean}.  In our random walk example, we had $\mu=0$,
+so $\Ex{(X-\mu)^2}$ just reduces to $\Ex{X^2}$.
+
+\begin{definition}[Variance] For a r.v.~$X$ with expectation $\Ex{X}=\mu$,
+the \ul{variance} of~$X$ is defined to be $$
+   \Var{X}=\Ex{(X-\mu)^2}.  $$
+The square root $\sigma(X) :=\sqrt{\Var{X}}$ is called the
+\ul{standard deviation} of~$X$.
+\end{definition}
+
+The point of the standard deviation is merely to ``undo'' the
+squaring in the variance.  Thus the standard deviation is ``on the
+same scale as'' the r.v.\ itself.  Since the variance and standard
+deviation differ just by a square, it really doesn't matter which
+one we choose to work with as we can always compute one from the
+other immediately. We shall usually use the variance.  For the
+random walk example above, we have that $\Var{X}=n$, and the
+standard deviation of~$X$, $\sigma(X)$,  is~$\sqrt{n}$.
+
+The following easy observation gives us a slightly different
+way to compute the variance that is simpler in many cases.
+\begin{theorem}\label{thm:var}
+For a r.v.~$X$ with expectation~$\Ex{X}=\mu$, we have
+$\Var{X}=\Ex{X^2}-\mu^2$.
+\end{theorem}
+
+\begin{proof} From the definition of variance, we have $$
+\Var{X}=\Ex{(X-\mu)^2}=\Ex{X^2-2\mu X+\mu^2}
+                               =\Ex{X^2}-2\mu\Ex{X}+\mu^2
+                               =\Ex{X^2}-\mu^2.  $$
+In the third step above, we used linearity of expectation. Moreover, note that
+$\mu = \Ex{X}$ is a constant, so $\Ex{\mu X} = \mu \Ex{X} = \mu^2$ and $\Ex{\mu^2} = \mu^2$.
+\end{proof}
+
+Another important property that will come in handy is the following: For any random variable~$X$ and constant~$c$, we have $$
+   \Var{cX}=c^2\Var{X}.  $$
+   The proof is simple and left as an exercise.
+
+
+
+\subsection*{Examples}
+Let's see some examples of variance calculations.
+\begin{enumerate}
+\item {\bf Fair die.}  Let $X$ be the score on the roll of a single
+fair die.  Recall from the previous note that $\Ex{X}={7\over 2}$.
+So we just need to compute $\Ex{X^2}$, which is a routine calculation: $$
+   \Ex{X^2} = {1\over 6}\left(1^2+2^2+3^2+4^2+5^2+6^2\right)={{91}\over 6}. $$
+Thus from Theorem~\ref{thm:var}, $$
+ \Var{X}=\Ex{X^2}-(\Ex{X})^2 = {{91}\over 6} - {{49}\over 4}
+                             = {{35}\over{12}}.  $$
+
+\item {\bf Uniform distribution.}
+More generally, if $X$ is a uniform random variable on the set $\{1,\dots,n\}$, so
+$X$ takes on values $1, \ldots, n$ with equal probability $\frac{1}{n}$, then the mean,
+variance and standard deviation of $X$ are given by:
+\begin{align}\label{eq:uniform}
+\Ex{X} = \frac{n+1}{2}, \qquad \Var{X} = \frac{n^2-1}{12}, \qquad \sigma(X) = \sqrt{\frac{n^2-1}{12}}.
+\end{align}
+You should verify these as an exercise.
+
+\iffalse
+\item {\bf Biased coin.}  Let $X$ the the number of Heads in $n$ tosses
+of a biased coin with Heads probability~$p$ (i.e., $X$ has the binomial
+distribution with parameters $n,p$).  We already know that $\Ex{X}=np$.
+Writing as usual $X=X_1+X_2+\cdots +X_n$, where
+$X_i=\begin{cases} 1&\text{if $i$th toss is Head;}\\ 0&\text{otherwise}\end{cases}$ we have $$
+\eqalign{\Ex{X^2}&=\Ex{(X_1+X_2+\cdots+X_n)^2}\cr
+                 &=\sum_{i=1}^n \Ex{X_i^2} + \sum_{i\ne j}\Ex{X_iX_j}\cr
+                 &=(n\times p) + (n(n-1)\times p^2)\cr
+                 &=n^2p^2 + np(1-p).\cr}  $$
+In the third line here, we have used the facts that $\Ex{X_i^2}=p$,
+and that
+
+$$\Ex{X_iX_j}= \Pr[X_i=X_j = 1]= \Pr[X_i = 1] \cdot \Pr[X_j = 1] = p^2,$$
+
+(since $X_i=1$ and $X_j=1$  are
+independent events).  Note that there are $n(n-1)$ pairs $i,j$ with $i\ne j$.
+
+Finally, we get that $\Var{X}=\Ex{X^2}-(\Ex{X})^2=np(1-p)$. Notice
+that in fact $\Var{X}=\sum_i\Var{X_i}$, and the same was true in the
+random walk example.  This is in fact no coincidence. We will
+explore for what kinds of random variables this is true  later in the
+next lecture.
+
+As an example, for a fair coin the expected number of Heads in $n$
+tosses is~$n\over 2$, and the standard deviation
+is~${{\sqrt{n}}\over 2}$. Note that since the maximum number of
+Heads is $n$, the standard deviation is much less than this maximum
+number for large $n$. This is in contrast to the previous example of
+the uniformly distributed random variable, where the standard
+deviation $$ \sigma(X) = \sqrt{(n^2-1)/12} \approx n/\sqrt{12}$$ is
+of the same order as the largest value $n$. In this sense, the
+spread of a binomially distributed r.v. is much smaller than that
+of a uniformly distributed r.v.
+\fi
+
+\iffalse
+\item {\bf Poisson distribution.} What is the variance of a Poisson r.v. X? $$
+   \Ex{X^2} = \sum_{i=0}^\infty i^2{\rm e}^{-\lambda}{{\lambda^i}\over{i!}}
+            = \lambda\sum_{i=1}^\infty i{\rm e}^{-\lambda}{{\lambda^{i-1}}\over{(i-1)!}}
+            = \lambda\left(\sum_{i=1}^\infty (i-1){\rm e}^{-\lambda}{{\lambda^{i-1}}\over{(i-1)!}} + \sum_{i=1}^\infty {\rm e}^{-\lambda}{{\lambda^{i-1}}\over{(i-1)!}}\right)
+            = \lambda(\lambda + 1).  $$
+[Check you follow each of these steps.  In the last step, we have noted
+that the two sums are respectively $\Ex{X}$ and $\sum_i\Pr[X=i] = 1$.]
+
+Finally, we get $\Var{X}=\Ex{X^2}-(\Ex{X})^2 = \lambda$.
+So, for a Poisson random variable, the expectation and variance are equal.
+\fi
+
+\item {\bf Number of fixed points.}  Let $X$ be the number of fixed points
+in a random permutation of $n$ items (i.e., the number of students in
+a class of size~$n$ who receive their own homework after shuffling).
+We saw in the previous note that $\Ex{X}=1$, regardless of~$n$.
+To compute $\Ex{X^2}$, write $X=X_1+X_2+\cdots+X_n$, where
+$X_i=1$ if $i$ is a fixed point, and $X_i = 0$ otherwise. 
+Then as usual we have
+\begin{equation}\label{eq1}
+   \Ex{X^2} = \sum_{i=1}^n \Ex{X_i^2} + \sum_{i\ne j}\Ex{X_iX_j}.
+\end{equation}
+Since $X_i$ is an indicator r.v., we have that
+$\Ex{X_i^2}=\Pr[X_i=1]={1\over n}$. Since both
+$X_i$ and $X_j$ are indicators, we can compute
+$\Ex{X_iX_j}$  as follows: $$
+   \Ex{X_iX_j} = \Pr[X_iX_j = 1] = \Pr[X_i=1\wedge X_j=1] = \Pr[\hbox{\rm both $i$ and $j$
+                                                 are fixed points}]
+                                        = {1\over{n(n-1)}}.  $$
+Make sure that you understand the last step here.  Plugging this
+into equation~(\ref{eq1}) we get $$
+   \Ex{X^2} =  \sum_{i=1}^n \frac{1}{n} + \sum_{i\ne j}\frac{1}{n(n-1)} = (n\times{\textstyle{1\over n}}) + (n(n-1)\times{\textstyle{1\over{n(n-1)}}}) = 1+1 = 2.  $$
+Thus $\Var{X}=\Ex{X^2}-(\Ex{X})^2 = 2-1 = 1$.  That is, the variance and
+the mean are both equal to~1.  Like the mean, the variance is also
+independent of~$n$.  Intuitively at least, this means that
+it is unlikely that there will be more than a small number of fixed points
+even when the number of items, $n$, is very large.
+\end{enumerate}
+
+\section*{Independent Random Variables}
+Independence for random variables is defined in analogous fashion
+to independence for events:
+\begin{definition}[Independent r.v.'s]
+Random variables $X$ and~$Y$ on the same probability space are said to be {\it independent\/}
+if the events $X=a$ and $Y=b$ are independent for all values $a,b$. Equivalently, the joint distribution of independent r.v.'s decomposes as
+$$\Pr[X=a,Y=b] = \Pr[X=a]\Pr[Y=b] \quad \forall a,b.$$
+\end{definition}%
+
+Mutual independence of more than two r.v.'s is defined similarly.
+A very important example of independent r.v.'s is indicator r.v.'s
+for independent events. Thus, for example, if $\{X_i\}$ are
+indicator r.v.'s for the $i$-th toss of a coin being Heads,
+then the $X_i$ are mutually independent r.v.'s.
+
+One of the most important and useful facts about variance is if 
+a random variable $X$ is the sum of {\em independent} random
+variables $X = X_1 + \cdots + X_n$, then its variance is the sum of the variances of the 
+individual r.v.'s. In particular, if the individual r.v.'s $X_i$ are
+identically distributed (i.e., they have the same distribution), then $\Var{X} = \sum_i \Var{X_i} = n \cdot \Var{X_1}$. 
+This means that the standard deviation is $\sigma(X) = \sqrt{n} \cdot \sigma(X_1)$. 
+Note that by contrast, the expected value is $E[X] = n \cdot E[X_1]$. Intuitively this 
+means that whereas the average value of $X$ grows proportionally to $n$, the 
+spread of the distribution grows proportionally to $\sqrt{n}$, which is much smaller than $n$. In other words the 
+distribution of $X$ tends to concentrate around its mean.
+
+Let us now formalize these ideas. First, we have the following result which states
+that the expected value of the product of two independent random variables
+is equal to the product of their expected values.
+
+\begin{theorem}\label{thm:indepexp}
+For {\em independent} random variables $X,Y$, we have $\Ex{XY}=\Ex{X}\Ex{Y}$.
+\end{theorem}
+\begin{proof}
+We have
+\begin{eqnarray*}
+   \Ex{XY} & = & \sum_a\sum_b ab\times\Pr[X=a, Y=b] \\
+                  &=& \sum_a\sum_b ab\times\Pr[X=a]\times\Pr[Y=b] \\
+                  &=& \left(\sum_a a\times\Pr[X=a]\right)\times \left(\sum_b b\times\Pr[Y=b]\right)\\
+                  &=& \Ex{X}\times\Ex{Y},
+\end{eqnarray*}
+as required.  In the second line here we made crucial use of independence.
+\end{proof}
+
+We now use the above theorem to conclude the nice property that the variance of
+the sum of independent random variables is equal to the sum of their variances.
+
+\begin{theorem}\label{thm:varsum}
+For {\em independent} random variables $X,Y$, we have $$
+   \Var{X+Y} = \Var{X} + \Var{Y}.  $$
+\end{theorem}
+\begin{proof}
+From the alternative formula for variance in Theorem~\ref{thm:var}, we have, using linearity
+of expectation extensively,
+\begin{eqnarray*}
+   \Var{X+Y} &=& \Ex{(X+Y)^2} - \Ex{X+Y}^2\\
+                      &=& \Ex{X^2}+\Ex{Y^2}+2\Ex{XY} - (\Ex{X}+\Ex{Y})^2\\
+                      &=& (\Ex{X^2}-\Ex{X}^2) + (\Ex{Y^2}-\Ex{Y}^2) + 2(\Ex{XY}-\Ex{X}\Ex{Y})\\
+                      &=& \Var{X} + \Var{Y} + 2(\Ex{XY}-\Ex{X}\Ex{Y}).
+\end{eqnarray*}
+Now {\it because $X,Y$ are independent}, by Theorem~\ref{thm:indepexp} the final
+term in this expression is zero.  Hence we get our result.
+\end{proof}
+
+{\bf Note:} The expression $\Ex{XY}-\Ex{X}\Ex{Y}$ appearing in the above proof
+is called the {\it covariance\/} of $X$ and~$Y$, and is a measure of the dependence between
+$X,Y$.  It is zero when $X,Y$ are independent.
+
+It is very important to remember that {\bf neither} of these two results is true in general, without the assumption
+that $X,Y$ are independent.  As a simple example, note that even for
+a 0-1 r.v.~$X$ with $\Pr[X=1]=p$, $\Ex{X^2}=p$ is not equal to
+$\Ex{X}^2=p^2$ (because of course $X$ and $X$ are not independent!).
+This is in contrast to the case of the expectation, where we saw that the expectation of a sum 
+of r.v.'s is the sum of the expectations of the individual r.v.'s {\em always}. 
+
+\subsection*{Example}
+Let's return to our motivating example of a sequence of $n$ coin tosses.
+Let $X$ the the number of Heads in $n$ tosses
+of a biased coin with Heads probability~$p$ (i.e., $X$ has the binomial
+distribution with parameters $n,p$).  As usual, we write $X=X_1+X_2+\cdots +X_n$, where
+$X_i=1$ if the $i$-th toss is Head, and $X_i = 0$ otherwise.
+
+We already know $\Ex{X}= \sum_{i=1}^n \Ex{X_i} = np$. We can compute
+$\Var{X_i} = E(X_i^2) - E(X_i)^2 = p - p^2 = p(1-p)$. Since the $X_i$'s are independent,
+by Theorem~\ref{thm:varsum} we get $\Var{X} = \sum_{i=1}^n \Var{X_i} = np(1-p)$. 
+
+As an example, for a fair coin ($p = \frac{1}{2}$) the expected number of Heads in $n$
+tosses is~$n\over 2$, and the standard deviation
+is~$\sqrt{\frac{n}{4}} = {{\sqrt{n}}\over 2}$. Note that since the maximum number of
+Heads is $n$, the standard deviation is much less than this maximum
+number for large $n$. This is in contrast to the previous example of
+the uniformly distributed random variable~\eqref{eq:uniform}, where the standard
+deviation $\sigma(X) ~=~ \sqrt{\frac{n^2-1}{12}} ~\approx~ \frac{n}{\sqrt{12}}$ is
+of the same order as the largest value $n$. In this sense, the
+spread of a binomially distributed r.v. is much smaller than that
+of a uniformly distributed r.v.
+
+\end{document}
+
+

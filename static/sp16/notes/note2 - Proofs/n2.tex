@@ -1,0 +1,409 @@
+\documentclass[11pt]{article}
+\usepackage{../cs70,latexsym,epsf, amssymb}
+
+
+\lecture{2}
+\def\title{Note \the\lecturenumber}
+
+\newcounter{thm}
+\addtocounter{thm}{\the\lecturenumber}
+
+\newtheorem{theorem}{Theorem}[thm]
+\newtheorem{algorithm}{Algorithm}[thm]
+\newtheorem{lemma}{Lemma}[thm]
+\newtheorem{fact}{Fact}[thm]
+\newtheorem{definition}{Definition}[thm]
+\newtheorem{conjecture}{Conjecture}[thm]
+\newtheorem{counterexample}{Counterexample}[thm]
+\newtheorem{corollary}{Corollary}[thm]
+\newtheorem{observation}{Observation}[thm]
+
+\begin{document}
+\maketitle
+\section{Proofs}
+
+In science, evidence is accumulated through experiments to assert the validity of a statement.
+Mathematics, in contrast, aims for a more absolute level of certainty.
+A mathematical proof provides a means for {\em guaranteeing} that a statement is true.
+Proofs are very powerful and are in some ways like computer programs. Indeed, there is
+a deep historic link between these two concepts that we will touch upon in this course ---
+the invention of computers is intimately tied to the exploration of the idea of a mathematical proof about a
+century ago.
+
+So what types of ``computer science-related'' statements might we want to prove? Here are two examples:
+(1) Does program $P$ halt on every input?
+(2) Does program $P$ correctly compute the function $f(x)$,
+i.e. does it output $f(x)$ on input $x$, for every $x$?
+Note that each of these statements refers to the behavior of
+a program on \emph{infinitely} many inputs. For such a statement, we
+can try to provide \emph{evidence} that it is true by testing that it holds for
+many values of $x$. Unfortunately, this does not guarantee that the statement
+holds for the infinitely many values of x that we did not test! To be certain
+that the statement is true, we must provide a rigorous \emph{proof}.
+
+So what is a proof? A proof is a finite sequence of steps, called \emph{logical deductions}, which
+establishes the truth of a desired statement. In particular, the power of a proof lies in the fact that using \emph{finite} means, we can guarantee the truth of a statement with \emph{infinitely} many cases.
+
+More specifically, a proof is typically structured as follows. Recall that there are certain statements, called axioms or postulates,
+that we accept without proof (we have to start somewhere). Starting from these
+axioms, a proof consists of a sequence of logical deductions: Simple steps that
+apply the rules of logic. This results in a sequence of statements where
+each successive statement is necessarily true if the previous statements
+were true. This property is enforced by the rules of logic: Each statement
+follows from the previous statements. These rules of logic are a formal distillation of
+laws that were thought to underlie human thinking. They play a
+central role in the design of computers, starting with digital logic
+design or the fundamental principles behind the design of digital
+circuits. At a more advanced level, these rules of logic play an
+indispensable role in artificial intelligence, one of whose ultimate goals
+is to emulate human thought on a computer.
+
+\paragraph{Organization of this note.} We begin in Section~\ref{scn:facts} by setting notation and stating basic mathematical facts used throughout this note. We next introduce four different proof techniques: Direct proof (Section~\ref{scn:direct}), proof by contraposition (Section~\ref{scn:contrapositive}), proof by contradiction (Section~~\ref{scn:contradiction}), and proof by cases (Section~~\ref{scn:cases}). We then briefly discuss common pitfalls in and stylistic advice for proofs (Sections~\ref{scn:errors} and~\ref{scn:style}, respectively). We close with exercises in Section~\ref{scn:exercises}.
+
+%%==========================================================================
+%%==========================================================================
+%%==========================================================================
+\section{Notation and basic facts}\label{scn:facts}
+In this note, we use the following notation and basic mathematical facts. Let $\mathbb{Z}$ denote the set of integers, i.e. $\mathbb{Z}=\{\ldots,-2,-1,0,1,2,\ldots\}$, and $\mathbb{N}$ the set of natural numbers $\mathbb{N}=\{0,1,2,\ldots\}$. Recall that the sum or product of two integers is an integer, i.e. the set of integers is \emph{closed} under addition and multiplication. The set of natural numbers is also closed under addition and multiplication.
+
+Given integers $a$ and $b$, we say that $a$ divides $b$ (denoted $a | b$) iff there exists an integer $q$ such that $b=aq$. For example, $2 | 10$ because there exists an integer $q=5$ such that $10=5\cdot 2$. We say a natural number $p$ is \emph{prime} if it is divisible only by $1$ and itself. 
+
+Finally, we use the notation $:=$ to indicate a definition. For example, $q:=6$ defines variable $q$ as having value $6$.
+
+\section{Direct Proof}\label{scn:direct}
+
+With the language of propositional logic from Note 0 under our belts, we can now discuss proof techniques, and the real fun can begin. Are you ready? If so, here is our first technique, known as a \emph{direct proof}. Throughout this section, keep in mind that our goal is give clear and concise proofs. Let's begin with a very simple example.
+
+\begin{theorem}\label{thm:divides}
+    For any $a,b,c\in \mathbb{Z}$, if $a|b$ and $a|c$, then $a|(b+c)$.
+\end{theorem}
+
+\sanity{Let $P(x,y)$ denote ``$x|y$''. Convince yourself that the statement above is equivalent to $(\forall a,b,c\in\mathbb{Z})\;(P(a,b)\wedge P(a,c))\lra P(a,b+c))$.}
+
+
+At a high level, a direct proof proceeds as follows. For each $x$, the proposition we are trying to prove is of the form $P(x) \lra Q(x)$. A direct proof of this starts by assuming $P(x)$ for a generic value of~$x$  and eventually concludes $Q(x)$ through a chain of implications:
+\vspace{.2cm}
+
+\begin{tabular}{|l|}
+ \hline \\
+        {\bf Direct Proof}\\
+        \hspace{.5cm}\emph{Goal}: To prove $P \lra Q$. \\
+        \hspace{.5cm}\emph{Approach:} Assume $P$ \\
+  \hspace{2.9cm}\vdots \\
+  \hspace{2.2cm}Therefore $Q$ \\ \\
+ \hline
+\end{tabular}
+
+\vspace{.2cm}
+
+
+\begin{proof}[Proof of Theorem~\ref{thm:divides}] Assume that $a|b$ and $a|c$, i.e. there exist integers $q_1$ and $q_2$ such that $b=q_1a$ and $c=q_2a$.
+Then, $b+c=q_1a+q_2a=(q_1+q_2)a$. Since the $\mathbb{Z}$ is closed under addition, we conclude that $(q_1+q_2)\in\mathbb{Z}$, and so $a|(b+c)$, as desired.
+\end{proof}
+
+Easy as pie, right? But wait, earlier we said Theorem~\ref{thm:divides} was equivalent to $(\forall a,b,c\in\mathbb{Z})\;(P(a,b)\wedge P(a,c))\lra P(a,b+c))$; where in the proof above did we encounter the $\forall$ quantifier? The key insight is that the proof did not assume any \emph{specific} values for $a$, $b$, and $c$; indeed, our proof holds for {arbitrary} $a,b,c\in\mathbb{Z}$! Thus, we have indeed proven the desired claim.
+
+\sanity{Give a direct proof of the following statement: For any $a,b,c\in \mathbb{Z}$, if $a|b$ and $a|c$, then $a|(b-c)$.}
+
+Let's try something a little more challenging.
+
+\begin{theorem}\label{thm:sumdigits}
+Let $0<n<1000$ be an integer. If the sum of the digits of $n$ is divisible by 9, then $n$ is divisible by 9.
+\end{theorem}
+
+Observe that this statement is equivalent to
+$$
+(\forall n\in\mathbb{Z}^+)(n <1000) \implies (\text{sum of $n$'s digits divisible by 9}\lra \text{$n$ divisible by 9}),
+$$
+where $\mathbf{Z}^+$ denotes the set of positive integers, $\{1,2,\ldots\}$. Now the proof proceeds similarly --- we start by assuming, for a generic value of~$n$, that the sum of $n$'s digits is divisible by $9$. Then we perform a sequence of implications to conclude that $n$ itself is divisible by $9$.
+
+\begin{proof}[Proof of Theorem~\ref{thm:sumdigits}]
+   Let $n$ in decimal be written as $n=abc$, i.e. $n=100a+10b+c$. Assume that the sum of the digits of $n$ is divisible by 9, i.e.
+   \begin{equation}\label{eqn:a+b+c}
+    \exists k\in\mathbb{Z} \quad\text{such that}\quad a+b+c = 9k.
+    \end{equation}
+     Adding $99a + 9b$ to both
+  sides of Equation~(\ref{eqn:a+b+c}), we have
+$$
+    100a+10b+c = n=9k + 99a + 9b = 9(k+11a+b).
+$$
+ We conclude that $n$ is divisible by 9.
+\end{proof}
+
+Is the converse of Theorem~\ref{thm:sumdigits} also true? Recall that the \emph{converse} of $P\lra Q$ is $Q\lra P$. The converse of Theorem~\ref{thm:sumdigits} says that for any integer $0<n<1000$, if $n$ is divisible by $9$, then the sum of the digits of $n$ is divisible by $9$.
+\vskip.1in
+
+\begin{theorem}[Converse of Theorem~\ref{thm:sumdigits}]\label{thm:converse} Let $0<n<1000$ be an integer. If $n$ is divisible by 9, then
+the sum of the digits of $n$ is divisible by 9.
+\end{theorem}
+\begin{proof}
+Assume that $n$ is divisible by $9$. We use the same notation for the digits of~$n$ as we used in Theorem~\ref{thm:sumdigits}'s proof. We proceed as follows.
+\begin{eqnarray*}
+n\text{ is divisible by }9 &\lra& n=9l\quad\text{ for }l \in \mathbb{Z}\\
+&\lra& 100a + 10b + c = 9l\\
+&\lra& 99a+9b + (a+b+c) = 9l\\
+&\lra& a+b+c = 9l-99a-9b\\
+&\lra& a+b+c = 9(l-11a-b)\\
+&\lra& a+b+c = 9k \quad\text{ for } k=l-11a-b\in\mathbf{Z}.
+\end{eqnarray*}
+We conclude that $a+b+c$ is divisible by 9.
+\end{proof}
+
+We now come to the moral of this story. We have shown both Theorem~\ref{thm:sumdigits} and its converse, Theorem~\ref{thm:converse}. This means that the sum of the digits of $n$ is divisible by $9$ \emph{if and only if} $n$ is divisible by $9$; in other words, these two statements are logically equivalent. So the key lesson is this: Whenever you wish to prove an equivalence $P\iff Q$, always proceed by showing $P\lra Q$ and $Q\lra P$ separately (as we have done here).
+
+\section{Proof by Contraposition}\label{scn:contrapositive}
+
+We now move to our second proof technique. Recall from our discussion on propositional logic that any implication $P\lra Q$ is equivalent to its {contrapositive} $\neg Q\lra \neg P$. Yet, sometimes $\neg Q\lra \neg P$ can be much simpler to prove than $P\lra Q$. Thus, a proof by contraposition proceeds by proving $\neg Q\lra \neg P$ instead of $P\lra Q$.
+
+
+\vspace{.2cm}
+
+\begin{tabular}{|l|}
+ \hline \\
+        {\bf Proof by Contraposition}\\
+        \hspace{.5cm}\emph{Goal}: To prove $P \lra Q$. \\
+        \hspace{.5cm}\emph{Approach:} Assume $\neg Q$. \\
+  \hspace{3cm}\vdots \\
+  \hspace{2.2cm}Therefore $\neg P$ \\
+        \hspace{.5cm}\emph{Conclusion}: $\neg Q \Longrightarrow \neg P$, which is equivalent to $P\Longrightarrow Q$. \\\\
+ \hline
+\end{tabular}
+\vspace{.2cm}
+
+Consider now the following theorem:
+
+\begin{theorem}\label{thm:oddodd}
+    Let $n$ be a positive integer and let $d$ divide $n$. If $n$ is odd then $d$ is odd.
+\end{theorem}
+
+Proving this via the technique of direct proof seems difficult; we would assume $n$ is odd in Step 1, but then what? An approach via contraposition, on the other hand, turns out to be much easier.
+
+\sanity{What is the contrapositive of Theorem~\ref{thm:oddodd}? (Answer: If $d$ is even, then $n$ is even.)}
+
+\begin{proof}[Proof of Theorem~\ref{thm:oddodd}]
+We proceed by contraposition. Assume that $d$ is even. Then, by definition, $d=2k$ for some $k\in \mathbb{Z}$. Because $d|n$, $n=dl$, for some $l \in \mathbb{Z}$.
+Combining these two statements, we have $n=dl=(2k)l=2(kl)$.
+We conclude that $n$ is even.
+\end{proof}
+
+Note that this time, the first line of our proof stated our proof technique --- this is good practice for any proof, similar to how commenting code is good practice when programming. Stating your proof technique like this an enormous aid to your reader in understanding where your proof will go next. (Let us not forget that a reader who understands your proof, such a teaching assistant or instructor, is much more likely to give you a good grade for it!)
+
+
+\section{Proof by Contradiction}\label{scn:contradiction}
+
+Of all the proof techniques we discuss in this note, it's perhaps hardest to resist the appeal of this one; after all, who wouldn't want to use a technique known as {\em reductio ad absurdum}, i.e. reduction to an absurdity? The idea in a proof by contradiction is to assume that the claim you wish to prove is \emph{false} (yes, this seems backwards, but bear with us). Then, you show that this leads to a conclusion which is utter nonsense: A contradiction. Hence, you conclude that your claim must in fact have been true.
+
+\sanity{A proof by contradiction relies crucially on the fact that if a proposition is not false, then it must be true. Which law from a previous lecture embodied this black or white interpretation of a statement?}
+
+\vspace{.2cm}
+
+
+\begin{tabular}{|l|}
+ \hline \\
+        {\bf Proof by Contradiction}\\
+        \hspace{.5cm}\emph{Goal}: To prove $P$. \\
+        \hspace{.5cm}\emph{Approach:} Assume $\neg P$. \\
+  \hspace{2.9cm} \vdots \\
+  \hspace{2.9cm}$R$ \\
+  \hspace{2.9cm} \vdots \\
+  \hspace{2.7cm}$\neg R$ \\
+  \hspace{.5cm}\emph{Conclusion}: $\neg P\lra\neg R \wedge R$, which is a contradiction. Thus, $P$.\\\\
+ \hline
+\end{tabular}
+\vspace{.2cm}
+
+If you are not convinced by the intuitive explanation thus far as to why proof by contradiction works, here is the formal reasoning: A proof by contradiction shows that $\neg P\lra \neg R\wedge R\equiv\text{False}$. The contrapositive of this statement is hence $\text{True}\lra P$.
+
+Let us now take this proof technique on a trial run. Note that in doing so, we are continuing a long-standing legacy --- the proof of the theorem below dates back more than 2000 years to the ancient Greek mathematician, Euclid of Alexandria!\footnote{It is perhaps worth pausing here to appreciate the true scale of this statement --- after all, how many aspects of our human heritage remain relevant after multiple millenia? Music? Fashion? All of these are quickly outdated with time. But mathematics is, in a sense, timeless.}
+
+\begin{theorem}\label{thm:infiniteprimes}
+    There are infinitely many prime numbers.
+\end{theorem}
+
+To appreciate the power of contradiction, let us pause for a moment to ponder how we might try to prove Theorem~\ref{thm:infiniteprimes} via a different proof technique, such as, say, a direct proof. It seems very difficult, right? How would you construct infinitely many prime numbers? The remarkable thing about contradiction, however, is that if we assume the statement is false, i.e. there are only finitely many primes, bad things will happen.
+
+To proceed, we now state a simple lemma which is handy in showing Theorem~\ref{thm:infiniteprimes}. Its proof will be deferred to a future lecture in which we learn about induction.
+
+\begin{lemma}\label{lem:prime}
+    Every natural number greater than one is either prime or has a prime divisor.
+\end{lemma}
+\begin{proof}[Proof of Theorem~\ref{thm:infiniteprimes}]
+    We proceed by contradiction. Suppose that Theorem~\ref{thm:infiniteprimes} is false, i.e. that there are only finitely many primes, say $k$ of them. Then, we can enumerate them: $p_1, p_2, p_3, \ldots, p_k$.
+
+    Now, define number $q:=p_1 p_2 p_3 \ldots p_k + 1$, which is the product of all primes plus one. We claim that $q$ cannot be prime. Why? Because by definition, it is larger than all the primes $p_1$ through $p_k$! By Lemma~\ref{lem:prime}, we therefore conclude that $q$ has a prime divisor,~$p$. This will be our statement~$R$.
+
+    Next, because $p_1, p_2, p_3, \ldots, p_k$ are all the primes, $p$ must be equal to one of them; thus, $p$ divides $r:=p_1 p_2 p_3 \ldots p_k$. Hence, $p|q$ and $p|r$, implying $p|(q-r)$. But $q-r=1$, implying $p\leq 1$, and hence $p$ is not prime; this is the statement $\neg R$. We thus have $R\wedge \neg R$, which is a contradiction, as desired.
+\end{proof}
+
+Now that we're warmed up, let's tackle another classic proof involving contradictions. Recall that a \textbf{rational number} is a number that can be expressed as the
+ratio of two integers. For example, $\frac{2}{3}$, $\frac{3}{5}$, and $\frac{9}{16}$ are
+rational numbers. Numbers which \emph{cannot} be expressed as fractions, on the other hand, are called \textbf{irrational}. Now, how about $\sqrt{2}$? Do you think it's rational or irrational? The answer is as follows.
+
+\begin{theorem}\label{thm:irrational}
+    $\sqrt{2}$ is irrational.
+\end{theorem}
+
+Before giving the proof, let us ask a crucial question: Why should contradiction be a good candidate proof technique to try here? Well, consider this: Theorem~\ref{thm:infiniteprimes} and Theorem~\ref{thm:irrational} share something fundamental in common --- in both cases, we wish to show that something \emph{doesn't} exist. For example, for Theorem~\ref{thm:infiniteprimes}, we wished to show that a largest prime doesn't exist, and for Theorem~\ref{thm:irrational}, we wish to show that integers $a$ and $b$ satisfying $\sqrt{2}=a/b$ don't exist. In general, proving that something \emph{doesn't} exist seems difficult. But this is actually one setting in which proof by contradiction shines.
+
+To prove Theorem~\ref{thm:irrational}, we use the following simple lemma. In Section~\ref{scn:exercises}, we ask you to prove Lemma~\ref{lem:asquared}.
+
+\begin{lemma}\label{lem:asquared}
+    If $a^2$ is even, then $a$ is even.
+\end{lemma}
+
+\begin{proof}[Proof of Theorem~\ref{thm:irrational}]
+We proceed by contradiction. Assume that $\sqrt{2}$ is rational. By the definition of rational numbers, there are integers $a$ and $b$ with no common factor other than 1, such that $\sqrt{2} = a/b$. Let our assertion $R$ state that $a$ and $b$ share no common factors.
+
+Now, for any numbers $x$ and $y$, we know that $x = y \implies x^2 = y^2$. Hence $2 = {a^2}/{b^2}$. Multiplying both sides by $b^2$, we have $a^2 = 2b^2$. Since $b$ is an integer, it follows that $b^2$ is an integer, and thus $a^2$ is even (by the definition of evenness). Plugging in Lemma~\ref{lem:asquared}, we hence have that $a$ is even. In other words, there exists integer $c$ such that $a = 2c$.
+
+Combining all our facts thus far, we have that $2b^2 = 4 c^2$, or $b^2 = 2 c^2$. Since $c$ is an integer, $c^2$ is an integer, and hence $b^2$ is even. Thus, again applying Lemma~\ref{lem:asquared}, we conclude that $b$ is even.
+
+But we have just shown that both $a$ and $b$ are even. In particular, this means they share the common factor~2. This implies $\neg R$. We conclude that $R\vee \neg R$ holds; thus, we have a contradiction, as desired.
+\end{proof}
+
+
+\section{Proof by Cases}\label{scn:cases}
+
+Here is a proof to tickle your fancy; it relies on another proof technique known as proof by \emph{cases}, which we will touch on informally in this section. Specifically, the idea behind a proof by cases is as follows: Sometimes when we wish to prove a claim, we don't know which of a set of possible cases is true, but we know that \emph{at least one} of the cases is true. What we can do then is to prove the result in \emph{both} cases; then, clearly the general statement must hold.
+
+
+\begin{theorem}\label{thm:xy}
+    There exist irrational numbers $x$ and $y$ such that $x^y$ is rational.
+\end{theorem}
+\begin{proof}
+We proceed by cases. Note that the statement of the theorem is quantified by an existential quantifier: Thus, to prove our claim, it suffices to demonstrate a single $x$ and $y$ such that $x^y$ is rational. To do so, let $x=\sqrt{2}$ and $y=\sqrt{2}$. Let us divide our proof into two cases, exactly one of which must be true: \begin{enumerate}
+    \item[(a)] $\sqrt{2}^{\sqrt{2}}$ is rational, or
+    \item [(b)] $\sqrt{2}^{\sqrt{2}}$ is irrational.
+\end{enumerate}
+(Case (a)) Assume first that $\sqrt{2}^{\sqrt{2}}$ is rational. But this immediately yields our claim, since $x$ and $y$ are irrational numbers such that $x^y$ is rational.
+
+(Case (b)) Assume now that $\sqrt{2}^{\sqrt{2}}$ is irrational. Our first guess for $x$ and $y$ was not quite right, but now we have a new irrational number to play with, $\sqrt{2}^{\sqrt{2}}$. So, let's try setting $x=\sqrt{2}^{\sqrt{2}}$ and $y=\sqrt{2}$. Then,
+$$
+   x^y  =  \left(\sqrt{2}^{\sqrt{2}}\right)^{\sqrt{2}}
+        =  \sqrt{2}^{\sqrt{2}\sqrt{2}}
+        =  \sqrt{2}^2 = 2,
+$$
+where the second equality follows from the axiom $(x^y)^z=x^{yz}$. But now we again started with two irrational numbers $x$ and $y$ and obtained rational $x^y$.
+
+Since one of case (a) or case (b) must hold, we thus conclude that the statement of Theorem~\ref{thm:xy} is true.
+\end{proof}
+
+Before closing, let us point out a peculiarity of the proof above. What were the \emph{actual} numbers $x$ and $y$ satisfying the claim of Theorem~\ref{thm:xy}? Were they $x=\sqrt{2}$ and $y=\sqrt{2}$? Or $x=\sqrt{2}^{\sqrt{2}}$ and $y=\sqrt{2}$? Well, since we did a case analysis, it's not clear which of the two choices is actually the correct one. In other words, we have just demonstrated something rather remarkable known as a \textbf{nonconstructive} proof: We've proven that some object $X$ exists, but without explicitly revealing what $X$ itself is! 
+
+\section{Common Errors When Writing Proofs}\label{scn:errors}
+
+The ability to write clean and concise proofs is a remarkable thing, and is arguably among the highest forms of intellectual enlightenment one can achieve. It requires your mind to critically reflect on its own inner workings (i.e. your thought processes), and reorganize them into a coherent and logical sequence of thoughts. In other words, your mind is improving itself at a very fundamental level, far transcending the boundaries of computer science or any particular area of study. The benefits of this training will touch every aspect of your life as you know it; indeed, it will shape the way you approach life itself.
+
+As with any such fundamental achievement, developing the ability to write rigorous proofs is likely among the most difficult learning challenges you will face in university, so do not despair if it gives you trouble; you are not alone. There is simply no substitute here for lots and lots of practice. To help get you started on your way, we now raise some red flags regarding common pitfalls in composing proofs. Let us begin with a simple, but common error.
+
+\textbf{Claim:} $-2 = 2$.
+
+\textbf{Proof?} Assume $-2 = 2$. Squaring both sides, we have $(-2)^2 = 2^2$, or $4 = 4$, which is true. We conclude that $-2 = 2$, as desired. $\spadesuit$
+
+The theorem is obviously false, so what did we do wrong? Our arithmetic is correct, and each step rigorously follows from the previous step. So, the error must lie in the very beginning of the proof, where we made a brazen assumption: That $-2=2$. But wait, wasn't this the very statement we were trying to prove? Exactly. In other words, to prove the statement $P\equiv$``$-2=2$'', we just proved that $P\lra\text{True}$, which is not the same as proving $P$. Lesson \#1: When writing proofs, do not assume the claim you aim to prove!
+
+Lesson \#2 is about the number zero: In particular, never forget to consider the case where your variables take on the value $0$. Otherwise, this can happen:
+
+\textbf{Claim:} $1 = 2$.
+
+\textbf{Proof?} Assume that $x=y$ for integers $x,y\in\mathbb{Z}$. Then,
+\begin{eqnarray*}
+    x^2-xy &=& x^2-y^2 \text{\hspace{20mm}(since $x=y$)}\\
+    x(x-y) &=& (x+y)(x-y)\\
+    x &=& x+y \quad\text{\hspace{19mm}(divide both sides by $x-y$)}\\
+    x &=& 2x.
+\end{eqnarray*}
+Setting $x=y=1$ yields the claim.
+$\spadesuit$
+
+But, clearly $1\neq 2$, unless your grade school teachers were lying to you. Where did we go wrong? In deriving the third equality, we divided by $(x-y)$. What is the value of $(x-y)$ in our setting? Zero. Dividing by zero is not well-defined; thus the third equality does not hold.
+
+Lesson \#3 says to be careful when mixing negative numbers and inequalities. For example:
+
+\textbf{Claim:} $4 \leq 1$.
+
+\textbf{Proof?} We know that $-2\leq 1$; squaring both sides of this inequality yields $4 \leq 1$. $\spadesuit$
+
+\sanity{To see why this proof fails, ask yourself this: If $a\leq b$, is it necessarily true that $\abs{a}\leq\abs{b}$? Can you give a counterexample?}
+
+In addition, do not forget that multiplying an inequality by a negative number flips the direction of the inequality! For example, multiplying both sides of $-2 < 5$ by $-1$ yields $2 > -5$, as you would expect.
+
+
+\section{Style and substance in proofs}\label{scn:style}
+
+\iffalse
+1. convince yourself that you have a waterproof, solid, rigorous convincing proof.
+2. Communicate that it is rigorous. 
+\fi
+
+We conclude with some general words of advice.
+First, get in the habit of thinking carefully before you write down
+the next sentence of your proof. If you cannot explain clearly why
+the step is justified, you are making a leap and you need to go
+back and think some more. In theory, each step in a proof must be
+justified by appealing to a definition or general axiom.
+In practice the depth to which one must do this
+is a matter of taste. For example, we could
+break down the step, ``Since $a$ is an integer, $(2a^2 + 2a)$ is an
+integer,'' into several more steps. [Exercise: what are they?]
+A justification can be stated without proof only if you are
+absolutely confident that (1) it is correct and (2) the reader
+will automatically agree that it is correct.
+
+Notice that in the proof that $\sqrt{2}$ is irrational, we used the
+result, ``For any integer $n$, if $n^2$ is even then $n$ is
+even,'' twice. This suggests that it may be a useful fact in many
+proofs. A subsidiary result that is useful in a more complex proof is
+called a {\it lemma}. It is often a good idea to break down a long
+proof into several lemmas. This
+is similar to the way in which large programming tasks should be
+divided up into smaller subroutines.  Furthermore, make each lemma
+(like each subroutine) as general as possible so it can be reused
+elsewhere.
+
+The dividing line between lemmas and theorems is not clear-cut.
+Usually, when writing a paper, the theorems are those propositions
+that you want to ``export'' from the paper to the rest of the world,
+whereas the lemmas are propositions used locally in the proofs of your
+theorems. There are, however, some lemmas (for example, the Pumping
+Lemma and the Lifting Lemma) that are perhaps more famous and
+important than the theorems they were used to prove.
+\par\nobreak
+Finally, you should remember that the point of this lecture was
+not the specific statements we proved, but the different proof
+strategies, and their logical structure. Make sure you understand
+them clearly; you will be using them when you write your own
+proofs in homework and exams.
+
+\section{Exercises}\label{scn:exercises}
+\begin{enumerate}
+    \item Generalize the proof of Theorem~\ref{thm:sumdigits} so that it works for {\it any\/}
+positive integer~$n$.  ({\sc Hint}: Suppose $n$ has $k$ digits, and
+write $a_i$ for the digits of~$n$, so that $n=\sum_{i=0}^{k-1} (a_i\cdot10^i)$.)
+    \item Prove Lemma~\ref{lem:asquared}. (Hint: First try a direct proof. Then, try contraposition. Which proof approach is better suited to proving this lemma?)
+   
+\iffalse
+ \item Many of the proofs in this Note are of purely mathematical statements. But this is a course about computer science, so let's now discuss a proof of a statement which hits closer to home. Consider the following pseudocode which we claim computes the sum $\sum_{i=1}^ni$:
+        \begin{enumerate}
+            \item //precondition:  $n$ is a positive integer
+            \item //postcondition: The sum $\sum_{i=1}^ni$ is returned.
+            \item int sum(int $n$) \{
+            \item \mbox{\hspace{5mm}} int total = $0$;
+            \item \mbox{\hspace{5mm}} int $j$ = $1$;
+            \item \mbox{\hspace{5mm}} while ($j\leq n$) \{
+            \item \mbox{\hspace{10mm}}total = total $+$ $j$;
+            \item \mbox{\hspace{10mm}}$j$ = $j$ $+$ $1$;
+            \item \mbox{\hspace{5mm}}\}
+            \item \mbox{\hspace{5mm}}return total;
+            \item \}
+        \end{enumerate}
+        In the area of \emph{formal verification}, the goal is to {prove} that a program does what it claims to do. Can you prove that the function sum() above actually computes $\sum_{i=1}^ni$? Let's give a direct proof using the notion of a \emph{loop invariant}. A loop invariant is a statement which is true each time a loop is run (i.e. each time we hit line (f) above). Let our loop invariant be $P = $`` total $=$ $1+2+\cdots+(j-1)$ ''.
+
+        Our proof proceeds as follows. After lines (d) and (e), we have total = $0$ and int $j$ = $1$. Thus, the first time we hit line (f), $P$ holds. Now, whenever $P$ holds, then running lines (g) and (h) adds $j$ to total and increments $j$ by $1$. Thus, when we return to line (f), $P$ still holds. The loop will repeat until we finally break its condition that $j\leq n$, at which point we jump to line (j). At this stage, we know that $P$ holds (since it held the last time we hit (f)), and $j=n+1$ (since we just broke the loop condition). Combining these two facts, we conclude that line (j) returns $1+2+\cdots + n$, as desired.
+
+        We now task you with the following problem: Write a similar program which, given non-negative integer $n$, uses a loop to compute the value $2^n$. Prove the correctness of your program using a loop invariant.
+\fi
+        
+\end{enumerate}
+\end{document}
+

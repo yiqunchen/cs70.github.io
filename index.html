@@ -18,6 +18,62 @@ layout: default
     {% endfor %}
   </ul>
 
+  <h3>Weekly Resources</h3>
+  <blockquote>
+    <table border="1" cellpadding="5">
+      <tr>
+        <td align="center">Week number</td>
+        <td align="center">Discussion A</td>
+        <td align="center">Discussion B</td>
+        <td align="center">HW problem</td>
+        <td align="center">HW Due Data</td>
+        <td align="center">HW Sol</td>
+      </tr>
+
+
+      {% for week in site.data.resource.weekly %}
+        {% if week.display %}
+          <tr>
+            <td align="center">Week {{week.week}}</td>
+            {% capture static_url %}{{site.baseurl}}{{'/static'}}{{site.term_url}}{% endcapture %}
+            {% capture dis_base_url %}{{static_url}}{{'/discussions/'}}{% endcapture %}
+            {% capture hw_base_url %}{{static_url}}{{'/homeworks/'}}{% endcapture %}
+
+            {% for dis in week.discussions %}
+              {% unless dis.skipped %}
+                <td align="center">
+                  {% if dis.prob %}
+                    <a href="{{ dis_base_url }}q{{week.week}}{{dis.part}}.pdf">{{ week.week }}{{dis.part | upcase}}</a>;
+                  {% endif %}
+                  {% if dis.sol %}
+                    <a href="{{ dis_base_url }}s{{week.week}}{{dis.part}}.pdf">Sol</a>;
+                  {% endif %}
+                </td>
+              {% endunless %}
+            {% endfor %}
+
+            {% unless week.homework.skipped %}
+              <td align="center">
+                {% if week.homework.problem %}
+                  <a href="{{ hw_base_url }}hw{{week.week}}.pdf">Homework {{ week.week }}</a>
+                {% endif %}
+              </td>
+              <td align="center">{{week.homework.due_date}}</td>
+              <td align="center">
+                {% if week.homework.solution %}
+                  <a href="{{ hw_base_url }}hw{{week.week}}-sol.pdf">Solution</a>
+                {% endif %}
+              </td>
+            {% endunless %}
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  </blockquote>
+
+
+
+
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
 </div>
