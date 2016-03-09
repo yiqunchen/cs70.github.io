@@ -6,12 +6,14 @@ def do_one(fname_base,directory):
     os.system("pwd")
     os.system("pdflatex " + fname_base + ".tex")
     os.system("pdflatex " + fname_base + ".tex")
-    print("scp  " + fname_base + ".pdf cs70@hive20.cs.berkeley.edu:public_html/sp16/notes/")
+    print("cp  " + fname_base + ".pdf ../compiled/")
+    os.system("cp  " + fname_base + ".pdf ../compiled/")
     os.chdir("..")
 
 import glob
 
 files = glob.glob("./note*")
+print files
 
 def find_dir(name):
     for string in files:
@@ -19,15 +21,14 @@ def find_dir(name):
             return string
 
 if (len(sys.argv) == 1):
-    for x in xrange(1,23):
+    os.system("mkdir compiled")
+    for x in xrange(0,23):
         fname_base = "n" + str(x)
-        lookup_name = "note" + str(x) + " "
+        lookup_name = "./note" + str(x)
         directory = find_dir(lookup_name)
-        do_one(fname_base, directory)
+        do_one(fname_base, str(directory))
 
-    do_one('n0', 'note0')
 else:
-
     do_one(sys.argv[1],sys.argv[2])
 
 #print sys.argv[1],sys.argv[2]

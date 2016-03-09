@@ -4,12 +4,16 @@ title: Staff
 permalink: /staff/
 ---
 
+{% capture static_url %}{{site.baseurl}}{{'/static'}}{{site.term_url}}{% endcapture %}
+{% capture pic_url %}{{static_url}}{{'/staff_pic/'}}{% endcapture %}
+
 <h1 id="title">CS 70: Meet The Staff</h1>
 <b> Professor </b>
 <table>
     <tr>
         {% for profile in site.data.staff.professor %}
         <td>
+            <img class="photo-long" src="{{profile.profile_img | prepend:pic_url}}"/></br>
             <b><a href={{ profile.website }}>{{ profile.name }}</a></b></br>
             Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
             Office: {{ profile.office }}</br>
@@ -24,6 +28,7 @@ permalink: /staff/
     <tr>
         {% for profile in site.data.staff.ta %}
         <td>
+            <img class="photo-long" src="{{profile.profile_img | prepend:pic_url}}"/>
             <b>{{ profile.name }}</b></br>
             {% if profile.admin_ta %}
                 (Head Administrative TA)</br>

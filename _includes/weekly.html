@@ -1,0 +1,54 @@
+<h3>Weekly Resources</h3>
+<blockquote>
+  <table border="1" cellpadding="5">
+    <thead>
+      <tr>
+        <th align="center">Week number</th>
+        <th align="center">Discussion A</th>
+        <th align="center">Discussion B</th>
+        <th align="center">HW problem</th>
+        <th align="center">HW Due Data</th>
+        <th align="center">HW Sol</th>
+      </tr>
+    </thead>
+
+
+    {% for week in site.data.resource.weekly %}
+      {% if week.display %}
+        <tr>
+          <td align="center">Week {{week.week}}</td>
+          {% capture static_url %}{{site.baseurl}}{{'/static'}}{{site.term_url}}{% endcapture %}
+          {% capture dis_base_url %}{{static_url}}{{'/discussions/'}}{% endcapture %}
+          {% capture hw_base_url %}{{static_url}}{{'/homeworks/'}}{% endcapture %}
+
+          {% for dis in week.discussions %}
+            {% unless dis.skipped %}
+              <td align="center">
+                {% if dis.prob %}
+                  <a href="{{dis_base_url}}q{{week.week}}{{dis.part}}.pdf">{{ week.week }}{{dis.part | upcase}}</a>;
+                {% endif %}
+                {% if dis.sol %}
+                  <a href="{{dis_base_url}}s{{week.week}}{{dis.part}}.pdf">Sol</a>;
+                {% endif %}
+              </td>
+            {% endunless %}
+          {% endfor %}
+
+          {% unless week.homework.skipped %}
+            <td align="center">
+              {% if week.homework.problem %}
+                <a href="{{ hw_base_url }}hw{{week.week}}.pdf">Homework {{ week.week }}</a>
+              {% endif %}
+            </td>
+            <td align="center">{{week.homework.due_date}}</td>
+            <td align="center">
+              {% if week.homework.solution %}
+                <a href="{{ hw_base_url }}hw{{week.week}}-sol.pdf">Solution</a>
+              {% endif %}
+            </td>
+          {% endunless %}
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </table>
+</blockquote>

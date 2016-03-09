@@ -1,6 +1,4 @@
 {
-    "notes_released": 20,
-
     "Exams": [
         {
             "name": "Midterm 1",
@@ -196,7 +194,7 @@
             "homework": {
                 "skipped": false,
                 "problem": true,
-                "solution": true,
+                "solution": false,
                 "due_date": ""
             },
 
@@ -355,6 +353,19 @@
                     "skipped": false,
                     "prob": true,
                     "sol": true
+                }
+            ]
+        }
+    ],
+
+    "other": [
+        {
+            "name": "videos",
+            "description": "",
+            "items": [
+                {
+                    "text": "",
+                    "link": ""
                 }
             ]
         }
