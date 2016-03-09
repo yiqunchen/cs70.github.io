@@ -1,37 +1,39 @@
 ---
-layout: default
+layout: page
+title: Staff
+permalink: /staff/
 ---
 
 <h1 id="title">CS 70: Meet The Staff</h1>
-    <b> Professor </b>
-    <table>
-        <tr>
-            {% for profile in site.data.staff.professor %}
-            <td>
-                <b><a href={{ profile.website }}>{{ profile.name }}</a></b></br>
+<b> Professor </b>
+<table>
+    <tr>
+        {% for profile in site.data.staff.professor %}
+        <td>
+            <b><a href={{ profile.website }}>{{ profile.name }}</a></b></br>
+            Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
+            Office: {{ profile.office }}</br>
+            Office Hours: {{ profile.office_hours }}</br>
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+<hr>
+<b> TA </b>
+<table>
+    <tr>
+        {% for profile in site.data.staff.ta %}
+        <td>
+            <b>{{ profile.name }}</b></br>
+            {% if profile.admin_ta %}
+                (Head Administrative TA)</br>
+            {% endif %}
+            {% if profile.email %}
                 Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
-                Office: {{ profile.office }}</br>
-                Office Hours: {{ profile.office_hours }}</br>
-            </td>
-            {% endfor %}
-        </tr>
-    </table>
-    <hr>
-    <b> TA </b>
-    <table>
-        <tr>
-            {% for profile in site.data.staff.ta %}
-            <td>
-                <b>{{ profile.name }}</b></br>
-                {% if profile.admin_ta %}
-                    (Head Administrative TA)</br>
-                {% endif %}
-                {% if profile.email %}
-                    Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
-                {% endif %}
-                Section: {{ profile.section }}
-                Office Hours: {{ profile.office_hours }}</br>
-            </td>
-            {% endfor %}
-        </tr>
-    </table>
+            {% endif %}
+            Section: {{ profile.section }}
+            Office Hours: {{ profile.office_hours }}</br>
+        </td>
+        {% endfor %}
+    </tr>
+</table>
