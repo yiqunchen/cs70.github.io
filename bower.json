@@ -1,0 +1,19 @@
+{
+  "name": "CS70_course_page",
+  "version": "0.0.0",
+  "authors": [
+    "Fan Ye <yefan1994@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "www.eecs70.org",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~1.3.1"
+  }
+}
