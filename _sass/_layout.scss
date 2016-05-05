@@ -6,16 +6,30 @@
     font-weight: 300;
     line-height: 30px;
     letter-spacing: -1px;
-    margin-bottom: 0;
-    float: center;
-    text-align: center;
-    color: #000000;
+    color: #ffffff;
+    padding-left: $spacing-unit;
 }
 
-.top-nav-right-links {
-    text-align: right;
-    float:right;
+.course-detail {
+    font-size: 18px;
 }
+
+/**
+ * Navigation
+ */
+
+.nav {
+    float: right;
+    margin-right:$spacing-unit;
+    padding-left:$spacing-unit;
+}
+
+.nav-link {
+    padding: 10px 15px 10px 15px;
+    font-size: 18px;
+}
+
+
 
 /**
  * Page content
@@ -28,23 +42,5 @@
     font-size: 20px;
 }
 
-.post-list {
-    margin-left: 0;
-    list-style: none;
-
-    > li {
-        margin-bottom: $spacing-unit;
-    }
-}
-
-.post-meta {
-    font-size: $small-font-size;
-    color: $grey-color;
-}
-
-.post-link {
-    display: block;
-    font-size: 24px;
-}
 
 
