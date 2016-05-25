@@ -11,8 +11,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://127.0.0.1:4000" # the base hostname & protocol for your site
 
 # Change this each semester
-term_url: "/sp16"
-term: "Spring 2016"
+term_url: "/su16"
+term: "Summer 2016"
 
 
 

@@ -8,37 +8,52 @@ permalink: /staff/
 {% capture pic_url %}{{static_url}}{{'/staff_pic/'}}{% endcapture %}
 
 
-<b> Professor </b>
-<table>
+<b style="font-size: 30px;"> Instructors </b>
+<table cellpadding=10 class="fixed">
+    <col width="320px" />
+    <col width="320px" />
+    <col width="320px" />
     <tr>
-        {% for profile in site.data.staff.professor %}
-        <td>
-            <img class="photo-long" src="{{profile.profile_img | prepend:pic_url}}"/></br>
-            <b><a href={{ profile.website }}>{{ profile.name }}</a></b></br>
-            Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
-            Office: {{ profile.office }}</br>
-            Office Hours: {{ profile.office_hours }}</br>
-        </td>
+        {% for profile in site.data.staff.instructor %}
+            <td style="text-align: center;">
+                <img class="photo-long" src="{{profile.profile_img | prepend:pic_url}}"/></br>
+                {% if profile.website %}
+                    <b><a href={{ profile.website }} target="_blank">{{ profile.name }}</a></b></br>
+                {% else %}
+                    <b>{{ profile.name }}</b></br>
+                {% endif %}
+                Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
+                Office Hours: {{ profile.office_hours }}</br>
+            </td>
         {% endfor %}
     </tr>
 </table>
 <hr>
-<b> TA </b>
-<table>
-    <tr>
-        {% for profile in site.data.staff.ta %}
-        <td>
-            <img class="photo-long" src="{{profile.profile_img | prepend:pic_url}}"/>
-            <b>{{ profile.name }}</b></br>
-            {% if profile.admin_ta %}
-                (Head Administrative TA)</br>
-            {% endif %}
-            {% if profile.email %}
-                Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
-            {% endif %}
-            Section: {{ profile.section }}
-            Office Hours: {{ profile.office_hours }}</br>
-        </td>
-        {% endfor %}
-    </tr>
+<b style="font-size: 30px;"> TAs </b>
+<table cellpadding=10 class="fixed">
+    <col width="320px" />
+    <col width="320px" />
+    <col width="320px" />
+    {% for profile in site.data.staff.ta %}
+        {% assign mod = forloop.index | modulo: 3 %}
+
+        {% if mod == 1 %} <tr> {% endif %}
+            <td style="text-align: center;">
+                <img class="photo-long" src="{{profile.profile_img | prepend:pic_url}}"/></br>
+                {% if profile.website %}
+                    <b><a href={{ profile.website }} target="_blank">{{ profile.name }}</a></b></br>
+                {% else %}
+                    <b>{{ profile.name }}</b></br>
+                {% endif %}
+                {% if profile.admin_ta %}
+                    (Head Administrative TA)</br>
+                {% endif %}
+                {% if profile.email %}
+                    Email: <a href=mailto:{{ profile.email }}>{{ profile.email }}</a></br>
+                {% endif %}
+                Section: {{ profile.section }}</br>
+                Office Hours: {{ profile.office_hours }}</br>
+            </td>
+        {% if (mod == 0) or (forloop.index == forloop.length) %} </tr> {% endif %}
+    {% endfor %}
 </table>

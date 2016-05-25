@@ -1,28 +1,110 @@
 {
-    "professor":[
-        {   "name": "Satish Rao",
-            "profile_img": "satishrao.jpg",
-            "website": "http://www.cs.berkeley.edu/~satishr/",
-            "email": "satishr@cs.berkeley.edu",
-            "office": "257 Cory Hall",
-            "office_hours": "TuW-2:30-3:30"
+    "instructor":[
+        {   "name": "Alexandros Psomas",
+            "profile_img": "alex_psomas.jpg",
+            "website": "http://people.eecs.berkeley.edu/~alexpsomi/",
+            "email": "alexpsomi@cs.berkeley.edu",
+            "office_hours": "TBD"
         }, {
-            "name": "Jean Walrand",
-            "profile_img": "jeanwalrand.jpg",
-            "website": "https://sites.google.com/site/walrandberkeley/",
-            "email": "walrand@berkeley.edu",
-            "office": "687 Soda Hall",
-            "office_hours": "MoTh-3:00-4:00"
+            "name": "David Dinh",
+            "profile_img": "david",
+            "website": "https://david.dinh.io",
+            "email": "dinh@cs.berkeley.edu",
+            "office_hours": "TBD"
+        }, {
+            "name": "Fan Ye",
+            "profile_img": "Fan.jpg",
+            "email": "mike_ye2016@berkeley.edu",
+            "office_hours": "M 10-11, Tu 11-12 @ 611 Soda"
         }
     ],
 
     "ta": [
-        {   "name": "Allen Tang",
+        {   "name": "Siqi Liu",
             "admin_ta": true,
-            "profile_img": "allentang.jpg",
-            "email": "chen.tang@berkeley.edu",
+            "profile_img": "siqi.jpg",
+            "email": "sliu18@berkeley.edu",
             "section": "N/A",
-            "office_hours": "M 10-11am, F 10-11am"
+            "office_hours": "Tu 12-1 pm, W 12-1pm @ 611 Soda"
+        }, {
+            "name": "Sayan Gul",
+            "admin_ta": true,
+            "profile_img": "default.jpg",
+            "email": "sayangul@berkeley.edu",
+            "section": "N/A",
+            "office_hours": "TBD"
+        }, {
+            "name": "Nathan Mandi",
+            "admin_ta": true,
+            "profile_img": "nathan.png",
+            "email": "nvmandi7@berkeley.edu",
+            "section": "N/A",
+            "office_hours": "N/A"
+        }, {
+            "name": "Alex Pearson",
+            "admin_ta": false,
+            "profile_img": "alex_pearson.jpg",
+            "email": "apearson1995@berkeley.edu",
+            "section": "102",
+            "office_hours": "TBD"
+        }, {
+            "name": "Yiqun Chen",
+            "admin_ta": false,
+            "profile_img": "Yiqun.jpg",
+            "email": "yiqunchen@berkeley.edu",
+            "website": "http://yiqunchen.github.io/",
+            "section": "108",
+            "office_hours": "TBD"
+        }, {
+            "name": "Wan Fung Chui",
+            "admin_ta": false,
+            "profile_img": "wanfungchui.jpg",
+            "email": "wanfungchui@gmail.com",
+            "website": "http://wanfungchui.github.io",
+            "section": "109",
+            "office_hours": "TBD"
+        }, {
+            "name": "Forest Yang",
+            "admin_ta": false,
+            "profile_img": "default.jpg",
+            "email": "forestyang@berkeley.edu",
+            "section": "104",
+            "office_hours": "TBD"
+        }, {
+            "name": "Vicenc Rubies Royo",
+            "admin_ta": false,
+            "profile_img": "vicenc.jpg",
+            "email": "vrubies@berkeley.edu",
+            "section": "101",
+            "office_hours": "TBD"
+        }, {
+            "name": "Hongling Lu",
+            "admin_ta": false,
+            "profile_img": "hongling.JPG",
+            "email": "hongling_lu@berkeley.edu",
+            "section": "105",
+            "office_hours": "TBD"
+        }, {
+            "name": "Albert Pham",
+            "admin_ta": false,
+            "profile_img": "linh.jpg",
+            "email": "linh.pham@berkeley.edu",
+            "section": "107",
+            "office_hours": "TBD"
+        }, {
+            "name": "Peijie Li",
+            "admin_ta": false,
+            "profile_img": "PeijieLi.JPG",
+            "email": "li_paige@berkeley.edu",
+            "section": "103",
+            "office_hours": "TBD"
+        }, {
+            "name": "Yijin Wang",
+            "admin_ta": false,
+            "profile_img": "Yijin",
+            "email": "yijinwang@berkeley.edu",
+            "section": "106",
+            "office_hours": "TBD"
         }
     ]
 }
