@@ -1,4 +1,28 @@
 <polymer-element is='main-resource' class='resource-tab'>
+    <dom-module id="hw-due-date">
+      <template>
+        <span>{% raw %} {{calc_remain(due)}} {% endraw %}</span>
+      </template>
+
+      <script>
+        Polymer({
+          is: "hw-due-date",
+          properties: {
+            due: String,
+            remain: String
+          },
+          calc_remain: function(due) {
+            if (due != "") {
+              var time = moment(due+"2200", "YYYY/MM/DDhhmm");
+              return time.format("MMMM Do, h:mm a") + "(" + time.fromNow() + ")";
+            }
+            else
+              return "";
+          }
+        });
+      </script>
+
+    </dom-module>
 
     <paper-tabs selected="0" noink>
         <paper-tab>Notes</paper-tab>

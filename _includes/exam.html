@@ -10,5 +10,23 @@
     </tr>
   </thead>
 
+  {% for exam in site.data.resource.exams %}
+    {% capture static_url %}{{site.baseurl}}{{'/static'}}{{site.term_url}}{% endcapture %}
+    {% capture exam_base_url %}{{static_url}}{{'/exams/'}}{% endcapture %}
+    <tr>
+        <td align="center">{{exam.name}}</td>
+        <td align="center">{{exam.time}}</td>
+        {% if exam.exam_file %}
+            <td align="center"><a href="{{exam_base_url}}{{exam.exam_file}}.pdf">Problems</a></td>
+        {% else %}
+            <td align="center">To be released</td>
+        {% endif %}
 
+        {% if exam.exam_sol %}
+            <td align="center"><a href="{{exam_base_url}}{{exam.exam_sol}}.pdf">Problems</a></td>
+        {% else %}
+            <td align="center">To be released</td>
+        {% endif %}
+    </tr>
+  {% endfor %}
 </table>

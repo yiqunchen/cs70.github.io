@@ -2,17 +2,17 @@
     "exams": [
         {
             "name": "Midterm 1",
-            "time": "7-9 PM (Feb. 17)",
+            "time": "July 8, 11:30-13:30",
             "exam_file": null,
             "exam_sol": null
         }, {
             "name": "Midterm 2",
-            "time": "6:30-8:30 PM (Mar. 29)",
+            "time": "July 29, 11:30-13:30",
             "exam_file": null,
             "exam_sol": null
         }, {
             "name": "Final",
-            "time": "Thursday (May 12) 3:00-6:00pm",
+            "time": "August 12, 11:30-14:30",
             "exam_file": null,
             "exam_sol": null
         }
