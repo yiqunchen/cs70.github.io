@@ -1,0 +1,733 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt, preview]{standalone} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+
+\usepackage{../../markup}
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{color}
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{amsmath, amsfonts,amssymb}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+% The hint given in all the modular computation problems.
+\newcommand{\modcomphint}{Recall to compute $a \bmod b$, we divide $a$ by $b$ to write $a = b\lfloor \frac{a}{b} \rfloor + r$. The answer is $x = r$.}
+% The hint given in all "Is a equivalent to b mod m?" questions.
+\newcommand{\modequivhint}{Recall $a \equiv b \bmod m$ iff $m$ divides $a-b$.}
+
+% The main solution to a computation problem a mod b. 
+% #1 is a, #2 is b, #3 is the solution, and #4 is floor(a / b)
+\newcommand{\modsol}[4]{We can express $#1$ as $#2 \times #4 + #3$, so the remainder $#3$ is the solution.}
+% Gives the equivalence class once the main solution is given.
+% #1 is the solution, #2 is the modulus, and #3 is the equivalence class
+\newcommand{\equivclass}[3]{The equivalence class of $#1 \bmod #2$ is $\{...#3...\}$, obtained by adding integer multiples of $#2$ to $#1$.}
+% Parenthetical statement made when finding a negative answer would have been 
+% easier. #1 is a, #2 is b, #3 is the floor(a/b) + 1, #4 is the negative answer, 
+% and #5 is the positive answer.
+\newcommand{\negans}[5]{(Note that in this case it might have been easier to notice that $#1$ was $#4$ less than a multiple of $#2$: $#1 = #2 \times #3 + (-#4)$. To convert a fully simplified negative answer like this to an answer in the range $0 \leq x < #2$, simply add the modulus $#2$: $-#4 + #2 = #5$).}
+
+\begin{document}
+\config{name}{Modular Arithmetic}
+\noindent{\bf Modular Arithmetic}.
+
+The following problems are intended to give you some practice and familiarity with modular arithmetic computations, and to make you comfortable with the Euclid's Algorithm and the notion of multiplicative inverses modulo $m$. 
+\begin{enumerate}
+\item Calculate the smallest non-negative $x \in \N$ for each of the following expressions:
+\begin{enumerate}
+\item $x = 21 \mod 12$ 
+\begin{Freeform}{9}
+$x =$ 
+\Hint \modcomphint 
+\Solution \modsol{21}{12}{9}{1} \equivclass{9}{12}{-15,\ -3,\ 9,\ 21,\ 33} \negans{21}{12}{2}{3}{9}
+\end{Freeform}
+
+\item $x = -27 \mod 4$
+\begin{Freeform}{1}
+\Hint \modcomphint
+\Solution \modsol{-27}{4}{1}{(-7)} \equivclass{1}{4}{-7,\ -3,\ 1,\ 5,\ 9}
+\end{Freeform}
+
+\item $x = 7 \mod 64$ 
+\begin{Freeform}{7}
+$x =$ 
+\Hint \modcomphint
+\Solution \modsol{7}{64}{7}{0} \equivclass{7}{64}{-121,\ -57,\ 7,\ 71,\ 135}
+\end{Freeform}
+
+\item $x = 101 \mod 2$ 
+\begin{Freeform}{1}
+$x =$ 
+\Hint \modcomphint
+\Solution \modsol{101}{2}{1}{50} The equivalence class of $1 \bmod 2$ is simply all of the odd integers.
+\end{Freeform}
+
+\item $x = 55 \mod 5$
+\begin{Freeform}{0}
+$x =$ 
+\Hint \modcomphint
+\Solution \modsol{55}{5}{0}{11} \equivclass{0}{5}{-10,\ -5,\ 0,\ 5,\ 10}
+\end{Freeform}
+
+\item $x = 63 \mod 13$
+\begin{Freeform}{11}
+$x =$ 
+\Hint \modcomphint
+\Solution \modsol{63}{13}{11}{4} \equivclass{11}{13}{-15,\ -2,\ 11,\ 24,\ 37} \negans{63}{13}{5}{2}{11}
+\end{Freeform}
+
+\item $x = -25 \mod 7$
+\begin{Freeform}{3}
+$x =$
+\Hint \modcomphint
+\Solution \modsol{-25}{7}{3}{(-4)} \equivclass{3}{7}{-11,\ -4,\ 3,\ 10,\ 17}
+\end{Freeform}
+
+\item $x = -61 \mod 10$
+\begin{Freeform}{9}
+\Hint \modcomphint
+\Solution \modsol{-61}{10}{9}{(-7)} \equivclass{9}{10}{-11,\ -1,\ 9,\ 19} \negans{-61}{10}{(-6)}{1}{9}
+\end{Freeform}
+
+\item $x = 20 \mod 1$
+\begin{Freeform}{0}
+$x =$ 
+\modcomphint
+\Solution \modsol{20}{1}{0}{20} All integers are in the equivalence class $0 \bmod 1$, because all integers are perfect multiples of $1$.
+\end{Freeform}
+
+\item $x = 89 \mod 5$
+\begin{Freeform}{4}
+$x =$ 
+\Hint \modcomphint
+\Solution \modsol{89}{5}{4}{17} \equivclass{4}{5}{-6,\ -1,\ 4,\ 9} \negans{89}{5}{18}{1}{4}
+\end{Freeform}
+
+\item $x = -32 \mod 6$
+\begin{Freeform}{4}
+\Hint \modcomphint
+\Solution \modsol{-32}{6}{4}{(-6)} \equivclass{4}{6}{-8,\ -2,\ 4,\ 10,\ 16} \negans{-32}{6}{(-5)}{2}{4}
+\end{Freeform}
+
+\item $x = 34 \mod 16$ 
+\begin{Freeform}{2}
+$x =$ 
+\Hint \modcomphint
+\Solution \modsol{34}{16}{2}{2} \equivclass{2}{16}{-30,\ -14,\ 2,\ 18,\ 34}
+\end{Freeform}
+
+\item $x = 79 \mod 4$
+\begin{Freeform}{3}
+$x =$ 
+\Hint \modcomphint
+\Solution \modsol{79}{4}{3}{19} \equivclass{3}{4}{-5,\ -1,\ 3,\ 7,\ 11} \negans{79}{4}{20}{1}{3}
+\end{Freeform}
+
+\item $x = -37 \mod 5$
+\begin{Freeform}{3}
+\Hint \modcomphint
+\Solution \modsol{-37}{5}{3}{(-8)} \equivclass{3}{5}{-7,\ -2,\ 3,\ 8} \negans{-37}{5}{(-7)}{2}{3}
+\end{Freeform}
+
+\item $x = 17 \mod 3$ 
+\begin{Freeform}{2}
+$x =$ 
+\Hint \modcomphint 
+\Solution \modsol{17}{3}{2}{5} \equivclass{2}{3}{-4,\ -1,\ 2,\ 5,\ 8} \negans{17}{3}{6}{1}{2}
+\end{Freeform}
+
+\item $x = -45 \mod 47$
+\begin{Freeform}{2}
+\Hint \modcomphint
+\Solution \modsol{-45}{47}{2}{(-1)} \equivclass{2}{47}{-92,\ -45,\ 2,\ 49,\ 96}
+\end{Freeform}
+\end{enumerate}
+
+\item Decide whether each of the following statements are true or false. The expression $a \equiv b \mod 5$ reads ``$a$ is equivalent to $b$ modulo $m$''.
+
+\begin{enumerate}
+\item $10 \equiv 2 \mod 5$
+\begin{Choices}
+\begin{itemize}
+\FalseChoice\item True 
+\TrueChoice\item False
+\Hint \modequivhint
+\Solution $10 - 2 = 7$, which is not divisible by $5$, so $10 \not\equiv 2 \bmod 5$
+\end{itemize}
+\end{Choices}
+
+\item $42 \equiv 7 \mod 5$
+\begin{Choices} 
+\begin{itemize}
+\TrueChoice\item True
+\FalseChoice\item False
+\Hint \modequivhint
+\Solution $42 - 7 = 35$, which is divisible by $5$, so $42 \equiv 7 \bmod 5$
+\end{itemize}
+\end{Choices}
+
+\item $18 \equiv -4 \mod 11$
+\begin{Choices} 
+\begin{itemize}
+\TrueChoice\item True
+\FalseChoice\item False
+\Hint \modequivhint
+\Solution $18 - (-4) = 22$, which is divisble by $11$, so $18 \equiv -4 \bmod 11$
+\end{itemize}
+\end{Choices}
+
+\item $12 \equiv - 6 \mod 5$
+\begin{Choices} 
+\begin{itemize}
+\FalseChoice\item True
+\TrueChoice\item False
+\Hint \modequivhint
+\Solution $12 - (-6) = 18$, which is not divisble by $5$, so $12 \not\equiv -6 \bmod 5$
+\end{itemize}
+\end{Choices}
+
+\item $28 \equiv 14 \mod 7$
+\begin{Choices}
+\begin{itemize}
+\TrueChoice\item True
+\FalseChoice\item False
+\Hint \modequivhint
+\Solution $28 - 14 = 14$, which is divisble by $7$, so $28 \equiv 14 \bmod 7$
+\end{itemize}
+\end{Choices}
+
+\item $-37 \equiv 37 \mod 6$
+\begin{Choices}
+\begin{itemize}
+\FalseChoice\item True
+\TrueChoice\item False
+\Hint \modequivhint
+\Solution $-37 - 37 = -74$, which is not divisble by $6$, so $-37 \not\equiv 37 \bmod 6$. Note that it is {\it not} in general true that $a \equiv -a \bmod m$!
+\end{itemize}
+\end{Choices}
+
+\item $44 \equiv -44 \mod 8$
+\begin{Choices}
+\begin{itemize}
+\TrueChoice\item True
+\FalseChoice\item False
+\Solution $44 - (-44) = 88$, which is divisble by $8$, so $44 \equiv -44 \bmod 8$. Note that it is {\it not} in general true that $a \equiv -a \bmod m$! (Why does it work here?)
+\end{itemize}
+\end{Choices}
+
+\item $-17 \equiv -29 \mod 4$
+\begin{Choices}
+\begin{itemize}
+\TrueChoice\item True
+\FalseChoice\item False
+\Solution $-17 - (-29) = 12$, which is divisible by $4$, so $-17 \equiv -29 \bmod 4$.
+\end{itemize}
+\end{Choices}
+\end{enumerate}
+
+\item In the notes, you learn that $x$ has a multiplicative inverse $\mod m$ if and only if the greatest common divisor of $x$ and $m$ is 1. For each of the following questions, first decide if $x$ has a multiplicative inverse $\mod m$, then calculate $y$ to be the inverse of $x$ in base $m$ (if one exists), or give $y$ such that $xy = 0 \mod m$. In all cases report the smallest such $y$ that is bigger than $0$.
+\begin{enumerate}
+\item $x = 3, m = 5$.
+\begin{Choices} 
+What is $gcd(x,m)$? Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\begin{itemize}
+\TrueChoice\item $x$ has an inverse $\mod m$.
+\FalseChoice\item $x$ does not have an inverse $\mod m$.
+\Solution Yes, $gcd(x, m)\ =\ gcd(3, 5)\ =\ 1$
+\end{itemize}
+\end{Choices}
+\begin{Freeform}{2}
+$y =$ 
+\Hint What is $gcd(x,m)$? Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\Solution Since $3$ and $5$ are small values, we can use guess-and-check to see that $2$ is the multiplicative inverse ($3 \times 2\ =\ 6\ \equiv\ 1 \bmod 5$). This answer is unique $\bmod 5$, so other numbers in the equivalence class ($7$, $12$, $17$, etc) would also work.
+\end{Freeform}
+\item $x = 3, m = 6$.
+\begin{Choices} 
+Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\begin{itemize}
+\FalseChoice\item $x$ has an inverse $\mod m$.
+\TrueChoice\item $x$ does not have an inverse $\mod m$.
+\Solution No, $gcd(x, m)\ =\ gcd(3, 6)\ =\ 3$. The numbers are not coprime, so no inverse exists.
+\end{itemize}
+\end{Choices}
+\begin{Freeform}{2}
+$y =$ 
+\Hint What is $gcd(x,m)$? Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\Solution We want to find $y$ such that $3 y\ \equiv\ 0 \bmod 6$. By trial and error we find that $2$ works ($3 \times 2\ =\ 6\ \equiv 0 \bmod 6$). Any multiple of $2$ would also work.
+\end{Freeform}
+\item $x = 15, m = 4$.
+\begin{Choices} 
+Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\begin{itemize}
+\TrueChoice\item $x$ has an inverse $\mod m$.
+\FalseChoice\item $x$ does not have an inverse $\mod m$.
+\Solution Yes, $gcd(x, m)\ =\ gcd(15, 4)\ =\ 1$, so an inverse exists.
+\end{itemize}
+\end{Choices}
+\begin{Freeform}{3}
+$y =$ 
+\Hint What is $gcd(x,m)$? Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\Solution We know $15^{-1} \bmod 4\ =\ (15 \bmod 4)^{-1} \bmod 4\ =\ 3^{-1} \bmod 4$. From trial and error we can see that $3$ works ($3 \times 3\ =\ 9\ \equiv 1 \bmod 4$). Quickly verifying, we see that $15 \times 3\ =\ 45\ \equiv\ 1 \bmod 4$. Anything in the same equivalence class ($7$, $11$, $15$, etc) would also work.
+\end{Freeform}
+\item $x = 3, m = 4$.
+\begin{Choices} 
+Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\begin{itemize}
+\TrueChoice\item $x$ has an inverse $\mod m$.
+\FalseChoice\item $x$ does not have an inverse $\mod m$.
+\Solution Yes, $gcd(x, m)\ =\ gcd(3, 4)\ =\ 1$, so an inverse exists.
+\end{itemize}
+\end{Choices}
+\begin{Freeform}{3}
+$y =$ 
+\Hint What is $gcd(x,m)$? Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\Solution From above, we found $3^{-1} \bmod 4\ =\ 3$, or anything equivalent to $3 \bmod 4$.
+\end{Freeform}
+\item $x = 12, m = 16$.
+\begin{Choices} 
+Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\begin{itemize}
+\FalseChoice\item $x$ has an inverse $\mod m$.
+\TrueChoice\item $x$ does not have an inverse $\mod m$.
+\Solution No, $gcd(x, m)\ =\ gcd(12, 16)\ =\ 4$. The numbers are not coprime, so no inverse exists.
+\end{itemize}
+\end{Choices}
+\begin{Freeform}{4}
+$y =$ 
+\Hint What is $gcd(x,m)$? Review the definition and existence conditions of an inverse modulo $m$ in the notes.
+\Solution We want to find $y$ such that $12 y\ \equiv\ 0 \bmod 16$, so $12 y$ must be a multiple of $16$. To find the smallest such $y$, solve $12 y\ =\ lcm(12, 16)\ =\ 48$. This gives us $y\ =\ 4$. Any multiple of $4$ would also work.  
+\end{Freeform}
+\end{enumerate}
+
+\item Euclid's algorithm is a fast algorithm for computing the greatest common divisor of two integers. Here is an example. To compute $gcd(16, 10)$:
+\begin{eqnarray}
+16 &=& 10\times 1 + {\color{red} 6}\\
+10 &=& {\color{red} 6} \times 1 + {\color{blue} 4} \qquad (\text{notice this is a recursive call of } gcd(10, 6))\\
+6 &=& {\color{blue} 4} \times 1 + {\color{green} 2} \qquad (\text{notice this is a recursive call of } gcd(6, 4))\\
+4 &=&  {\color{green} 2} \times 2 + 0 \qquad (\text{notice this is a recursive call of } gcd(4, 2))
+\end{eqnarray}
+So $gcd(16, 10) = 2$, the last non-zero remainder. We can also back substitute to find $x, y$ such
+that $$ 2 = 16x + 10 y = gcd(16,10).$$ Here is how:
+\begin{eqnarray*}
+\text{ Rearrange (3) to get an expression} \qquad\quad\\
+\text{ for gcd(16,10):}\qquad  2&=& 6 - {\color{blue} 4}\times 1 \\
+\text{ rearrange (2) to get }  {\color{blue} 4 = (10 - 6\times 1)}\qquad\quad\\ \text{ and substitute:} 
+ \qquad 2 &=& 6 - {\color{blue}(10- 6\times 1)}\times 1\\ 
+\text{simplify:} \qquad 2 &=& -10 + {\color{red}6} \times 2\\
+\text{now rearrange (1) to get }\qquad\quad\\ {\color{red} 6 = (16 - 10\times 1)}\text{ and substitute:} \qquad
+2 &=& -10 + {\color{red} (16 - 10\times 1)}\times 2\\ 
+\text{simplify:}\qquad2 &=& 16 \times 2 - 10 \times 3
+\end{eqnarray*}
+So $x = 2$ and $y = -3$. \\
+
+Now, we will practice running Euclid's algorithm. As we saw above, the $i$th step of Euclid's algorithm is of the form 
+\[
+a_i = b_i \times q_i + r_i,
+\]
+where $a_1$ and $b_1$ are the two numbers for which we are trying to compute the greatest common divisor. The following questions will ask you to give the values for $a_i, b_i, q_i, r_i$ for different steps $i$.
+\begin{enumerate}
+\item Run Euclid's algorithm to determine the greatest common divisor of $a = 8, b = 22$. 
+\begin{enumerate}
+\item In the first step of the algorithm, we have $a_1 = 22$ and $b_1 = 8$. Give the values for $q_1$ and $r_1$:
+\begin{Freeform}{2}
+$q_1 = $
+\Solution We're solving $22\ =\ 8 \times q_1\ +\ r_1$, so $q_1\ =\ \lfloor \frac{22}{8} \rfloor\ =\ 2$.
+\Hint Review Euclid's algorithm in the notes.
+\end{Freeform}
+\begin{Freeform}{6}
+$r_1 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution We're solving $22\ =\ 8 \times q_1\ +\ r_1$, so $r_1\ =\ 22 \bmod 8\ =\ 6$.
+\end{Freeform}
+%-------------------
+\item What are $a_2, b_2, q_2$, and $r_2$?
+\begin{Freeform}{8}
+$a_2 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution By the algorithm, we're now trying to compute $gcd(8, 6)$, so $a_2\ =\ 8$.
+\end{Freeform}
+\begin{Freeform}{6}
+$b_2 = $
+\Hint Review Euclid's algorithm in the notes
+\Solution By the algorithm, we're now trying to compute $gcd(8, 6)$, so $b_2\ =\ 6$.
+\end{Freeform}
+\begin{Freeform}{1}
+$q_2 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution We're trying to solve $8\ =\ 6 \times q_2\ +\ r_2$, so $q_2\ =\ \lfloor \frac{8}{6} \rfloor\ =\ 1$.
+\end{Freeform}
+\begin{Freeform}{2}
+$r_2 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution We're trying to solve $8\ =\ 6 \times q_2\ +\ r_2$, so $r_2\ =\ 8 \bmod 6\ =\ 2$.
+\end{Freeform}
+%-------------------
+\item What are $a_3, b_3, q_3$, and $r_3$?
+\begin{Freeform}{6}
+$a_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution By the algorithm, we're now trying to find $gcd(6, 2)$, so $a_3\ =\ 6$.
+\end{Freeform}
+\begin{Freeform}{2}
+$b_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution By the algorithm, we're now trying to find $gcd(6, 2)$, so $b_3\ =\ 2$.
+\end{Freeform}
+\begin{Freeform}{3}
+$q_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution We're trying to solve $6\ =\ 2 \times q_3\ +\ r_3$, so $q_3\ =\ \lfloor \frac{6}{2} \rfloor\ =\ 3$.
+\end{Freeform}
+\begin{Freeform}{0}
+$r_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution We're trying to solve $6\ =\ 2 \times q_3\ +\ r_3$, so $r_3\ =\ 2 \bmod 2\ =\ 0$.
+\end{Freeform}
+\item What is the greatest common divisor of $22$ and $8$?
+\begin{Freeform}{2}
+$gcd(22,8) = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution We've determined $gcd(22, 8)\ =\ gcd(2, 0)$, and by definition the greatest common denominator of $x$ and $0$ is $x$, so $gcd(22, 8)\ =\ 2$.
+\end{Freeform}
+\end{enumerate}
+%-----------------------------------------
+\item Now, follow the process demonstrated above to find $x, y$ such that $8x + 22y = gcd(8,22)$. 
+\begin{enumerate}
+\item We start by taking $r_2 = a_2 - b_2\times q_2$.  We then substitute some expression for $b_2$, and after simplifying end up with the expression $r_2 = \alpha \times b_1 + \beta \times a_1$. What are $\alpha, \beta$?
+\begin{Freeform}{3}
+$\alpha = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\alpha\ =\ 3$. For full explanation, see solution to $\beta$. 
+\end{Freeform}
+\begin{Freeform}{-1}
+$\beta = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\beta\ =\ -1$. Recall that $a_2\ =\ 8$, $b_2\ =\ 6$, $q_2\ =\ 1$, and $r_2\ =\ 2$. We know 
+
+$$2\ =\ 8\ -\ 6 \times 1\ =\ 8 \times 1\ +\ 6 \times (-1)$$
+
+Now let's try to express this in terms of $b_1\ =\ 8$ and $a_1\ =\ 22$.\\
+
+We're trying to find $\alpha$ and $\beta$ such that
+
+$$2\ =\ 8 \times \alpha\ +\ 22 \times \beta$$
+
+First we express $a_2$ and $b_2$ in terms of $a_1$ and $b_1$. We know $8 \times 2\ +\ 6\ =\ 22$, so $6\ =\ 22\ -\ 8 \times 2$.
+
+$$2\ =\ 8 \times 1\ +\ (22\ -\ 8 \times 2) \times (-1)$$
+
+Combining like terms, 
+
+$$2\ =\ 8 \times (1 + 2)\ +\ 22 \times (-1)\ =\ 8 \times 3\ +\ 22\times (-1)$$
+
+Thus we have $\alpha\ =\ 3$ and $\beta\ =\ -1$.
+\end{Freeform}
+\item What are $x, y$?
+\begin{Freeform}{3}
+$x = $
+\Solution $x\ =\ \alpha\ =\ 3$.
+\Hint Review Euclid's algorithm in the notes.
+\end{Freeform}
+\begin{Freeform}{-1}
+$y = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $y\ =\ \beta\ =\ -1$.
+\end{Freeform}
+\end{enumerate}
+%-----------------------------------------
+\item Run Euclid's algorithm to determine the greatest common divisor of $x = 13, y = 21$.
+\begin{enumerate}
+\item In the first step of the algorithm, we have $a_1 = 21$ and $b_1 = 13$. Give the values for $q_1$ and $r_1$:
+\begin{Freeform}{1}
+$q_1 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $q_1\ =\ \lfloor \frac{21}{13} \rfloor\ =\ 1$.
+\end{Freeform}
+\begin{Freeform}{8}
+$r_1 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $r_1\ =\ 21 \bmod 13\ =\ 8$.
+\end{Freeform}
+%-------------------
+\item What are $a_2, b_2, q_2$, and $r_2$?
+\begin{Freeform}{13}
+$a_2 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $a_2\ =\ b_1\ =\ 13$
+\end{Freeform}
+\begin{Freeform}{8}
+$b_2 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $b_2\ =\ r_1\ =\ 8$.
+\end{Freeform}
+\begin{Freeform}{1}
+$q_2 = $
+\Solution $q_2\ =\ \lfloor \frac{13}{8} \rfloor\ =\ 1$.
+\Hint Review Euclid's algorithm in the notes.
+\end{Freeform}
+\begin{Freeform}{5}
+$r_2 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $r_2\ =\ 13 \bmod 8\ =\ 5$.
+\end{Freeform}
+%-------------------
+\item What are $a_3, b_3, q_3$, and $r_3$?
+\begin{Freeform}{8}
+$a_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $a_3\ =\ b_2\ =\ 8$.
+\end{Freeform}
+\begin{Freeform}{5}
+$b_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $b_3\ =\ r_2\ =\ 5$.
+\end{Freeform}
+\begin{Freeform}{1}
+$q_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $q_3\ =\ \lfloor \frac{8}{5} \rfloor\ =\ 1$.
+\end{Freeform}
+\begin{Freeform}{3}
+$r_3 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $r_3\ =\ 8 \bmod 5\ =\ 3$.
+\end{Freeform}
+%-------------------
+\item What are $a_4, b_4, q_4$, and $r_4$?
+\begin{Freeform}{5}
+$a_4 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $a_4\ =\ b_3\ =\ 5$.
+\end{Freeform}
+\begin{Freeform}{3}
+$b_4 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $b_4\ =\ r_3\ =\ 3$.
+\end{Freeform}
+\begin{Freeform}{1}
+$q_4 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $q_4\ =\ \lfloor \frac{5}{3} \rfloor\ =\ 1$.
+\end{Freeform}
+\begin{Freeform}{2}
+$r_4 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $r_4\ =\ 5 \bmod 3\ =\ 2$.
+\end{Freeform}
+%-------------------
+\item What are $a_5, b_5, q_5$, and $r_5$?
+\begin{Freeform}{3}
+$a_5 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $a_5\ =\ b_4\ =\ 3$.
+\end{Freeform}
+\begin{Freeform}{2}
+$b_5 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $b_5\ =\ r_4\ =\ 2$.
+\end{Freeform}
+\begin{Freeform}{1}
+$q_5 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $q_5\ =\ \lfloor \frac{3}{2} \rfloor\ =\ 1$.
+\end{Freeform}
+\begin{Freeform}{1}
+$r_5 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $r_5\ =\ 3 \bmod 2\ =\ 1$.
+\end{Freeform}
+%-------------------
+\item What are $a_6, b_6, q_6$, and $r_6$?
+\begin{Freeform}{2}
+$a_6 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $a_6\ =\ b_5\ =\ 2$.
+\end{Freeform}
+\begin{Freeform}{1}
+$b_6 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $b_6\ =\ r_5\ =\ 1$.
+\end{Freeform}
+\begin{Freeform}{2}
+$q_6 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $q_6\ =\ \lfloor \frac{2}{1} \rfloor\ =\ 2$.
+\end{Freeform}
+\begin{Freeform}{0}
+$r_6 = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $r_6\ =\ 2 \bmod 1\ =\ 0$.
+\end{Freeform}
+\item What is the greatest common divisor of $13$ and $21$?
+\begin{Freeform}{1}
+$gcd(13,21) = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $gcd(31, 21)\ =\ gcd(1, 0)\ =\ 1$.
+\end{Freeform}
+\end{enumerate}
+\item Now, follow the process demonstrated above to find $x, y$ such that $13x + 21y = gcd(13,21)$. 
+\begin{enumerate}
+\item We start by taking $r_5 = a_5 - b_5\times q_5$.  We then substitute some expression for $b_5$, and after simplifying end up with the expression $r_5 = \alpha \times b_4 + \beta \times a_4$. What are $\alpha, \beta$?
+\begin{Freeform}{2}
+$\alpha = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\alpha\ =\ 2$. For full solution, see solution to $\beta$.
+\end{Freeform}
+\begin{Freeform}{-1}
+$\beta = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\beta\ =\ -1$. We know 
+
+$$r_5\ =\ a_5\ -\ b_5 \times q_5\ \implies\ 1\ =\ 3\ -\ 2 \times 1$$
+
+Now we express $b_5\ =\ 2$ in terms of $b_4\ =\ 3$ and $a_4\ =\ 5$:
+
+$$1\ =\ 3\ -\ (5\ -\ 3) \times 1$$
+
+Combining like terms, we get 
+
+$$1\ =\ 3 \times 2\ +\ 5 \times (-1)$$
+
+giving $\alpha\ =\ 2$ and $\beta\ =\ -1$.
+
+\end{Freeform}
+%-------------------------
+\item We then substitute some expression for $b_4 = r_3$, and after simplifying we get $r_5 = \alpha \times b_3 + \beta\times a_3$. What are $\alpha, \beta$?
+\begin{Freeform}{-3}
+$\alpha = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\alpha\ =\ -3$. For full solution, see solution to $\beta$.
+\end{Freeform}
+\begin{Freeform}{2}
+$\beta = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\beta\ =\ 2$. We start with the expression we derived in the last step:
+
+$$1\ =\ 3 \times 2\ +\ 5 \times (-1)$$
+
+Now we express $b_4\ =\ 3$ in terms of $b_3\ =\ 5$ and $a_3\ =\ 8$:
+
+$$1\ =\ (8 - 5) \times 2\ +\ 5 \times (-1)$$
+
+Combining like terms, 
+
+$$1\ =\ 5 \times (-3)\ +\ 8 \times 2$$
+
+giving $\alpha\ =\ -3$ and $\beta\ =\ 2$.
+\end{Freeform}
+%-------------------------
+\item We then substitute some expression for $b_3 = r_2$, and after simplifying we get $r_5 = \alpha \times b_2 + \beta\times a_2$. What are $\alpha, \beta$?
+\begin{Freeform}{5}
+$\alpha = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\alpha\ =\ 5$. For full solution, see solution to $\beta$.
+\end{Freeform}
+\begin{Freeform}{-3}
+$\beta = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\beta\ =\ -3$. We start with the expression we found in the last step:
+
+$$1\ =\ 5 \times (-3)\ +\ 8 \times 2$$
+
+Now we express $b_3\ =\ 5$ in terms of $b_2\ =\ 8$ and $a_2\ =\ 13$:
+
+$$1\ =\ (13 - 8) \times (-3)\ +\ 8 \times 2$$
+
+Combining like terms, we get 
+
+$$1\ =\ 8 \times 5\ +\ 13 \times (-3)$$
+
+giving $\alpha\ =\ 5$ and $\beta\ =\ -3$.
+\end{Freeform}
+%-------------------------
+\item We finally substitute some expression for $b_2 = r_1$, and after simplifying we get $r_5 = \alpha \times b_1 + \beta\times a_1$. What are $\alpha, \beta$?
+\begin{Freeform}{-8}
+$\alpha = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\alpha\ =\ -8$. For full solution, see solution to $\beta$.
+\end{Freeform}
+\begin{Freeform}{5}
+$\beta = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $\beta\ =\ 5$. We start with the expression we derived in the last step:
+
+$$1\ =\ 8 \times 5\ +\ 13 \times (-3)$$
+
+We now express $b_2\ =\ 8$ in terms of $b_1\ =\ 13$ and $a_1\ =\ 22$:
+
+$$1\ =\ (22 - 13)\times 5\ +\ 13 \times (-3)$$
+
+Combining like terms, we get
+
+$$1\ =\ 13 \times (-8)\ +\ 22 \times 5$$
+
+giving $\alpha\ =\ -8$ and $\beta\ =\ 5$.
+\end{Freeform}
+%-------------------------
+\item  What are $x, y$?
+\begin{Freeform}{-8}
+$x = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $x\ =\ \alpha\ =\ -8$.
+\end{Freeform}
+\begin{Freeform}{5}
+$y = $
+\Hint Review Euclid's algorithm in the notes.
+\Solution $y\ =\ \beta\ =\ 5$.
+\end{Freeform}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\end{document}

@@ -4,10 +4,10 @@
   <thead>
     <tr>
       <th align="center">Week number</th>
-      <th align="center">Dis a</th>
-      <th align="center">Dis b</th>
-      <th align="center">Dis c</th>
-      <th align="center">Dis d</th>
+      <th align="center">Dis A</th>
+      <th align="center">Dis B</th>
+      <th align="center">Dis C</th>
+      <th align="center">Dis D</th>
       <th align="center">HW problem</th>
       <th align="center">HW Due Data</th>
       <th align="center">HW Sol</th>
@@ -23,19 +23,25 @@
         {% capture hw_base_url %}{{static_url}}{{'/homeworks/'}}{% endcapture %}
 
         {% for dis in week.discussions %}
-          {% unless dis.skipped %}
-            <td align="center">
+          <td align="center">
+            {% if dis.skipped %}
+              Skipped
+            {% else %}
               {% if dis.prob %}
                 <a href="{{dis_base_url}}q{{week.week}}{{dis.part}}.pdf">{{ week.week }}{{dis.part | upcase}}</a>;
               {% endif %}
               {% if dis.sol %}
                 <a href="{{dis_base_url}}s{{week.week}}{{dis.part}}.pdf">Sol</a>;
               {% endif %}
-            </td>
-          {% endunless %}
+            {% endif %}
+          </td>
         {% endfor %}
 
-        {% unless week.homework.skipped %}
+        {% if week.homework.skipped %}
+          <td>No homework</td>
+          <td>N/A</td>
+          <td>N/A</td>
+        {% else %}
           <td align="center">
             {% if week.homework.problem %}
               <a href="{{ hw_base_url }}hw{{week.week}}.pdf">Homework {{ week.week }}</a>
@@ -51,7 +57,7 @@
               <a href="{{ hw_base_url }}hw{{week.week}}-sol.pdf">Solution</a>
             {% endif %}
           </td>
-        {% endunless %}
+        {% endif %}
       </tr>
     {% endif %}
   {% endfor %}

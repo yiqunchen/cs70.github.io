@@ -19,9 +19,13 @@
  */
 
 .nav {
-    float: right;
-    margin-right:$spacing-unit;
+    padding-right:$spacing-unit;
     padding-left:$spacing-unit;
+}
+
+.nav_right {
+    margin-right:$spacing-unit;
+    margin-left: auto;
 }
 
 .nav-link {
@@ -35,6 +39,9 @@
     margin-right: auto;
 }
 
+.resource_table tr:nth-child(even) {
+    background-color: #dddddd;
+}
 
 /**
  * Page content

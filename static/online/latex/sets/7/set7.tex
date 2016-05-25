@@ -1,0 +1,154 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt,preview]{standalone} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+
+\usepackage{../../markup}
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{color}
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{amsmath, amsfonts,amssymb}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\config{name}{Infinity, Countability, and Computability}
+
+\noindent{\bf Infinity and Countability}
+
+\begin{enumerate}
+	\item Which of the following are true for the cardinality of the set $\{1,2,3\}$?
+	\begin{Multi}
+	\begin{itemize}
+		\TrueChoice\item Finite.
+		\TrueChoice\item Countable.
+	\end{itemize}
+	\Solution This is a finite set since it has only 3 elements. A set is countable if and only if there is a bijection between it and a subset of $\mathbb{N}$. But this is actually a subset of $\mathbb{N}$ itself. So the identity function is the desired bijection. In general any finite set is countable.
+	\end{Multi}
+	
+	\item Which of the following are true for the cardinality of the set of multiples of $5$?
+	\begin{Multi}
+	\begin{itemize}
+		\FalseChoice\item Finite.
+		\TrueChoice\item Countable.
+	\end{itemize}
+	\Solution This set obviously has infinitely many elements since $5k$ for any $k\in\mathbb{N}$ is in it. The function $x\to \frac{x}{5}$ is a bijection between this set and the set of natural numbers. So this is a countable set.
+	\end{Multi}
+
+
+	\item Suppose that a set $S$ is countable. Which of the following are true about $S$?
+	\begin{Multi}
+	\begin{itemize}
+		\TrueChoice\item Any subset of $S$ is also countable.
+		\FalseChoice\item Any strict (not equal to $S$ itself) subset of $S$ is finite.
+		\TrueChoice\item  If we add an element to $S$ it remains countable.
+	\end{itemize}
+	\Solution By definition there is a bijection between $S$ and some subset of $\mathbb{N}$. That same bijection restricted to any subset of $S$ is also a bijection between that subset and some subset of $\mathbb{N}$.
+	
+	It is not true that any strict subset of $S$ is finite. For example the set of natural numbers is countable, but the set of odd numbers is a strict subset which is not finite.
+	
+	If $S$ is finite, adding an element to it makes it finite. If $S$ is infinite, then there is a bijection between it and $\mathbb{N}$. Now when we add an element to $S$ we can shift everything up by $1$ (so if an element was being mapped to $x$, now it's mapped to $x+1$), and map the new element to the lowest element of $\mathbb{N}$, i.e. $0$.
+	\end{Multi}
+
+	\item Which of the following sets are uncountable?
+	\begin{Multi}
+	\begin{itemize}
+		\TrueChoice\item The interval $[0, 1]$.
+		\FalseChoice\item The total number of computer programs that could ever be written.
+		\TrueChoice\item The interval $[0, 10]$.
+		\TrueChoice\item The set of real numbers that have a digit $1$ when written down.
+	\end{itemize}
+	\Solution The interval $[0,1]$ can be shown to be uncountable using Cantor's diagonalization method.
+	
+	Every computer program is simply a finite sequence of characters. If we assign each character a natural number, then a computer program is just a finite sequence of natural numbers. These are countable, since there is a bijection between them and the polynomials with natural coefficients which was shown to be a countable set.
+	
+	There is a bijection between the interval $[0,10]$ and the interval $[0,1]$. Namely $x\to \frac{x}{10}$.
+	
+	The set of real numbers that have a digit $1$ in their representation obviously includes the set $[10,11]$ which is uncountable.
+	\end{Multi}
+
+	\item In what cases does a set $S$ have the same cardinality as the set $S'$ obtained from $S$ by adding an element to it?
+	\begin{Multi}
+	\begin{itemize}
+		\FalseChoice\item If $S$ is finite.
+		\TrueChoice\item If $S$ is countable and infinite.
+		\TrueChoice\item If $S$ is uncountable and infinite.
+	\end{itemize}
+	\Solution When $S$ is finite, then $S$ plus one element has strictly larger cardinality.
+	
+	But when $S$ is infinite, we can extract an infinite sequence out of it by the following method: we pick an element $a_1$; there must be another element $a_2$; there must be another element $a_3$, and so on. This process never stops because $S$ is infinite. Now construct a bijection between $S$ and $S'$ by mapping each $a_i$ to $a_{i+1}$, mapping the new element to $a_1$, and mapping other elements to themselves. This shows that $S$ and $S'$ have the same cardinality.
+	\end{Multi}
+
+\end{enumerate}
+
+\noindent{\bf Computability}
+
+\begin{enumerate}
+	\item Why can't we solve the Halting problem by just simulating the given program on the given input and seeing if it stops?
+	\begin{Multi}
+	\begin{itemize}
+		\FalseChoice\item Because we cannot simulate programs.
+		\TrueChoice\item Because in case the answer is no, our simulation would never stop.
+	\end{itemize}
+	\Solution We can indeed simulate programs. That is what virtualization softwares that most people are familiar with do.
+	
+	The reason is that we need to output an answer no matter whether it's Yes or No. But if a program is not going to halt (in which case the answer is No), our simulation also never stops.
+	\end{Multi}
+	
+	\item 
+
+\end{enumerate}
+
+\end{document}

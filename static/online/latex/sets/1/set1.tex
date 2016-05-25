@@ -1,0 +1,469 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt, preview]{standalone} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{amsmath,amsthm,amsfonts}
+\usepackage{ dsfont }
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+\def\N{\mathbb{N}}
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\usepackage{../../markup}
+
+\begin{document}
+\config{name}{Induction}
+\noindent{\bf Induction}
+
+\noindent The following questions have a proposition and corresponding inductive proof. For each question: decide whether the proof is correct, and if not, identify the proof's flaw.
+\begin{enumerate}
+%-------------------------------------------------------
+\item 
+{\bf Proposition:} For every integer $n \ge 0$, 
+\[
+0^2 + 1^2 + 2^2 + \cdots + n^2 \ =\  \sum_{i=0}^n i^2 \ =\ \frac{n(n+1)(2n+1)}{6}.
+\] 
+\\
+{\bf Proof:} 
+\begin{itemize}
+\item {\bf Base Case.} For $n = 0$, this clearly holds since $\sum_{i=0}^0{i^2} = 0 = \frac{0(1)(1)}{6}$. 
+\item {\bf Inductive Hypothesis.} Assume $\sum_{i = 0}^k{i^2} = \frac{k(k+1)(2k+1)}{6}$.
+\item {\bf Inductive Step.} Consider $\sum_{i = 0}^{k+1}{i^2}$. Notice that
+\begin{equation}
+\sum_{i = 0}^{k+1}{i^2} = \left( \sum_{i = 0}^{k}{i^2} \right)+ (k+1)^2.
+\end{equation}
+Apply the inductive hypothesis to the right-hand side to obtain
+\begin{eqnarray}
+\sum_{i = 0}^{k+1}{i^2} &=& \frac{k(k+1)(2k+1)}{6} + (k+1)^2 \\
+&=& (k+1) \frac{(2k^2 + k) + 6k + 6}{6} \\
+&=& (k+1) \frac{(k+2)(2k+3)}{6}.
+\end{eqnarray}
+Thus, the statement holds for $k+1$, and the proposition follows by the principle of induction. 
+\end{itemize}
+\begin{enumerate}
+\begin{Choices}
+\TrueChoice\item The proof is correct.
+\FalseChoice\item The wrong base case was used; we should start from $n = 1$.
+\FalseChoice\item This proof only holds for some of the integers; it is not general enough. 
+\FalseChoice\item The inductive hypothesis was not applied correctly.
+\FalseChoice\item Equation (1) is incorrect.  
+\FalseChoice\item There is an error in line (2).
+\FalseChoice\item There is an error in line (3). 
+\FalseChoice\item There is an error in line (4). 
+
+\Solution The proof is correct. 
+\end{Choices}
+\end{enumerate}
+
+%-------------------------------------------------------
+
+\item 
+{\bf Proposition:} $(\forall n \in \N)(n^2 \leq n)$.
+\\
+{\bf Proof:}
+\begin{itemize}
+\item {\bf Base Case.}  When $n=1$, the statement is $1^2 \leq 1$ which is true.
+\item {\bf Inductive Hypothesis.}  Assume that $k^2 \leq k$.
+\item {\bf Inductive Step.} 
+(1)We need to show that $$(k+1)^2 \leq k+1$$\\
+Working backwards we see that:\\
+(2) $$k^2 \leq (k+1)^2 -1 \leq (k+1)-1 = k$$\\
+(3)So we get back to our original hypothesis which is assumed to be true.\\
+(4)Hence, for every $n \in \N$ we know that $n^2 \leq n$. $\spadesuit$
+\end{itemize}
+\begin{enumerate}
+\begin{Choices}
+\FalseChoice\item The proof is correct.
+\FalseChoice\item The proof of the base case is incorrect. 
+\FalseChoice\item The inductive hypothesis does not hold.
+\FalseChoice\item The goal in (1) is incorrect.
+\TrueChoice\item The application of the inductive hypothesis in (2) is incorrect.
+\FalseChoice\item Step (3) is incorrect.
+\FalseChoice\item Step (4) is incorrect.
+
+\Solution The application of the inductive hypothesis in (2) is incorrect.\\
+
+The goal of the inductive hypothesis is to let you prove that if the proposition is true for $n = k$, then it will be true for $n = k + 1$. In other words, to prove that $P(k) \implies P(k + 1)$. However, what we actually showed here was that $P(k + 1) \implies P(k)$. Remember that implications are not bidirectional! 
+\end{Choices}
+\end{enumerate}
+
+
+
+ %-------------------------------------------------------
+\item 
+{\bf Proposition:} All students love homework equally.
+\\
+{\bf Proof:}
+\begin{itemize}
+\item {\bf Base Case.} For $n = 1$, a single student clearly loves homework exactly as much as him- or herself, so the base case holds.
+\item {\bf Inductive Hypothesis.} Assume any $k$ students love homework equally. 
+\item {\bf Inductive Step.} 
+Consider $k+1$ students. \\
+(1) By the inductive hypothesis, the first $k$ students all love homework equally. \\
+(2) By the inductive hypothesis, the last $k$ students all love homework equally. \\
+(3) Therefore, all $k+1$ students love homework equally, and the proposition holds by the principle of induction.
+\end{itemize}
+\begin{Choices}
+\Hint Why are we separately considering the first $k$ students and the last $k$ students in a group of $k + 1$? What assumptions are we making about the two sets that allow us to draw conclusions in (3)?
+\begin{enumerate}
+\FalseChoice\item The proof is correct.
+\FalseChoice\item The proof of the base case is incorrect. 
+\FalseChoice\item The inductive hypothesis does not hold.
+\FalseChoice\item The application of the inductive hypothesis in (1) is incorrect.
+\FalseChoice\item The application of the inductive hypothesis in (2) is incorrect.
+\TrueChoice\item The inductive step logic in step (3) is flawed for at least one value of $k$.
+
+\Solution The inductive step logic in step (3) is flawed for at least one value of $k$ - namely, $k = 2$.\\
+
+The implicit assumption we make in step (3) is that there will be some overlap between the first $k$ students and the last $k$ students in a set of $k + 1$.\\ 
+
+For example, in a set of three students $\{A\ B\ C\}$, the first two students are $\{A\ B\}$ and the last two students are $\{B\ C\}$. By the inductive hypothesis, $A$ and $B$ both like homework equally, and $B$ and $C$ both like homework equaly, so by transitivity $A$ and $C$ must like homework equally, so the entire set of three must like homework equally. Similar logic will hold for all larger $k$.\\
+
+However, this assumption is {\it not} valid for $k = 2$. In a set of two students $\{A\ B\}$, $k - 1 = 1$. The set of the first one student is ${A}$ and the last one students is ${B}$, and while the inductive hypothesis would hold for both sets, we cannot make any arguments by transitivity because there is no overlap.
+\end{enumerate}
+\end{Choices}
+
+%-------------------------------------------------------
+\item 
+{\bf Proposition:} Every integer $n \ge 2$ can be written as a product of prime numbers.
+\\
+{\bf Proof:} 
+\begin{itemize}
+\item {\bf Base Case.} The base case is $k = 2$. This is prime, so the base case holds. 
+\item {\bf Inductive Hypothesis.} Assume for some  integer $k \ge 2$ that it can be expressed as a product of prime numbers.
+\item {\bf Inductive Step.} 
+Consider $k+1$. 
+If $k+1$ is prime, then we are done. 
+(1) Otherwise, it must have a smallest integer divisor $a>1$ such that $k+1 = a\cdot b$ for some integer $b$. 
+(2) Applying the inductive hypothesis, we know that $a$ and $b$ can be written as products of primes, and therefore $k+1$ can be written as a product of those primes in turn. 
+Thus, the proposition holds by the principle of induction. 
+\end{itemize}
+\begin{enumerate}
+\begin{Choices}
+\FalseChoice\item The proof is correct.
+\FalseChoice\item The logic of the inductive step does not apply to every integer. 
+\FalseChoice\item The claim in (1) is incorrect, because we are not guaranteed that $k+1$ has a smallest integer divisor. 
+\TrueChoice\item The inductive hypothesis was too weak to apply in (2); strong induction should have been used.
+\FalseChoice\item We cannot apply our inductive hypothesis to more than one subproblem at a time in (2). 
+
+\Solution The inductive hypothesis was too weak to apply in (2).\\
+
+Our inductive hypothesis only allowed us to assume that a single number $k\ \in \mathbb{N}$ was the product of prime numbers. However, in (2) we assume that $a$ and $b$ can be written as the product of prime numbers, with $a, b \leq k$.\\
+
+Simply assuming that $k$ is the product of primes does not give us any information about all the natural numbers up to $k$. Our inductive hypothesis should have been ``Assume that for some integer $k \geq 2$, all $i \leq k$ can be written as the product of prime numbers''.
+\end{Choices}
+\end{enumerate}
+
+%-------------------------------------------------------
+\item 
+{\bf Proposition:} Consider the function $f$ defined as:
+\[ f(x) = \left\{ 
+  \begin{array}{l l}
+    x & \quad x = 1,2,3\\
+    f(x-1)+f(x-2)+f(x-3) & \quad x \in \mathbb{N} \text{ and } x > 3
+  \end{array} \right.\]
+Show that $\forall x \in \mathbb{N}, f(x)<2^x$.
+\\
+{\bf Proof:} 
+\begin{itemize}
+\item {\bf Base Case.} $f(1) = 1 < 2^1$,$f(2) = 2 < 2^2$, $f(3) = 3 < 2^3$, and $f(4) = 1 + 2 + 3 < 2^4$.
+\item {\bf Inductive Hypothesis.} Assume for $n \geq 3, \forall x \leq n, f(x) < 2^x$.
+\item {\bf Inductive Step.} 
+Consider $x = n+1$. We get
+\begin{align}
+  f(n + 1) = f(n) + f(n-1) + f(n-2) &< 2^n + 2^{(n-1)} + 2^{(n-2)}\\
+  &= (2^2+2+1)\times 2^{(n-2)}\\
+  &= 7\times 2^{(n-2)}\\
+  &< 8\times 2^{(n-2)} = 2^{(n+1)}
+\end{align}
+Therefore, $\forall x \in \mathbb{N}, f(x)<2^x$.
+\end{itemize}
+\begin{enumerate}
+\begin{Choices}
+\TrueChoice\item The proof is correct.
+\FalseChoice\item The proof is incorrect because the base case does not need to verify $f(4)$.
+\FalseChoice\item The proof is incorrect because the inductive hypothesis does not include the cases when $n = 1,2$.
+\FalseChoice\item The proof is incorrect because the inductive step should consider $x = n$ instead of $x = n + 1$.
+
+\Solution The proof is correct.
+\end{Choices}
+\end{enumerate}
+
+%-------------------------------------------------------
+\item 
+{\bf Proposition:} Any shape which can be drawn using $n$ squares of side length $\ell$ is an $\ell \times n\ell$ rectangle.
+\\
+{\bf Proof:} 
+\begin{itemize}
+\item {\bf Base Case.} For $n = 1$, a single square is an $\ell \times 1 \ell$ rectangle, and so the base case holds. 
+\item {\bf Inductive Hypothesis.} Any shape which can be drawn using $k$ squares is an $\ell \times k \ell$ rectangle.
+\item {\bf Inductive Step.} 
+Consider a shape drawn using $k$ squares. 
+(1) By the inductive hypothesis, this shape must be an $\ell \times k\cdot \ell$ rectangle. 
+(2) Now, we add one more square to the end of the rectangle, and we have a $\ell \times (k+1)\ell$ rectangle.
+Therefore, the statement holds for $k+1$, and we have proven the proposition by induction.
+\end{itemize}
+\begin{enumerate}
+\begin{Choices}
+\FalseChoice\item The proof is correct.
+\FalseChoice\item The base case is incorrect.
+\FalseChoice\item The inductive hypothesis is applied too early in the proof. 
+\FalseChoice\item The inductive hypothesis does not hold as applied in (1).
+\TrueChoice\item The way in which the argument is extended to $k+1$ in (2) does not hold for all cases.
+\FalseChoice\item The inductive hypothesis does not actually hold for the subproblem to which it was applied.
+
+\Solution The way in which the argument is extended to $k + 1$ in (2) doesn't hold.\\
+
+It is true that if we added another square to the end of the rectangle, extending the $kl$ side by one unit, we would have an $l\times(k + 1)l$ rectangle. However, this is {\it not} the only possible way to place the square.\\ 
+
+For example, a square could be placed on a $1\times2$ rectangle extending the short side to form an $L$ shape. What this actually proves is that it is always {\it possible} to construct an $l\times{nl}$ rectangle out of $n$ squares of length $l$, which is a much less extraordinary claim. 
+\end{Choices}
+\end{enumerate}
+
+%-------------------------------------------------------
+\item
+\noindent Suppose you are trying to prove the following proposition by induction on $n$:
+{\bf Proposition:} For $n \ge 1$, every set of $n$ numbers whose elements sum to 0 must contain at least one non-positive number. 
+\\
+Which of the following is a suitable induction hypothesis:
+\begin{enumerate}
+\begin{Choices}
+\FalseChoice\item Assume that for all $k \geq 1$, some set of $k$ numbers whose elements sum to 0 must contain at least one non-positive number. 
+\FalseChoice\item Assume that there is a set of $k \geq 1$ numbers whose elements sum to 0 and which contains at least one non-positive number.
+\FalseChoice\item Assume that for every $k \geq 1$, any set of $k$ numbers whose elements sum to 0 must contain at least one non-positive number. 
+\TrueChoice\item Assume that for some $k \geq 1$, any set of $k$ numbers whose elements sum to 0 must contain at least one non-positive number. 
+
+\Solution The correct proposition is ``Assume that for some $k \geq 1$, any set of $k$ numbers whose elements sum to $0$ must contain at least one positive number.'' This is because we are inducting over the number of elements in the sets, so our hypothesis must assert that the proposition is true for sets of size $k$. 
+\end{Choices}
+\end{enumerate}
+
+%-------------------------------------------------------
+
+\item The following questions will help you figure out sufficient assumptions for induction to work. Assume that in all cases our goal is to prove $(\forall n \in \mathbb{N}) P(n)$. In each case determine whether this statement can be proven using the given assumptions or not.
+\begin{enumerate}
+	\item We know $(\forall n) (P(2n)\implies P(2n+2))$ and $P(0),P(1)$ are true.
+	\begin{itemize}
+	\begin{Choices}
+		\FalseChoice\item Induction proves $\forall n P(n)$.
+		\TrueChoice\item The assumptions are not sufficient.
+		\Solution No. For example consider the statement $P(n)$ which says either $n$ is even or $n=1$. Then the assumptions are satisfied, but not all $n$ satisfy $P(n)$. The inductive step only works on even numbers, so we can never use it to derive $P(n)$ for odd $n$.
+	\end{Choices}
+	\end{itemize}
+	
+	\item We know $(\forall n) (P(n)\implies P(2n))$ and $\forall n (P(n)\implies P(2n+1))$ and $P(0)$ are true.
+		\begin{itemize}
+	\begin{Choices}
+		\TrueChoice\item Induction proves $\forall n P(n)$.
+		\FalseChoice\item The assumptions are not sufficient.
+		\Solution Yes. From $P(0)$, we can derive $P(0), P(1)$. From $P(1)$ we can derive $P(2), P(3)$. In general if we manage to prove $P(0),\dots, P(k-1)$, then $P(\lfloor \frac{k}{2}\rfloor)$ implies $P(2\lfloor \frac{k}{2}\rfloor)$ and $P(2\lfloor \frac{k}{2}\rfloor +1)$, one of which is simply $P(k)$. And since $\lfloor \frac{k}{2}\rfloor$ is amongst $0,\dots ,k-1$, we have already proven it.
+	\end{Choices}
+	\end{itemize}
+\end{enumerate}
+
+\item Assuming that we know $P(0), P(1)$ are true, which of the following assumptions imply that $(\forall n\in \mathbb N) P(n)$?
+	\begin{itemize}
+	\begin{Multi}
+		\FalseChoice\item $\forall n(P(n)\implies P(2n))$.
+		\TrueChoice\item $\forall n((P(n)\wedge P(n+1))\implies P(n+2))$.
+		\FalseChoice\item $\forall n((P(n)\wedge P(n+2))\implies P(n+1))$.
+		\TrueChoice\item $\forall n(P(n)\implies (P(n+1)\implies P(n+2)))$.
+		\Solution For the first choice, we can only use the rule to deduce $P(n)$ for even $n$. So it will never help us prove $P(9)$ for example.
+		
+			For the second choice, using $P(0), P(1)$ we can prove $P(2)$, then using $P(1), P(2)$ we can prove $P(3)$ and so on.
+		
+			For the third choice, note that to prove $P(n+1)$ we must already know $P(n+2)$. So if we know $P(0),\dots, P(k)$, the rule will never help us prove $P(k+1)$.
+			
+			For the fourth choice, note that $P(n)\implies (P(n+1)\implies P(n+2))$ is logically equivalent to $(P(n)\wedge P(n+1))\implies P(n+2)$. So it is equivalent to the second choice.	
+	\end{Multi}
+	\end{itemize}
+
+\item We wish to prove the following proposition: Let $r \neq 1$ be a real number and let $n \ge 0$ be an integer. Then we have
+\[
+\sum_{i = 0}^n r^i = \frac{r^{n+1} - 1}{r - 1}.
+\]
+\begin{itemize}
+\item What should we induct on? 
+\begin{enumerate}
+\begin{Choices}
+\FalseChoice\item $r$
+\FalseChoice\item $i$ 
+\TrueChoice\item {\bf $n$}
+\FalseChoice\item $\Sigma$
+\Solution We cannot induct on $r$, because it is a real number and not a natural number. $i$ is an internal variable, and the statement is not defined in terms of it (i.e. you can't say this is the statement for $i=2$). So the only remaining choice is to induct on $n$.
+\end{Choices}
+\end{enumerate}
+\item {\bf Base Case:} What should our base case be?
+\begin{enumerate}
+\begin{Choices}
+\TrueChoice\item $n = 0$
+\FalseChoice\item $n = 1$
+\FalseChoice\item $i = 0$
+\FalseChoice\item $i = 1$
+\FalseChoice\item $r = 0$
+\FalseChoice\item $r = 1$
+\FalseChoice\item $r = -1$
+\Solution Since we are inducting on $n$, the only two logical choices are $n=0$ and $n=1$. But since we want to prove the statement for all $n\geq 0$, $n=0$ is the logical base case. Otherwise we would have to provide a separate proof for the $n=0$ case.
+\end{Choices}
+\end{enumerate}
+\item {\bf Inductive Hypothesis:} What should our inductive hypothesis be? We want the simplest statement that will still prove our proposition.
+\begin{enumerate}
+\begin{Choices}
+\FalseChoice\item Suppose that our proposition holds for any integer $k < n +1$. 
+\FalseChoice\item Suppose that our proposition holds for some even integer $n$.
+\TrueChoice\item Suppose that our proposition holds for some $n$.
+\FalseChoice\item Suppose that for some $n$, we have $\sum_{i = 0}^n r^i \le \frac{r^{n+1} - 1}{r - 1}$.  
+\Solution The difference between the sum on the left hand side of the goal statement, for $n$ and $n+1$, is just one single term. So it looks like the sum for $n+1$ should be easily expressible in terms of the sum for $n$. Therefore assuming that the statement holds for some $n$ seems to be enough.
+\end{Choices}
+\end{enumerate}
+Now, we consider the case of $n+1$, and examine the sum $\sum_{i = 0}^{n+1} r^i$. Note that this sum has $n+2$ terms, since it starts from $0$. 
+\item {\bf Inductive Step:} How do we apply our hypothesis?
+\begin{enumerate}
+\begin{Choices}
+\FalseChoice\item We apply our hypothesis to the last $n+1$ terms of the sum. 
+\TrueChoice\item We apply our hypothesis to the first $n+1$ terms of the sum.
+\FalseChoice\item We first apply our hypothesis to the first $n+1$ terms, then apply it to the last $n+1$ terms, then subtract the expression for the middle $n$ terms.
+\Solution It is only the first $n+1$ terms that resemble a sum of the same format. So the logical thing to do is to apply the inductive hypothesis to the first $n+1$ terms.
+\end{Choices}
+\end{enumerate}
+\end{itemize}
+
+
+\end{enumerate}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\noindent The following questions will guide you through a proof by induction. 
+
+\begin{enumerate}
+\item We wish to prove the following proposition: Let $r \neq 1$ be a real number and let $n \ge 0$ be an integer. Then we have
+\[
+\sum_{i = 0}^n r^i = \frac{r^{n+1} - 1}{r - 1}.
+\]
+\begin{itemize}
+\item What should we induct on? 
+\begin{enumerate}
+\item $r$
+\item $i$ 
+\item {\bf $n$}
+\item $\Sigma$
+\end{enumerate}
+\item {\bf Base Case:} What should our base case be?
+\begin{enumerate}
+\item $n = 0$
+\item $n = 1$
+\item $i = 0$
+\item $i = 1$
+\item $r = 0$
+\item $r = 1$
+\item $r = -1$
+\end{enumerate}
+\item {\bf Inductive Hypothesis:} What should our inductive hypothesis be? We want the simplest statement that will still prove our proposition.
+\begin{enumerate}
+\item Suppose that our proposition holds for any integer $k < n +1$. 
+\item Suppose that our proposition holds for some even integer $n$.
+\item {\bf Suppose that our proposition holds for some $n$.}
+\item Suppose that for some $n$, we have $\sum_{i = 0}^n r^i \le \frac{r^{n+1} - 1}{r - 1}$.  
+\end{enumerate}\vspace{5mm}
+Now, we consider the case of $n+1$, and examine the sum $\sum_{i = 0}^{n+1} r^i$. Note that this sum has $n+2$ terms, since it starts from $0$. 
+\item {\bf Inductive Step:} How do we apply our hypothesis?
+\begin{enumerate}
+\item We apply our hypothesis to the last $n+1$ terms of the sum. 
+\item We apply our hypothesis to the first $n+1$ terms of the sum.
+\item We first apply our hypothesis to the first $n+1$ terms, then apply it to the last $n+1$ terms, then subtract the expression for the middle $n$ terms.
+\end{enumerate}
+\item {\bf Inductive Step:} How can we argue that the statement holds for $k+1$, given our inductive hypothesis?
+\begin{enumerate}
+\item We should obtain a simplified expression for the sum $\sum_{i = 0}^{n+1} r^i$. Write it down. 
+\item Now, simplify this expression to obtain our desired right-hand side. Write down this final expression.
+\item We've just proven the proposition using the principle of induction.
+\end{enumerate}
+\end{itemize}
+\end{enumerate}
+
+%-----------------------------------------------------------------------------------------------
+
+\noindent The following question will help you recognize when induction is appropriate.
+
+\begin{enumerate}
+  \item For which of these propositions is induction a natural proof technique?
+  \begin{enumerate}
+    \item {\bf $1^3 + 2^3 + 3^3 + \cdots + n^3 = (1+2+3+ \cdots + n)^2$ holds $\forall \ n \in \mathds{N}$}
+    \item Euler's formula, $e^{ix} = \cos(x) + i\sin(x)$.
+    \item $\sqrt{2}$ is irrational. 
+    \item {\bf $\sum_{k=1}^{n}{\frac{1}{k(k+1)}} = \frac{n}{n+1}$ holds $\forall \ n \in \mathds{N}$}
+    \item $\frac{d}{dx} x^n = nx^{n-1}$. 
+    \item The space $\mathbb{R}^n$ can always be tiled (completely filled) by regular $n$-dimensional cubes. 
+    \item {\bf Every polynomial of degree $n$ has at most $n$ roots.}
+    \item {\bf Any set $S$ of natural numbers that does not have a smallest element is the empty set.}
+    \item The area of the Sierpinski Triangle is zero. 
+    \item {\bf Suppose there are $n$ blue and red blocks in a line. If the block at the head of the line is blue and the block at the end of the line is red, then somewhere in the line, it must be that a blue block is adjacent to a red block.}
+  \end{enumerate}
+\end{enumerate}
+
+
+\end{document}

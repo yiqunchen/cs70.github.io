@@ -20,34 +20,34 @@
 
     "weekly": [
         {
-            "week": 1,
+            "week": 0,
             "display": true,
             "homework": {
                 "skipped": false,
                 "problem": true,
                 "solution": true,
-                "due_date": "2016/05/04"
+                "due_date": "2016/06/27"
             },
 
             "discussions": [
                 {
                     "part": "a",
-                    "skipped": false,
+                    "skipped": true,
                     "prob": true,
                     "sol": true
                 }, {
                     "part": "b",
-                    "skipped": false,
+                    "skipped": true,
                     "prob": true,
                     "sol": true
                 }, {
                     "part": "c",
-                    "skipped": false,
+                    "skipped": true,
                     "prob": true,
                     "sol": true
                 }, {
                     "part": "d",
-                    "skipped": false,
+                    "skipped": true,
                     "prob": true,
                     "sol": true
                 }

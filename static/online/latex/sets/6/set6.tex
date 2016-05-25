@@ -1,0 +1,350 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt,preview]{standalone} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+
+\usepackage{../../markup}
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{color}
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{amsmath, amsfonts,amssymb}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\config{name}{Error Correcting Codes}
+
+\noindent{\bf Decoding with Erasure Errors}
+\begin{enumerate}
+  \item[1.] Suppose Alice wants to send Bob a message of $n = 5$ packets and she wants to guard against $k = 1$ lost packets. Further assume that packets can be coded up as integers between $0$ and $6$. 
+  \begin{enumerate}
+    \item Alice can work over $GF(q)$. What is the minimum prime $q$ can be?
+    \begin{Freeform}{7}
+    $q = $
+    \Hint Recall that $q > n + k$.
+    \Solution $q\ =\ 7$. Alice needs to be able to send the original $5$ packets, plus one redundant packet to guard against one erasure, so $q$ must be a prime greater than $6$.
+    \end{Freeform}
+    \item Suppose Alice wants to send Bob the message $m = (2,3,5,1,6)$, where e.g., $m_2 = 3$. What is the maximum degree of the unique polynomial described by these points, which are of the form $(i,m_i)$?
+    \begin{Freeform}{4}
+    $d = $
+    \Solution $4$ --- we have $5$ points, which can uniquely determine a polynomial of degree at most $4$.
+    \end{Freeform}
+    \item What are the coefficients of the polynomial $P(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3 + a_4 x^4$ described by these $5$ points, $(i,m_i) \ \forall \ i \in \{1,\dotsc,5\}$?
+    \begin{Freeform}{3}
+    $a_0 = $
+    \Solution $a_0\ =\ 3$. For full solution, see solution to $a_4$.
+    \end{Freeform}
+    \begin{Freeform}{5}
+    $a_1 = $
+    \Solution $a_1\ =\ 5$. For full solution, see solution to $a_4$.
+    \end{Freeform}
+    \begin{Freeform}{4}
+    $a_2 = $
+    \Solution $a_2\ =\ 4$. For full solution, see solution to $a_4$.
+    \end{Freeform}
+    \begin{Freeform}{6}
+    $a_3 = $
+    \Solution $a_3\ =\ 6$. For full solution, see solution to $a_4$.
+    \end{Freeform}
+    \begin{Freeform}{5}
+    $a_4 = $
+    \Solution $a_4\ =\ 5$. The packets $m_1$ through $m_5$ gives us a system of $5$ linear equations
+
+    $$P(1)\ =\ a_0\ +\ a_1\ +\ a_2\ +\ a_3\ =\ 2$$
+    $$P(2)\ =\ a_0\ +\ 2 a_1\ +\ 4 a_2\ + a_3\ =\ 3$$
+    $$P(3)\ =\ a_0\ +\ 3 a_1\ +\ 2 a_2\ +\ 6 a_3\ =\ 5$$
+    $$P(4)\ =\ a_0\ +\ 4 a_1\ +\ 2 a_2\ +\ a_3\ =\ 1$$
+    $$P(5)\ =\ a_0\ +\ 5 a_1\ +\ 4 a_2\ +\ 6 a_3\ =\ 6$$
+
+    Notice that none of the coefficients are greater than $6$ --- we're always working in $GF(7)$! Thus the $i^{th}$ term of $P(x)$ is always $a_i \times (x^{i} \bmod 7)$.\\
+
+    Solving this system of linear equations will give us the coefficients found above. We can then easily check our work by plugging each $i$ into
+
+    $$P(x)\ =\ 3\ +\ 5 x\ +\ 4 x^2\ +\ 6 x^3\ +\ 5 x^4\ \bmod 7$$
+
+    and verifying that we get out $m_i$ in each case.
+
+    \end{Freeform}
+    \begin{Freeform}{1}
+    \item What is the minimum number of extra points Alice must send to Bob so that he can correctly reconstruct her message $m$?
+      \Solution $6$ --- we want to make sure that even if one packet is lost, we still have enough points to reconstruct a degree-$4$ polynomial, which means we need $5$ points left after a loss of $1$.
+    \end{Freeform}
+    \item Suppose Alice evaluates $P(x)$ at the extra point $i = 6$. What is the polynomial evaluated at this new point?
+    \begin{Freeform}{1}
+    $P(6) = $
+    \Solution We plug $x\ =\ 6$ into the polynomial found above:
+
+    $$P(6)\ =\ 3\ +\ 6 \times 5 +\ 6^2 \times 4\ +\ 6^3 \times 6\ +\ 6^4 \times 5\ \bmod 7$$
+
+    First we find $6^2 \bmod 7\ =\ 36 \bmod 7\ =\ 1$. Using this, we can find $6^3 \bmod 7\ =\ 6^2 \times 6 \bmod 7\ =\ 1 \times 6 \bmod 7\ =\ 6$. Finally, $6^4 \bmod 7\ =\ 6^2 \times 6^2 \bmod 7\ =\ 1 \times 1 \bmod 7\ =\ 1$. Plugging these values back in,
+
+    $$P(6)\ =\ 3\ +\ 6 \times 5 +\ 1 \times 4\ +\ 6 \times 6\ +\ 1 \times 5\ \bmod 7$$
+
+    From here we compute $6 \times 5\ =\ 30\ \equiv\ 2 \bmod 7$ and $6 \times 6\ =\ 1 \bmod 7$:
+
+    $$P(6)\ =\ 3\ +\ 2\ +\ 4\ +\ 1\ +\ 5\ \bmod 7$$
+
+    This is equivalent to 
+
+    $$P(6)\ =\ 15 \bmod 7\ =\ 1$$
+
+    \end{Freeform}
+    \item Alice sends her final message: $c_1 = 2$, $c_2 = 3$, $c_3 = 5$, $c_4 = 1$, $c_5 = 6$, $c_6 = 1$. But, the second packet is dropped, so Bob only receives: $c_1 = 2$, $c_3 = 5$, $c_4 = 1$, $c_5 = 6$, $c_6 = 1$. Bob can correctly recover the second packet via polynomial interpolation.
+    \begin{Choices}
+    \begin{itemize}
+    \TrueChoice\item True
+    \FalseChoice\item False
+    \Solution True, Bob still has $5$ distinct points from the same degree-4 polynomial, so the polynomial can be recovered, and $P(2)$ can be recomputed.
+    \end{itemize}
+    \end{Choices}
+    
+    \begin{Freeform}{5}
+    \item Bob decides to solve a system of linear equations to recover the second packet. How many linear equations are in his system?
+      \Solution There are $5$ equations.
+    \end{Freeform}
+    
+    \item Bob's $j^{th}$ linear equation is of the form $\sum_{i = 0}^{4}{g_i^{(j)} \cdot a_i} = g_5^{(j)}$. What are the coefficients $g_i^{(1)}$, $g_i^{(2)}$, $\dotsc$, $g_i^{(5)}$? Enter your answers in the form: $g^{(j)} = [g_4^{(j)} \ g_3^{(j)} \ g_2^{(j)} \ g_1^{(j)} \ g_0^{(j)} \ g_5^{(j)}]$.
+     \begin{Freeform}{[1 1 1 1 1 2]}
+     $ g^{(1)} = $
+     \Solution $[1\ 1\ 1\ 1\ 1\ 2]$. To find the $g_i^{(1)}$, we simply plug $1$ into the expression for $P(x)$:
+
+     $$P(1)\ =\ 1^4 \times a_4 +\ 1^3 \times a_3\ +\ 1^2 \times a_2\ +\ 1 \times a_1\ +\ a_0\ =\ 2\ \bmod 7$$
+
+     This simplifies to 
+
+     $$a_4\ +\ a_3\ +\ a_2\ +\ a_1\ +\ a_0\ =\ 2$$
+
+     meaning our coefficients are all $1$ and our result is $2$.
+     \end{Freeform}
+     \begin{Freeform}{[4 6 2 3 1 5]}
+     $ g^{(2)} = $
+     \Solution $[4\ 6\ 2\ 3\ 1\ 5]$. To find the $g_i^{(2)}$, we plug $3$ into the expression for $P(x)$ ($m_3$ is the second $m_i$ we received intact):
+
+     $$P(3)\ =\ 3^4 \times a_4 +\ 3^3 \times a_3\ +\ 3^2 \times a_2\ +\ 3 \times a_1\ +\ a_0\ =\ 5\ \bmod 7$$
+
+     This simplifies to 
+
+     $$4 a_4\ +\ 6 a_3\ +\ 2 a_2\ +\ 3 a_1\ +\ a_0\ =\ 5$$
+
+     \end{Freeform}
+     \begin{Freeform}{[4 1 2 4 1 1]}
+     $ g^{(3)} = $
+     \Solution $[4\ 1\ 2\ 4\ 1\ 1]$. To find the $g_i^{(3)}$, we plug in $4$ into the expression for $P(x)$:
+
+     $$P(4)\ =\ 4^4 \times a_4\ +\ 4^3 \times a_3\ +\ 4^2 \times a_2\ +\ 3 \times a_1\ +\ a_0\ =\ 1 \bmod 7$$
+
+     This simplifies to 
+
+     $$4 a_4\ +\ a_3\ +\ 2 a_2\ +\ 4 a_1\ +\ a_0\ =\ 1$$
+     \end{Freeform}
+     \begin{Freeform}{[2 6 4 5 1 6]}
+     $ g^{(4)} = $
+     \Solution $[2\ 6\ 4\ 5\ 1\ 6]$ To find the $g_i^{(4)}$, we plug in $5$ into the expression for $P(x)$:
+
+     $$P(5)\ =\ 5^4 \times a_4\ +\ 5^3 \times a_3\ +\ 5^2 \times a_2\ +\ 5 \times a_1\ +\ a_0\ =\ 6 \bmod 7$$
+
+     This simplifies to 
+
+     $$2 a_4\ +\ 6 a_3\ +\ 4 a_2\ +\ 5 a_1\ +\ a_0\ =\ 6$$     
+
+     \end{Freeform}
+     \begin{Freeform}{[1 6 1 6 1 1]}
+     $ g^{(5)} = $
+     \Solution [1 6 1 6 1 1]
+     \end{Freeform}
+     \item Bob solves this system by Gaussian elimination. He starts by subtracting equation 2 from equation 3 to get a new equation 3. What are the coefficients of the new equation 3? Again, enter your answer in the form: $g^{(j)} = [g_4^{(j)} \ g_3^{(j)} \ g_2^{(j)} \ g_1^{(j)} \ g_0^{(j)} \ g_5^{(j)}]$.
+    \begin{Freeform}{[0 2 0 1 0 3]}
+    $g^{(3)} = $
+    [0 2 0 1 0 3]
+    \end{Freeform}
+    \item Bob continues with Gaussian elimination, and solves for $a_4, \dotsc, a_0$. What are the coefficients $a_4, \dotsc, a_0$? Enter your answer in the form: $a = [a_4 \ a_3 \ a_2 \ a_1 \ a_0]$.
+    \begin{Freeform}{[5 6 4 5 3]}
+    $a = $
+    \Solution [5 6 4 5 3]
+    \end{Freeform}
+    \item Bob evaluates his polynomial to decode the dropped packet $m_2$ as:
+    \begin{Freeform}{3}
+    $P(2) = $
+    \Solution [5 6 4 5 3]
+    \end{Freeform}
+    \item Bob could have still correctly decoded Alice's message if both $c_2$ and $c_6$ were dropped.
+    \begin{Choices}
+    \begin{itemize}
+    \FalseChoice\item True
+    \TrueChoice\item False
+    \end{itemize}
+    \end{Choices}
+\end{enumerate}
+\noindent{\bf Decoding with General Errors}
+\item[2.] Suppose Alice wants to send Bob a message of $n = 3$ packets
+  and she wants to guard against $k = 1$ corrupted packets. Further
+  assume that packets can be coded up as integers between $0$ and $6$.
+  \begin{enumerate}
+  \item Alice can work over $GF(q)$. What is the minimum prime $q$ can be?
+    \begin{Freeform}{7}
+      $q = $
+      \Hint Recall that $q > n + 2k$.
+      \Solution 7
+    \end{Freeform}
+  \item Suppose Alice wants to send Bob the message $m = (m_1, m_2,
+    m_3)$. What is the maximum degree of the unique polynomial
+    described by these points, which are of the form $(i,m_i)$?
+    \begin{Freeform}{2}
+      $d = $
+      \Solution 2
+    \end{Freeform}
+    \begin{Freeform}{2}
+    \item What is the minimum number of extra points Alice must send to Bob so that he can correctly reconstruct her message $m$?
+      \Solution 2
+    \end{Freeform}
+    % P(x) = 3x^2+6x+0
+  \item Bob receives a message $r = (3, 3, 3, 2, 0)$. In order
+    to check whether there the message is corrupted, Bob needs to
+    solve $Q(x) = r_iE(x)$, where $Q(x) = P(x)E(x)$, $P(x)$ is the
+    original polynomial for sending the message, and $E(x)$ is the
+    error-locator polynomial in the Berlekamp-Welch algorithm.\\
+    \begin{Freeform}{3}
+      What is the degree of $Q(x)$?
+      \Solution 3
+    \end{Freeform}
+    \begin{Freeform}{1}
+      What is the degree of $E(x)$?
+      \Solution 1
+    \end{Freeform}
+    \begin{Choices}
+      What does $E(x)$ look like?
+      \begin{itemize}
+      \TrueChoice \item $x+b_0$
+      \FalseChoice \item $b_1x+b_0$
+      \end{itemize}
+    \end{Choices}
+    By letting $x = i, 1<i<5$ in $Q(x) = r_iE(x)$, we obtain the following system of linear equations:\\
+    \begin{align}
+      a_3 + a_2 + a_1 + a_0 &= 3 + 3b_0\\
+      a_3 + 4a_2 + 2a_1 + a_0 &= 6 + 3b_0\\
+      6a_3 + 2a_2 + 3a_1 + a_0 &= 2 + 3b_0\\
+      a_3 + 2a_2 + 4a_1 + a_0 &= 1 + 2b_0\\
+      6a_3 + 4a_2 + 5a_1 + a_0 &= 0
+    \end{align}
+    % a3x3+a2x2+a1x+a0 = r_x(x+b0)
+    % (1,3) => a3 + a2 + a1 + a0 = 3 + 3b0
+    % (2,3) => a3 + 4a2 + 2a1 + a0 = 6 + 3b0
+    % (3,3) => 6a3 + 2a2 + 3a1 + a0 = 2 + 3b0
+    % (4,2) => a3 + 2a2 + 4a1 + a0 = 1 + 2b0
+    % (5,0) => 6a3 + 4a2 + 5a1 + a0 = 0
+    % => a0 = 0, a1 = 1, a2 = 3, a3 = 3, b0 = 6
+    What is the solution of $a_0-a_3$ and $b_0$?
+    \begin{Freeform}{0}
+    $a_0 = $
+    \Solution $a_0 = 0$
+    \end{Freeform}
+    \begin{Freeform}{1}
+    $a_1 = $
+    \Solution $a_1 = 1$
+    \end{Freeform}
+    \begin{Freeform}{3}
+    $a_2 = $
+    \Solution $a_2 = 3$
+    \end{Freeform}
+    \begin{Freeform}{3}
+    $a_3 = $
+    \Solution $a_3 = 3$
+    \end{Freeform}
+    \begin{Freeform}{6}
+    $b_0 = $
+    \Solution $b_0 = 6$
+    \end{Freeform}
+    \item What is the original polynomial $P(x)=ax^2+bx+c$?
+    \begin{Freeform}{3}
+      $a = $
+      \Solution $a = 3$. For full solution, see solution to $c$.
+    \end{Freeform}
+    \begin{Freeform}{6}
+      $b = $
+      \Solution $b = 6$. For full solution, see solution to $c$.
+    \end{Freeform}
+    \begin{Freeform}{0}
+      $c = $
+      \Solution $c = 0$. We solve for the coefficients $a$, $b$, and $c$ by solving the equation
+
+      $$P(x)\ =\ a x^2\ +\ b x\ +\ c\ =\ \frac{Q(x)}{E(x)}$$
+
+      We plug in the expressions found for $Q(x)\ =\ a_3 x^3\ +\ a_2 x^2\ +\ a_1 x\ +\ a_0$ and $E(x)\ =\ x\ +\ b_0$:
+
+      $$P(x)\ =\ \frac{3 x^3\ +\ 3 x^2\ +\ x}{x\ +\ 6}\ \bmod 7$$
+
+      Carrying out the long division $\bmod 7$, we find
+
+      $$P(x)\ =\ 3 x^2\ +\ 6 x$$
+
+    \end{Freeform}
+    \item Which packet is corrupted?
+      \begin{Choices}
+        \begin{itemize}
+        \TrueChoice \item 1st
+        \FalseChoice \item 2nd
+        \FalseChoice \item 3rd
+        \end{itemize}
+        \Solution To find out which packet was corrupted, we find the index $i$ for which $P(i)$ differs from $r_i$. When $i = 1$, we see that $P(i)\ =\ 3\ +\ 6 \bmod 7\ =\ 2$, but $r_1\ =\ 3$.
+      \end{Choices}
+    \item 
+    \begin{Freeform}{2}
+      What is the orignal value?
+      \Solution As stated above, the original answer is $2$.
+    \end{Freeform}
+  \end{enumerate}
+\end{enumerate}
+
+\end{document}

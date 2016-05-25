@@ -1,0 +1,301 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt, preview]{standalone} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+
+\usepackage{../../markup}
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{amsmath, amsfonts,amssymb}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\config{name}{Stable Matchings}
+\noindent {\bf Stable Matchings}.
+
+Say that we want to pair up the men (1,2,3) with the women (A,B,C); such a pairing is called a \emph{matching}. The table below gives the ranked preferences of the people, with most preferred on the left and least preferred on the right.
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+man & ranking \\
+\hline
+1 & B, A, C \\
+\hline
+2 & A, B, C \\
+\hline
+3 & B, A, C \\
+\hline
+\end{tabular}
+\qquad
+\begin{tabular}{|c|c|}
+\hline
+woman & ranking \\
+\hline
+A & 3, 2, 1\\
+\hline
+B & 1, 2, 3 \\
+\hline
+C & 2, 1, 3\\
+\hline
+\end{tabular}
+\end{center}
+Given a matching, we say that two people form a \emph{rouge couple} if both prefer each other to the partner they are currently matched to. 
+
+\begin{enumerate}
+\item Select all of the rogue couples for the matching (1A, 2B, 3C) with respect to the preferences in the table above.
+\begin{Multi}
+\Hint Review the definition of a matching and a rogue couple above. For more details read course note 4. Remember that a rogue couple requires the man and the woman to {\it mutually} prefer each other!
+\begin{enumerate}
+\TrueChoice\item (1, B)
+\FalseChoice\item (1, C)
+\TrueChoice\item (2, A)
+\FalseChoice\item (2, C)
+\TrueChoice\item (3, A)
+\FalseChoice\item (3, B)
+\Solution Let's consider the choices in turn. 
+
+a) Man $1$ ranks woman $B$ above his current partner $A$, and woman $B$ likewise ranks man $1$ above her current partner $2$, so $(1,\ B)$ {\it do} form a rogue couple.
+
+b) Woman $C$ prefers man $1$ to her current partner $3$, {\it but} man $1$ prefers his partner $A$ over $C$, so $(1,\ C)$ do {\it not} form a rogue couple.
+
+c) Man $2$ prefers $A$ over his current partner, and $A$ prefers him over her current partner, so $(2,\ A)$ {\it do} form a rogue couple.
+
+d) While woman $C$ prefers man $2$ over her current partner $3$, man $2$ prefers his current partner over $C$, so $(2, C)$ do {\it not} form a rogue couple.
+
+e) Man $3$ prefers $A$ over his current partner $C$, and $A$ prefers him over her current partner $1$, so $(3,\ A)$ {\it do} form a rogue couple.
+
+f) Man $3$ prefers $B$ over his current partner, but $B$ does not prefer him over her current partner, so $(3,\ B)$ do {\it not} form a rogue couple.
+\end{enumerate}
+\end{Multi}
+\item Again given the preferences above, select all of the rogue couples for the matching (3A, 2B, 1C).
+\begin{Multi}
+\Hint Review the definition of a matching and a rogue couple above. For more details read course note 4. Remember that a rogue couple requires the man and the woman to {\it mutually} prefer each other!
+\begin{enumerate}
+\FalseChoice\item (1, A)
+\TrueChoice\item (1, B)
+\FalseChoice\item (2, A)
+\FalseChoice\item (2, C)
+\FalseChoice\item (3, B)
+\FalseChoice\item (3, C)
+\Solution Let's consider each choice in turn.
+
+a) Man $1$ prefers woman $A$ to his current partner $C$, but $A$ prefers her current partner $3$ over $1$, so $(1,\ A)$ do {\it not} form a rogue couple.
+
+b) Man $1$ and woman $B$ both prefer each to their current partners, so $(1,\ B)$ {\it do} form a rogue couple.
+
+c) Man $2$ prefers woman $A$ to his current partner, but woman $A$ does not prefer man $2$, so $(2,\ A)$ do {\it not} form a rogue couple.
+
+d) Woman $C$ prefers man $2$ over her current partner, but man $2$ does not prefer woman $C$, so $(2,\ C)$ do {\it not} form a rogue couple.
+
+e) Woman $A$ prefers man $3$ to her current partner, but man $3$ does not prefer woman $A$, so $(3,\ A)$ do {\it not} form a rogue couple.
+
+f) Man $3$ prefers woman $B$ over his current partner, but woman $B$ does not prefer $3$, so $(3,\ B)$ do {\it not} form a rogue couple.
+ 
+\end{enumerate}
+\end{Multi}
+%------------------------------------------------------------------------------------------------------
+ A matching is considered \emph{stable} if it contains no rogue couples. This is because no one can convince anyone else to leave their partner in order to form a new pair. The stable marriage algorithm allows us to find stable matchings. This algorithm is described in course note 4. The following problems are designed to give you practice with this algorithm.
+%-----------------------------------------------------
+\item Consider the preference ranks given below for the men/suitors (1,2,3,4) and women/suitees (A,B,C,D). 
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+man & ranking \\
+\hline
+1 & A, B, D, C \\
+\hline
+2 & A, C, B, D\\
+\hline
+3 & B, C, D, A\\
+\hline
+4 & B, A, D, C\\
+\hline
+\end{tabular}
+\qquad
+\begin{tabular}{|c|c|}
+\hline
+woman & ranking \\
+\hline
+A & 3, 1, 4, 2\\
+\hline
+B &  2, 1, 3, 4\\
+\hline
+C & 4, 1, 3, 2\\
+\hline
+D & 1, 2, 3, 4\\
+\hline
+\end{tabular}
+\end{center}
+Simulate the stable marriage algorithm (with male suitors), and answer the following questions about the algorithm. We consider the first offers to have taken place on day 1.
+\begin{enumerate}
+\begin{Freeform}{A}
+\item Who did suitor 1 propose to on day 1? %\ans A
+% \Hint Review the stable marriage algorithm, found in course note 4. 
+\Solution His first choice, A.
+\end{Freeform}
+\item Was he rejected? %\ans No
+\begin{Choices}
+\begin{itemize}
+\FalseChoice \item Yes
+\TrueChoice \item No
+\Solution No, A received proposals from 1 and 2 and she preferred 1.
+\end{itemize}
+% \Hint Review the stable marriage algorithm, found in course note 4. 
+\end{Choices}
+\begin{Freeform}{B}
+\item Who did suitor 4 propose to on day 1? %\ans B
+% \Hint Review the stable marriage algorithm, found in course note 4.
+\Solution His top choice, B.  
+\end{Freeform}
+\item Was he rejected? %\ans Yes
+\begin{Choices}
+\begin{itemize}
+\TrueChoice \item Yes
+\FalseChoice \item No
+\Solution Yes, B received proposals from 3 and 4 and preferred 3.
+\end{itemize}
+% \Hint Review the stable marriage algorithm, found in course note 4. 
+\end{Choices}
+\begin{Freeform}{4}
+\item Who proposed (with a new proposal) to A on day 2? %\ans 4
+% \Hint Review the stable marriage algorithm, found in course note 4. 
+\Solution 4, because he was rejected by B on day 1 and A is the next woman on his list.
+\end{Freeform}
+\item Did he get rejected?
+\begin{Choices}
+\begin{itemize}
+\TrueChoice \item Yes
+\FalseChoice \item No
+\Solution Yes, A received proposals from 4 and 1 and preferred 1.
+\end{itemize}
+% \Hint Review the stable marriage algorithm, found in course note 4. 
+\end{Choices}
+\begin{Freeform}{A}
+\item Who was 1 matched to when the algorithm terminated? 
+\Solution Woman A.
+\end{Freeform}
+\begin{Freeform}{C}
+\item Who was 2 matched to when the algorithm terminated? %\ans B
+% \Hint Review the stable marriage algorithm, found in course note 4. 
+\Solution Woman C.
+\end{Freeform}
+\begin{Freeform}{B}
+\item Who was 3 matched to when the algorithm terminated? %\ans D
+% \Hint Review the stable marriage algorithm, found in course note 4.
+\Solution Woman B. 
+\end{Freeform}
+\begin{Freeform}{D}
+\item Who was 4 matched to when the algorithm terminated? %\ans A
+% \Hint Review the stable marriage algorithm, found in course note 4. 
+\Solution Woman D.
+\end{Freeform}
+
+\item Now let us simulate the algorithm with women proposing (being the suitors). Before finding the outcome, what do you think is going to happen to men's matches (compared to when they were proposing)?
+\begin{Choices}
+\begin{itemize}
+\FalseChoice\item Each man will either get the same match as before, or prefer his new match.
+\TrueChoice\item Each man will either get the same match as before, or prefer his old match.
+\FalseChoice\item Some men will get the same match as before, some will prefer their new matches, and some will prefer their old matches.
+\end{itemize}
+\Solution The algorithm run with men proposing produces a male-optimal pairing. Therefore the original matches are as high on their list as each man can hope for. Another way to arrive at the same conclusion is to note that the algorithm produces male-pessimal pairings if run with women proposing. Therefore men get partners that are as low as it can be on their list in the second run.
+\end{Choices}
+
+\item Who will woman A propose to on the first day?
+\begin{Freeform}{3}
+\Solution Her top choice, 3.	
+\end{Freeform}
+
+\item Who gets rejected on the first day?
+\begin{Choices}
+\begin{itemize}
+\FalseChoice\item A
+\FalseChoice\item B
+\FalseChoice\item C
+\FalseChoice\item D
+\TrueChoice\item No one
+\end{itemize}
+\Solution No one gets rejected, because all men receive exactly one proposal.
+\end{Choices}
+
+
+\begin{Freeform}{D}
+\item In a male-optimal stable matching, who would be paired with man 4?
+\Solution The algorithm with male suitors returns a male-optimal pairing. We have already seen that the algorithm run with men proposing matches 4 with D.
+\end{Freeform}
+
+\begin{Freeform}{C}
+\item In a female-optimal stable matching, who would be paired with man 4?
+\Solution The algorithm with female suitors returns a female-optimal pairing. In that matching, 4 is matched with C.
+\end{Freeform}
+
+\begin{Freeform}{3}
+\item In a male-pessimal stable matching, who would be paired with woman A?	
+\Solution We get the male-pessimal pairing by running the algorithm with women proposing. In that case A is matched with 3.
+\end{Freeform}
+
+\begin{Freeform}{1}
+\item In a female-pessimal stable matching, who would be paired with woman A?
+\Solution We get the female pessimal pairing by running the algorithm with men proposing. In that case A is matched with 1 as we have already seen.	
+\end{Freeform}
+
+
+\end{enumerate}
+\end{enumerate}
+
+\end{document}

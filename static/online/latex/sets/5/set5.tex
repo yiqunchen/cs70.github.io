@@ -1,0 +1,637 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt, preview]{standalone} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+
+\usepackage{../../markup}
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{color}
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{amsmath, amsfonts,amssymb}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\config{name}{RSA, Polynomial Interpolation, and Secret Sharing}
+\noindent{\bf RSA}.
+
+\noindent Bob would like to receive encrypted messages from Alice via RSA.
+\begin{enumerate}
+\item Bob chooses $p = 7$ and $q = 11$. His public key is $(N,e)$. 
+\begin{enumerate}
+\item \begin{Freeform}{77}
+$N =$ 
+\Hint What is $N$ a function of $p$ and $q$?
+\Solution $N = pq = 77$
+\end{Freeform}
+\begin{Freeform}{60}
+\item $e$ is relatively prime to the number:
+\Hint The answer is not $N$. It is derived from Fermat's little theorem.
+\Solution $e$ is relatively prime to $(p - 1)(q - 1) = 60$. This is because when the message $x^e$ is raised to the power of $d = e^{-1} \bmod 60$, we get $x^{ed} \bmod N = x^{k(p - 1)(q - 1) + 1} \bmod N = x(x^{k(p - 1)(q - 1)}) \bmod N = x \bmod N$ according to Fermat's little theorem.
+\end{Freeform}
+\item $e$ need not be prime itself, but what is the smallest prime number $e$ can be? Use this value for $e$ in all subsequent computations.
+\begin{Freeform}{7}
+%\Hint 
+$ e = $
+\Solution The smallest prime number that is coprime with $60$ is $7$, so $e = 7$
+\end{Freeform}
+\begin{Freeform}{1}
+\item What is $gcd(e,(p-1)(q-1))$?
+\Hint Related to part (b)
+\Solution $e$ is required to be coprime to $(p - 1)(q - 1)$, which means their gcd is $1$ by definition
+\end{Freeform}
+\item What is the decryption exponent $d$?
+\begin{Freeform}{43}
+$d = $
+\Hint Recall that $d = e^{-1} \mod (p-1)(q-1)$.
+\Solution To find $d$, we need to compute $e^{-1} \bmod 60$. Recall that $e = 7$ from part c). We can find the multiplicative inverse of $7 \bmod 60$ using the egcd algorithm, which gives us $43$.  
+\end{Freeform}
+\item Now imagine that Alice wants to send Bob the message $30$. She applies her encryption function $E$ to $30$. What is her encrypted message?
+\begin{Freeform}{2}
+$E(x) = $
+\Hint Recall that $E(x) \equiv x^e \mod N$.
+\Solution Alice uses the public key $(77,\ 7)$ to encode her message as $30^{7} \bmod 77$. We can compute this value using a combination of the Chinese Remainder Theorem and Fermat's Little Theorem.\\
+
+Let $y = 30^7 \bmod 77$. We first use Chinese remainder theorem to express $y \bmod 7$ and $y \bmod 11$:
+
+$$y\ \equiv\ a \bmod 7$$
+$$y\ \equiv\ b \bmod 11$$
+
+We can solve for $a$ and $b$ using Fermat's Little Theorem:
+
+\begin{align*}
+a\ &=\ 30^7 \bmod 7\\
+&=\ 30 \times (30^6) \bmod 7\\
+&=\ 30 \bmod 7 \text{, because $x^6 \bmod 7 = 1$ by FLT}\\ 
+&=\ 2
+\end{align*}
+
+\begin{align*}
+b\ &=\ 30^7 \bmod 11\\
+&=\ (30 \bmod 11)^7 \bmod 11\\
+&=\ 8^7 \bmod 11\\
+&=\ 2 \times 2^{10} \times 2^{10} \bmod 11\\
+&=\ 2 \text{, because $x^{10} \bmod 11 = 1$ by FLT}
+\end{align*}
+
+Now that we have $y \bmod 7$ and $y \bmod 11$, we can write a system of equations and solve algebraically for $y$. Because $y \equiv 2 \bmod 7$, we can express $y$ as $7s + 2,\ s\thinspace \in \mathbb{Z}$. Using the fact that $y \equiv 2 \bmod 11$, we have 
+
+$$7s + 2\ \equiv\ 2 \bmod 11 \implies s\ \equiv\ 0 \bmod 11$$
+
+From this we know that $s = 11t,\thinspace t\in \mathbb{Z}$. Substituting into the original equation, we have that
+
+$$y\ =\ 7(11t) + 2\ =\ 77t + 2,\ t \in \mathbb{Z}$$
+
+meaning $30^7 \bmod 77\ =\ 2$, so the message Alice sends is $\hat{x} = 2$.
+
+\end{Freeform}
+\item Bob receives the encrypted message, and applies his decryption function $D$ to it.
+\begin{Freeform}{30}
+$D(x) = $
+\Hint Recall that $D(x) \equiv x^d \mod N$.
+\Solution Bob applies his private key $d = 43$ to decode Alice's message. He has to compute 
+
+$$2^{43}\thinspace \bmod 77$$
+
+From the previous part, we know that $2\ =\ 30^7 \bmod 77$, giving 
+
+$$(30^7)^{43}\thinspace \bmod 77\ =\ 30^{1 \bmod 60}\thinspace \bmod 77\ =\ 30$$
+
+Here we applied Fermat's Little Theorem and the fact that $ed \equiv 1 \bmod (p - 1)(q - 1)$ to verify the answer.
+
+\end{Freeform}
+\end{enumerate}
+
+
+\item Decide whether each of the following statements are true or false.
+\begin{enumerate}
+\item Bob has to publish his key $(N,e)$ to receive encrypted messages from Alice. 
+\begin{Choices}
+\begin{itemize}
+\TrueChoice\item True 
+\FalseChoice\item False
+\Solution This is the unique feature of asymmetric or public key cryptography: the key $(N, e)$ is open information to everyone.
+\end{itemize}
+\end{Choices}
+\item Eve needs to know Bob's key $d$ in order to send him encrypted messages.
+\begin{Choices} 
+\begin{itemize}
+\FalseChoice\item True
+\TrueChoice\item False
+\Solution No, she only needs to know $(N, e)$ to encode the message.
+\end{itemize}
+\end{Choices}
+\item The security of RSA relies on the computational intractability of determining $x$ from $y = x^e \mod N$, even when $y$, $e$, and $N$ are all known.
+\begin{Choices} 
+\begin{itemize}
+\TrueChoice\item True
+\FalseChoice\item False
+\Solution True, the most efficient algorithms we know of to solve this problem are far too slow to crack RSA for extremely large primes.
+\end{itemize}
+\end{Choices}
+\item $E(x) = x^e \mod N$ is a bijection on numbers $\mod N$.
+\begin{Choices} 
+\begin{itemize}
+\TrueChoice\item True
+\FalseChoice\item False
+\Hint We say a function $M$ is a bijection from set $A$ to set $B$ iff every element of $A$ maps to a unique element of $B$. 
+\Solution This is true. If $0 \leq x \leq N - 1$, then each value of $x$ will map to a unique value $x^e$ in that same set. 
+
+\end{itemize}
+\end{Choices}
+\end{enumerate}
+
+\noindent{\bf Polynomial Interpolation}. 
+
+\item Three points uniquely determine a degree $2$ polynomial. Given the three points $\{(x_1,y_1) = (-1,2), (x_2,y_2) = (1,-2),(x_3,y_3) = (2,5)\}$ we wish to find the unique polynomial $p(x) = a_2 x^2 + a_1 x + a_0$ such that $p(x_i) = y_i$.  In this question we will find $p(x)$ by solving a system of linear equations:
+\begin{enumerate}
+\item Compute $a,b,c,d$ such that: $p(-1) =  a_2 \cdot a +  a_1  \cdot b + a_0  \cdot c = d$
+\begin{Freeform}{1}
+$a = $
+\Solution $a = 1$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-1}
+$b = $
+\Solution $b = -1$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{1}
+$c = $
+\Solution $c = 1$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{2}
+$d = $
+\Solution From the point $(-1, 2)$, we know that
+
+$$p(-1)\ =\ a_2 \times (-1)^2\ +\ a_1 \times (-1)\ +\ a_0\ =\ 2$$
+
+giving us $a = 1,\ b = -1,\ c = 1,\ d = 2$
+\end{Freeform}
+
+\item Compute $a,b,c,d$ such that: $p(1) = a \cdot a_2 + b \cdot a_1 + c \cdot a_0 = d$
+\begin{Freeform}{1}
+$a = $
+\Solution $a = 1$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{1}
+$b = $
+\Solution $b = 1$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{1}
+$c = $
+\Solution $c = 1$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-2}
+$d = $
+% \Hint Recall that $p(x_2) = y_2$.
+\Solution From the point $(1, -2)$, we know that 
+
+$$a_2 \times 1^2\ +\ a_1 \times 1\ +\ a_0\ =\ -2$$
+
+giving us $a = 1,\ b = 1,\ c = 1,\ d = -2$
+\end{Freeform}
+
+\item Compute $a,b,c,d$ such that: $p(2) = a \cdot a_2 + b \cdot a_1 + c \cdot a_0 = d$
+\begin{Freeform}{4}
+$a = $
+\Solution $a = 4$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{2}
+$b = $
+\Solution $b = 2$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{1}
+$c = $
+\Solution $c = 1$. See solution to $d$ for explanation.
+\end{Freeform}
+\begin{Freeform}{5}
+$d = $
+% \Hint Recall that $p(x_3) = y_3$.
+\Solution From the point $(2, 5)$, we know that 
+
+$$a_2 \times 2^2\ +\ a_1 \times 2\ +\ a_0\ =\ 5$$
+
+giving us $a = 4,\ b = 2,\ c = 1,\ d = 5$
+\end{Freeform}
+
+\item Subtract polynomials $p(x_1)$ and $p(x_2)$ to determine the value for $a_1$:
+\begin{Freeform}{-2}
+$a_1 = $
+\Solution We first compute $p(-1) - p(1)$:
+
+\begin{align*}
+a_2\ -\ &a_1\ +\ a_0\ = 2\\
+-(a_2\ +\ &a_1\ +\ a_0\ = -2) 
+\end{align*}
+
+Giving us $-2a_1 = 4 \implies a_1 = -2$
+\end{Freeform}
+
+\item Solve the remaining system of two equations and two variables to determine $a_2$ and $a_0$:
+\begin{Freeform}{3}
+$a_2 = $ 
+\Solution $a_2 = 3$. See solution to $a_0$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-3}
+$a_0 = $ 
+
+\Solution We first substitute $a_1 = -2$ into two of the equations in the original system, giving
+
+\begin{align*}
+a_2\ +\ (-2) \times 1\ +\ a_0\ =\ -2 &\implies a_2\ +\ a_0\ =\ 0\\
+4a_2\ +\ (-2) \times 2\ +\ a_0\ =\ 5 &\implies 4a_2\ +\ a_0\ =\ 9
+\end{align*}
+
+We can substitute $a_0 = -a_2$ into the second equation to get 
+
+$$4a_2\ +\ a_0\ =\ 4a_2 - a_2\ =\ 9\ \implies\ a_2\ =\ 3$$
+
+Because $a_0 = -a_2$,
+
+$$a_0\ =\ -3$$
+\end{Freeform}
+
+\end{enumerate}
+
+\item In this question we will find $p(x)$ using the Lagrange interpolation method. Recall from question 3 that we are given the three points $\{(x_1,y_1) = (-1,2), (x_2,y_2) = (1,-2),(x_3,y_3) = (2,5)\}$ we wish to find the unique polynomial $p(x) = a_2 x^2 + a_1 x + a_0$ such that $p(x_i) = y_i$. 
+\begin{enumerate}
+\item Compute $a,b,c$ such that $\Delta_1(x) = a(x-b)(x-c)$. Note $b,c$ are integers such that $b<c$:
+
+ \begin{Freeform}{1/6}
+ $a = $
+ \Hint Recall that $\Delta_j(x)$ is $1$ for $x = x_j$ and $0$ for $x = x_i,\ i \not= j$
+ \Solution $a = \frac{1}{6}$. See solution to $c$ for explanation.
+ \end{Freeform}
+ \begin{Freeform}{1}
+ $b = $
+ \Solution $b = 1$. See solution to $c$ for explanation.
+ \end{Freeform}
+ \begin{Freeform}{2}
+ $c = $
+
+ \Solution We know that $\Delta_1(x)$ should be $1$ for $x = x_1 = -1$ and $0$ for $x = x_2 = 1$ and $x = x_3 = 2$. Let's take care of the second condition first.
+
+ One polynomial that is $0$ for $x = 1$ and $x = 2$ is 
+
+ $$(x - 1)(x - 2)$$
+
+ This gives us 
+
+ $$b = 1$$
+ $$c = 2$$ 
+
+ Now we simply need to find the right scaling factor $a$ to make sure that $a(x - 1)(x - 2) = 1$ when $x = -1$. Plugging in $-1$, we see we need to satisfy
+
+ $$a \times (-2) \times (-3)\ =\ 1\ \implies\ a = \frac{1}{6}$$
+ \end{Freeform}
+  
+\item Compute $a,b,c$ such that $\Delta_2(x) = a x^2 + b x + c$:
+ 
+ \begin{Freeform}{-1/2}
+ $a = $
+ \Hint Recall that $\Delta_j(x)$ is $1$ for $x = x_j$ and $0$ for $x = x_i,\ i \not= j$
+ \Solution $a = -\frac{1}{2}$. See solution to $c$ for explanation.
+ \end{Freeform}
+ \begin{Freeform}{1/2}
+ $b = $
+ \Solution $b = \frac{1}{2}$. See solution to $c$ for explanation.
+ \end{Freeform}
+ \begin{Freeform}{1}
+ $c = $
+
+ \Solution Following the same procedure as above, let us first find a polynomial that is $0$ when $x = x_1 = -1$ and $x = x_3 = 2$. This gives us 
+
+ $$(x + 1)(x - 2)$$
+
+ To ensure that it will be $1$ when $x = x_2 = 1$, we scale by $\frac{1}{(1 + 1)(1 - 2)} = -\frac{1}{2}$, giving 
+
+ $$-\frac{1}{2}(x + 1)(x - 2)$$
+
+ Expanding, we get 
+
+ $$-\frac{1}{2}x^2 + \frac{1}{2}x + 1$$
+
+ meaning $a = -\frac{1}{2}$, $b = \frac{1}{2}$, and $c = 1$
+
+ \end{Freeform}
+
+\item Compute $a,b,c$ such that $\Delta_3(x) = a(x-b)(x-c)$. Note $b, c$ are integers such that $b < c$.
+ 
+ \begin{Freeform}{1/3}
+ $a = $
+ \Hint Recall that $\Delta_j(x)$ is $1$ for $x = x_j$ and $0$ for $x = x_i,\ i \not= j$. This should be a fraction.
+ \Solution $a = \frac{1}{3}$. See solution to $c$ for explanation.
+ \end{Freeform}
+ \begin{Freeform}{-1}
+ $b = $
+ \Solution $b = -1$. See solution to $c$ for explanation.
+ \end{Freeform}
+ \begin{Freeform}{1}
+ $c = $
+
+ \Solution Following the same procedure as above, let us first find a polynomial that is $0$ when $x = x_1 = -1$ and $x = x_2 = 1$. This gives us 
+
+ $$(x + 1)(x - 1)$$
+
+ To ensure that it will be $1$ when $x = x_2 = 2$, we scale by $\frac{1}{(2 + 1)(2 - 1)} = \frac{1}{3}$, giving 
+
+ $$\frac{1}{3}(x + 1)(x - 1)$$
+
+ meaning $a = \frac{1}{3}$, $b = -1$, and $c = 1$
+
+ \end{Freeform}
+
+\item Compute $a,b,c$ such that $y_1\Delta_1(x) + y_3\Delta_3(x) = a x^2+b x+c$.
+\begin{Freeform}{2}
+$a = $ %\Hint Recall...
+\Solution $a = 2$. See solution to $c$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-1}
+$b = $ %\Hint Recall...
+\Solution $b = -1$. See solution to $c$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-1}
+$c = $ %\Hint Recall...
+
+\Solution Recall $y_1\ =\ 2$ and $y_3\ =\ 5$. Plugging those into the equation given, we have 
+
+$$y_1 \Delta_1(x)\ +\ y_3\Delta_3(x)\ =\ 2 \left(\frac{1}{6} (x - 1) (x - 2)\right)\ +\ 5 \left(\frac{1}{3}(x + 1)(x - 1)\right) $$
+
+Simplifying, we get 
+
+$$\frac{1}{3} x^2\ -\ x\ +\ \frac{2}{3}\ +\ \frac{5}{3} x^2\ -\ \frac{5}{3}\ =\ 2x^2\ -\ x\ -\ 1$$
+
+Meaning $a\, =\, 2$, $b\, =\, -1$, and $c\, =\, -1$
+
+\end{Freeform}
+
+\item Compute $a,b,c$ such that $y_2\Delta_2(x) = a x^2 + b x + c$.
+\begin{Freeform}{1}
+$a = $ %\Hint Recall...
+\Solution $a = 1$. See solution to $c$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-1}
+$b = $ %\Hint Recall...
+\Solution $b = -1$. See solution to $c$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-2}
+$c = $ %\Hint Recall...
+\Solution Recall $y_2\, =\, -2$. Plugging this into the expression given, 
+
+$$y_2 \Delta_2(x)\ =\ -2\left(-\frac{1}{2} x^2\ -\ \frac{1}{2} x\ -\ 1\right)\ =\ x^2\ -\ x\ -\ 2$$
+
+meaning $a\, =\, 1$, $b\, =\, -1$, and $c\, =\, -2$
+
+\end{Freeform}
+
+\item Finally, compute $a_2, a_1, a_0$ such that $p(x) = a_2 x^2 + a_1 x + a_0 = \sum_{i = 1}^{3}{y_i \Delta_i(x)}$.
+\begin{Freeform}{3}
+$a_2 =$
+\Solution $a_2 = 3$. See solution to $a_0$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-2}
+$a_1 =$
+\Solution $a_1 = -2$. See solution to $a_0$ for explanation.
+\end{Freeform}
+\begin{Freeform}{-3}
+$a_0 =$
+
+\Solution We simply have to combine the two expressions we found for $y_1 \Delta_1(x)\ +\ y_3 \Delta_3(x)$ and $y_2 \Delta_2(x)$:
+
+$$\sum_{i = 1}^{3}\, y_i \Delta_i(x)\ =\ 2x^2\ -\ x\ -\ 1\ +\ x^2\ -\ x\ -\ 2\ =\ 3 x^2\ -\ 2x\ -\ 3$$
+
+This gives us $a_3\, =\, 3$, $a_2\, =\, -2$, and $a_1\, =\, -3$
+\end{Freeform}
+
+\end{enumerate}
+
+\noindent{\bf Secret Sharing}.
+\item Suppose you are in charge of setting up a secret sharing scheme where you want to distribute $n = 5$ shares to $5$ people such that any $k = 3$ or more people can figure out the secret, but two or fewer cannot. Suppose we are working over $GF(7)$.
+\begin{enumerate}
+\begin{Freeform}{2}
+\item What is the degree of the polynomial you will use to distribute the shares? 
+ \Hint How many points uniquely determine a degree $n$ polynomial?
+
+ \Solution We want $3$ points to uniquely determine this polynomial, so it should be of degree $2$.
+ \end{Freeform}
+
+ \item You randomly choose the polynomial: $P(x) = 5x^2 + 3x + 3$. What is the secret?
+ \begin{Freeform}{3}
+ $P(0) = $
+ \Hint Remember we're working in $GF(7)$.
+ \Solution The y-intercept, $3$, is our secret.
+ \end{Freeform}
+ 
+ \item What is the share given to the first official?
+ \begin{Freeform}{4}
+ $P(1) = $ 
+ % \Hint Remember we're working in $GF(7)$.
+ \Solution $$P(1)\ =\ (5\ +\ 3\ +\ 3) \bmod 7\ =\ 11 \bmod 7\ =\ 4$$
+ \end{Freeform}
+ 
+ \item What is the share given to the second official?
+ \begin{Freeform}{1}
+ % \Hint Remember we're working in $GF(7)$.
+ $P(2) = $
+ \Solution $$P(2)\ =\ (20\ +\ 6\ +\ 3) \bmod 7\ =\ (6\ +\ 6\ +\ 3) \bmod 7\ =\ 15 \bmod 7\ =\ 1$$
+ \end{Freeform}
+ 
+\item What is the share given to the third official?
+ \begin{Freeform}{1}
+ % \Hint Remember we're working in $GF(7)$.
+ $P(3) = $
+ \Solution $$P(3)\ =\ (45\ +\ 9\ +\ 3) \bmod 7\ =\ (3\ +\ 2\ +\ 3) \bmod 7\ =\ 8 \bmod 7\ =\ 1$$
+ \end{Freeform}
+ 
+  \item What is the share given to the fourth official?
+ \begin{Freeform}{4}
+ % \Hint Remember we're working in $GF(7)$.
+ $P(4) = $
+ \Solution $$P(4)\ =\ (5 \times 16\ +\ 12\ +\ 3) \bmod 7\ =\ (3\ +\ 5\ +\ 3) \bmod 7\ =\ 11 \bmod 7\ =\ 4$$
+ \end{Freeform}
+ 
+  \item What is the share given to the fifth official?
+ \begin{Freeform}{3}
+ % \Hint Remember we're working in $GF(7)$.
+ $P(5) = $
+ \Solution $$P(5)\ =\ (5 \times 25\ +\ 15\ +\ 3) \bmod 7\ =\ (6\ +\ 1\ +\ 3) \bmod 7\ =\ 10 \bmod 7\ =\ 3$$
+ \end{Freeform}
+ 
+ \item Suppose officials $1$, $2$, and $5$ get together, and try to recover the secret. Using Lagrange interpolation, they compute their delta functions $\Delta_1(x), \Delta_2(x), \Delta_5(x)$. What are $a,b,c$ when $\Delta_1(x) = a(x-b)(x-c)$? Again note that $b < c$ and $b,c$ are integers.
+  \begin{Freeform}{2}
+ $a = $
+ \Hint This should not be a fraction. Recall that we are in GF(7).
+ \Solution $a = 2$. See solution to $c$ for explanation.
+ \end{Freeform}
+  \begin{Freeform}{2}
+ $b = $
+ \Solution $b = 2$. See solution to $c$ for explanation.
+ \end{Freeform}
+  \begin{Freeform}{5}
+ $c = $
+
+ \Solution First, we know we want $\Delta_1(x)$ to be $0$ when $x\, =\, 2$ and $x\, =\, 5$. This gives us 
+
+ $$\Delta_1(x)\ =\ a(x - 2)(x - 5)\ \bmod 7$$
+
+ Second, we want $\Delta_1(x)$ to be $1$ when $x\, =\, 1$. This will determine the value of $a$.
+
+ $$\Delta_1(1)\ =\ a(1 - 2)(1 - 5)\ \bmod 7\ =\ 4 a \bmod 7\ =\ 1$$
+
+ Now we know $a\, =\, 4^{-1} \bmod 7\ =\ 2$. This gives us $a\, =\, 2$, $b\, =\, 2$, $c\, =\, 5$
+ \end{Freeform}
+ 
+ \item What are $a,b,c$ when $\Delta_2(x) = a(x-b)(x-c)$? Again note that $b < c$ and $b,c$ are integers.
+  \begin{Freeform}{2}
+ $a = $
+ \Hint This should not be a fraction. Recall that we are in GF(7).
+ \Solution $a = 2$. See solution to $c$ for explanation.
+ \end{Freeform}
+  \begin{Freeform}{1}
+ $b = $
+ \Solution $b = 1$. See solution to $c$ for explanation.
+ \end{Freeform}
+  \begin{Freeform}{5}
+ $c = $
+
+ \Solution First, we know we want $\Delta_2(x)$ to be $0$ when $x\, =\, 1$ and $x\, =\, 5$. This gives us 
+
+ $$\Delta_2(x)\ =\ a(x - 1)(x - 5)\ \bmod 7$$
+
+ Second, we want $\Delta_2(x)$ to be $1$ when $x\, =\, 2$:
+
+ $$\Delta_2(2)\ =\ a(2 - 1)(2 - 5)\ \bmod 7\ =\ 4a \bmod 7\ =\ 1$$
+
+ Now we know $a\, =\, 4^{-1} \bmod 7\ =\ 2$. This gives $a\, =\, 2$, $b\, =\, 1$, $c\, =\, 5$
+ \end{Freeform}
+ 
+  \item What are $a,b,c$ when $\Delta_5(x) = a(x-b)(x-c)$? Again note that $b < c$ and $b,c$ are integers.
+  \begin{Freeform}{3}
+ $a = $
+ \Hint This should not be a fraction. Recall that we are in GF(7).
+ \Solution $a = 3$. See solution to $c$ for explanation.
+ \end{Freeform}
+  \begin{Freeform}{1}
+ $b = $
+ \Solution $b = 1$. See solution to $c$ for explanation.
+ \end{Freeform}
+  \begin{Freeform}{2}
+ $c = $
+
+ \Solution First, we know we want $\Delta_5(x)$ to be $0$ when $x\, =\, 1$ and $x\, =\, 2$. This gives us 
+
+ $$\Delta_5(x)\ =\ a(x - 1)(x - 2)\ \bmod 7$$
+
+ Second, we want $\Delta_5(x)$ to be $1$ when $x\, =\, 5$:
+
+ $$\Delta_5(5)\ =\ a(5 - 1)(5 - 2)\ \bmod 7\ =\ 5a \bmod 7\ =\ 1$$
+
+ Now we know $a\, =\, 5^{-1} \bmod 7\ =\ 3$. This gives us $a\, =\, 3$, $b\, =\, 1$, $c\, =\, 2$
+ \end{Freeform}
+
+ 
+ \item Their final polynomial $p(x) = a_2 x^2 + a_1 x + a_0 = P(1)\cdot\Delta_1(x) + P(2)\cdot\Delta_2(x) + P(5)\cdot\Delta_5(x)$ has coefficients:
+  \begin{Freeform}{5}
+ $a_2 = $
+ \Hint Recall that we are in GF(7). This should be between $0$ and $6$.
+ \Solution $a_2 = 5$. See solution to $a_0$ for explanation.
+ \end{Freeform}
+  \begin{Freeform}{3}
+ $a_1 = $
+ \Solution $a_1 = 3$. See solution to $a_0$ for explanation.
+ % \Hint Recall that we are in GF(7). This should be between $0$ and $6$.
+ \end{Freeform}
+  \begin{Freeform}{3}
+ $a_0 = $
+ % \Hint Recall that we are in GF(7). This should be between $0$ and $6$.
+ \Solution Let's write out the expression for $P(1)\Delta_1(x)\ +\ P(2)\Delta_2(x)\ +\ P(5)\Delta_5(x)$:
+
+ $$4 \times 2(x - 2)(x - 5)\ +\ 1 \times 2(x - 1)(x - 5)\ +\ 3 \times 3(x - 1)(x - 2)\ \bmod 7$$
+
+Simplifying, we have  
+
+ \begin{align*}
+ P(x)\ &=\ (x - 2)(x - 5)\ +\ 2(x - 1)(x - 5)\ +\ 2(x - 1)(x - 2)\ &\bmod 7\\
+ &=\ x^2\ -\ 7x\ +\ 10\ +\ 2x^2\ -\ 12x\ +\ 10\ +\ 2x^2\ -\ 6x\ +\ 4\ &\bmod 7\\
+ &= 5x^2\ -\ 11x\ +\ 10\ &\bmod 7\\
+ &= 5x^2\ +\ 3x\ +\ 3\ &\bmod 7 
+ \end{align*}
+
+ This gives $a\, =\, 5$, $b\, =\, 3$, and $c\, =\, 3$. We have successfully recovered the original polynomial $P(x)$.
+
+ \end{Freeform}
+ 
+ \item Could officials $1$ and $2$ recover the secret with official $4$ instead of collaborating with official $5$?
+ \begin{Choices}
+\begin{itemize}
+\TrueChoice\item Yes 
+\FalseChoice\item No
+\Solution Yes, any three points is enough to recover the polynomial.
+\end{itemize}
+\end{Choices}
+
+ \item Could officials $1$ and $2$ recover the secret by only collaborating with each other?
+ \begin{Choices}
+\begin{itemize}
+\FalseChoice\item Yes
+\TrueChoice\item No
+\Solution No, there are $7$ possible polynomials of degree $2$ with $P(1)$ and $P(2)$ fixed. Note that there were only seven possibilities for the original secret in the first place, so the last point contains just as much information as the secret itself.
+\end{itemize}
+\end{Choices}
+ 
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}

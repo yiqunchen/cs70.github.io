@@ -1,0 +1,244 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt,preview]{standalone} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+
+\usepackage{../../markup}
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{color, tikz}
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{amsmath, amsfonts,amssymb}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\config{name}{Random Variables and Probability Distributions (continued)}
+\noindent{\bf Random Variables, and Probability Distributions.}
+
+\begin{enumerate}
+%------------------------------------------------------------------------------------------------------------------------
+\item {\bf Expectation and Variance.} This problem will give you some practice calculating expectations and variances of random variables.
+\begin{enumerate}
+\item Suppose that the random variable $X$ takes on 3 values, $10, 25, 70$. Suppose $\Prob[X =10] = 0.5$, $\Prob[X = 25] = 0.2$, and $\Prob[X = 70] = 0.3$. 
+\begin{enumerate}
+\item What is $\E[X]$?
+\begin{Freeform}{31}
+$\E[X]$ = 
+\Hint Review the definition of expectation.
+\end{Freeform}
+\item What is $\E[X^2]$?
+\begin{Freeform}{1645}
+$\E[X^2]$ = 
+\Hint Review the definition of expectation.
+\end{Freeform}
+\item What is $\Var[X]$?
+\begin{Freeform}{684}
+$\Var[X] = \E[X^2] - \E[X]^2$ = 
+\Hint You can calculate this with the quantities above.
+\end{Freeform}
+\end{enumerate}
+%-----------------------------------
+\item Let $X, Y$ be random variables, let $a,b,c$ be constants, and let $\E[X] = x$ and $\E[Y] = y$. What is $\E[aX + bY + c]$?
+\begin{Choices}
+Review linearity of expectation
+\begin{enumerate}
+\FalseChoice\item $a^2x + b^2y$
+\FalseChoice\item $ax + by$
+\TrueChoice\item $ax + by + c$
+\FalseChoice\item $aX + bY + c$
+\end{enumerate}
+\end{Choices}
+\item Let $X, Y$ be random variables, let $a,b,c$ be constants. Which of the following statements are always true?
+\begin{Multi}
+Review the definitions of expectation and variance, as well as properties of variance given in notes 12 and 13.
+\begin{enumerate}
+\TrueChoice\item $\E[aX + bY] = a\E[X]+ b\E[Y]$. 
+\FalseChoice\item $\Var[aX + bY] = a\Var[X] + b\Var[Y]$
+\TrueChoice\item $\Var[aX] = a^2\Var[X]$
+\FalseChoice\item $\Var[aX + bY] = a^2\Var[X] + b^2\Var[Y]$
+\TrueChoice\item $\Var[X + Y] = \Var[X] + \Var[Y]$ assuming $X,Y$ are independent.
+\TrueChoice\item $\Var[X] + \E[X]^2 = \E[X^2]$
+\TrueChoice\item $\Var[aX + c] = a^2\Var[X]$  (remember that $\Var[Y] = \E[(Y - \E[Y])^2]$)
+\end{enumerate}
+\end{Multi}
+\end{enumerate}
+%------------------------------------------------------------------------------------------------------------------------
+\item {\bf A Game--Part I.} This game will give you practice with some expectations. 
+\begin{enumerate}
+%-----------------------------------
+\item Suppose I have a bag full of equal numbers of \$1 bills and \$5 bills. If I let you choose a bill uniformly at random from this bag, let $X$ be the random variable corresponding to your profit. What is your expected profit?
+\begin{Freeform}{3}
+$\E[X]$ = 
+\Hint Review the definition of expectation.
+\end{Freeform}
+%-----------------------------------
+\item Say that I now add a second bag, which has equal numbers of $\$10$ and $\$20$ bills. Let the random variable corresponding to your profit from this bag be $Y$. If I let you choose one bill from the first bag and one bill from the second bag, what is your expected proft?
+\begin{Freeform}{18}
+$\E[X + Y]$ = 
+\Hint Review the definition of expectation and linearity of expectation.
+\end{Freeform}
+%-----------------------------------
+\item Now, suppose I decide to charge you $\$2.50$ to draw a bill from the first bag, and \$15.50 to draw from the second bag. If you draw from both bags, what is your expected net profit?
+\begin{Freeform}{0}
+$\E[X + Y - 18]$ = 
+\Hint Review the definition of expectation and linearity of expectation.
+\end{Freeform}
+%-----------------------------------
+\item Given the pay scheme above (\$2.50 to draw from the first bag, \$15.50 to draw from the second bag) Which of the following actions gives the maximum expected profit?
+\begin{Multi}
+\begin{enumerate}
+\TrueChoice \item Drawing from the first bag only.
+\FalseChoice \item Drawing from the second bag only.
+\FalseChoice \item Drawing from both bags.
+\FalseChoice \item Drawing from neither bag.
+\end{enumerate}
+\end{Multi}
+%-----------------------------------
+\item As the designer of this game, I want your expected profit to be net negative. I have told you that the proportions of \$1 and \$5 bills in the bag are the same. However, I could lie to you and rig the game so that if I charge you \$2.50, your expected profit for drawing from the first bag is negative. What percentage of bills in the bag should be \$1 bils in order to make your expected profit $-\$1$ (round up to the nearest percent)?
+\begin{Freeform}{88}
+\% of \$1s? = 
+\Hint Review the definition of expectation.
+\end{Freeform}
+%-----------------------------------
+\end{enumerate}
+
+%------------------------------------------------------------------------------------------------------------------------
+
+\item {\bf A Game--Part II.} This problem will give you some practice with variances. 
+\begin{enumerate}
+%-----------------------------------
+\item Recall the game from Part I: I have a bag full of equal numbers of \$1 bills and \$5 bills. If I let you choose a bill uniformly at random from this bag (without charging you a fee), let $X$ be the random variable corresponding to your profit. What is the variance of $X$?
+\begin{Freeform}{4}
+$\Var[X] = \E[X^2] - \E[X]^2$ = 
+\Hint Review the definition of variance.
+\end{Freeform}
+%-----------------------------------
+\item Say now that I have a new game, in which I do not make any claims about the composition of the bag. However, I do advertise that the {\bf average earnings for one round are \$3}, that {\bf the variance is 3}, and that each round is independent of the previous round. 
+
+After playing the game $10$ times, your total earnings are $\$14$--you drew \$1 bills 9 out of 10 times. You suspect me of cheating customers at this game. Can you use expectation and variance to make a case against me? Intuitively the answer is yes--you can show that your earnings are consistently below the advertized expectation, in a way that is more extreme than the advertized variance predicts. 
+
+This intuition can be formalized by \emph{Chebyshev's Inequality}. Chebyshev's Inequality states that for a random variable $X$, 
+\[
+\Pr[ |X - \E[X]| \ge a] \le \frac{\Var[X]}{a^2}.
+\] 
+\begin{enumerate}
+%%-----------------------------------
+\item Define $Y = \sum_{i=1}^{10}{\frac{1}{10}Y_i}$ to be the random variable corresponding to your average earnings, and let $Y_i$ be the random variable corresponding to your earnings the $i$th time you play. What is $\E[Y]$, if my claims about the expectation and variance are true? Round your answer to the nearest hundredth.
+\begin{Freeform}{3.00}
+$\E[Y]$ =  
+\Hint Remember linearity of expectation. Also, this is not for the 10 games you already played--this is the expected earnings for 10 arbitrary games.
+\end{Freeform}
+%%-----------------------------------
+\item What is $\Var[Y]$, if my claims are correct? Recall your answer from problem 1c, and that each time you play is independent of the others. Enter your answer as a decimal with leading 0.
+\begin{Freeform}{0.3}
+$\Var[Y]$ =  
+\Hint Remember how variances of sums of independent random variables behave.
+\end{Freeform}
+%%-----------------------------------
+\item Let $|1.40- \E[Y]| = a$. Give an upper bound on the probability that $Y = \$1.40$  (if my claims about the expectation and variance are true), by using Chebyshev's Inequality to upper bound the probability that $|Y - \E[Y]| \ge a$. Give your answer as a decimal, rounding to the nearest hundredth.
+\begin{Freeform}{0.12}
+$\Pr[Y = \$1.40] \le \Pr[|Y - \E[Y]| \ge a] \le $  
+\Hint Review the definition of expectation and linearity of expectation.
+\end{Freeform}
+%%-----------------------------------
+\item Say you decided that this probability is not convincing enough. You decided to repeat the game 100 times, and after these 100 times you find that your average earnings are still \$1.40.
+
+Define a new random variable corresponding to your average earnings, $Z =\sum_{i=1}^{100} \frac{1}{100} Z_i$, where $Z_i$ is your earnings on the $i$th round. Repeat the process above (calculate $\Var[Z]$, then use Chebyshev's Inequality) to give the best upper bound you can on the probability that $Z = \$1.40$. Give your answer as a decimal, rounding to the nearest hundredth.
+\begin{Freeform}{0.01}
+$\Pr[Z = \$1.40] \le  \Pr[|Z - \E[Z]| \ge a] \le$  
+\Hint Review the definition of expectation and linearity of expectation.
+\end{Freeform}
+%%-----------------------------------
+\item Even though the average is the same after 10 and 100 games, do you have a stronger case for my cheating after repeating the experiment more times?
+\begin{Choices}
+\begin{itemize}
+\TrueChoice \item Yes
+\FalseChoice \item No
+\end{itemize}
+\end{Choices}
+\end{enumerate}
+
+%\item Now, suppose I decide to charge you $\$2.50$ to draw a bill from the first bag, and \$15.50 to draw from the second bag. If you draw from both bags, what is your expected net profit?
+%\begin{Freeform}{0}
+%$\E[X + Y - 18]$ = 
+%\Hint Review the definition of expectation and linearity of expectation.
+%\end{Freeform}
+%%-----------------------------------
+%\item Given the pay scheme above (\$2.50 to draw from the first bag, \$15.50 to draw from the second bag) Which of the following actions maximizes your expected profit?
+%\begin{Multi}
+%\begin{enumerate}
+%\TrueChoice \item Drawing from the first bag only.
+%\FalseChoice \item Drawing from the second bag only.
+%\FalseChoice \item Drawing from both bags.
+%\FalseChoice \item Drawing from neither bag.
+%\end{enumerate}
+%\end{Multi}
+%%-----------------------------------
+%\item As the designer of this game, I want your expected profit to be net negative. I have told you that the proportions of \$1 and \$5 bills in the bag are the same. However, I could lie to you and rig the game so that if I charge you \$2.50, your expected profit for drawing from the first bag is negative. What percentage of bills in the bag should be \$1 bils in order to make your expected profit $-\$1$ (round up to the nearest percent)?
+%\begin{Freeform}{88}
+%\% of \$1s? = 
+%\Hint Review the definition of expectation.
+%\end{Freeform}
+%%-----------------------------------
+\end{enumerate}
+
+%--------------------------------------------------------------------------------------------------------------------------
+
+%--------------------------------------------------------------------------------------------------------------------------
+\end{enumerate}
+\end{document}
