@@ -18,12 +18,12 @@
  * Navigation
  */
 
-.nav {
+.cust_nav {
     padding-right:$spacing-unit;
     padding-left:$spacing-unit;
 }
 
-.nav_right {
+.cust_nav_right {
     margin-right:$spacing-unit;
     margin-left: auto;
 }
@@ -33,14 +33,16 @@
     font-size: 18px;
 }
 
-.resource_table {
-    width: 90%;
+.resources {
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
 }
 
-.resource_table tr:nth-child(even) {
-    background-color: #dddddd;
+.resource_table {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /**
@@ -58,6 +60,26 @@
     height: 250px;
     padding: 10px 10px 10px 10px;
 }
+
+.syllabus hr {
+    border: 1px solid #373b50;
+}
+
+.syllabus ul {
+    font-size: 18px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 80px;
+    overflow-y: auto;
+    height: 80%;
+}
+
+.notes{
+    font-size: 15px;
+}
+
 
 
 table.fixed { table-layout:fixed; }

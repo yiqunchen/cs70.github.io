@@ -1,6 +1,6 @@
 <h3>Weekly Resources</h3>
 
-<table class="resource_table" border="1" cellpadding="5">
+<table class="resource_table table table-striped table-hover" border="1" cellpadding="5">
   <thead>
     <tr>
       <th align="center">Week number</th>
@@ -25,7 +25,7 @@
         {% for dis in week.discussions %}
           <td align="center">
             {% if dis.skipped %}
-              Skipped
+              N/A
             {% else %}
               {% if dis.prob %}
                 <a href="{{dis_base_url}}q{{week.week}}{{dis.part}}.pdf">{{ week.week }}{{dis.part | upcase}}</a>;

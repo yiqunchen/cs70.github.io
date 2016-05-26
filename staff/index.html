@@ -10,9 +10,9 @@ permalink: /staff/
 
 <b style="font-size: 30px;"> Instructors </b>
 <table cellpadding=10 class="fixed">
-    <col width="320px" />
-    <col width="320px" />
-    <col width="320px" />
+    <col width="350px" />
+    <col width="350px" />
+    <col width="350px" />
     <tr>
         {% for profile in site.data.staff.instructor %}
             <td style="text-align: center;">
@@ -31,9 +31,9 @@ permalink: /staff/
 <hr>
 <b style="font-size: 30px;"> TAs </b>
 <table cellpadding=10 class="fixed">
-    <col width="320px" />
-    <col width="320px" />
-    <col width="320px" />
+    <col width="350px" />
+    <col width="350px" />
+    <col width="350px" />
     {% for profile in site.data.staff.ta %}
         {% assign mod = forloop.index | modulo: 3 %}
 

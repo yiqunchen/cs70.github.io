@@ -1,42 +1,46 @@
-<polymer-element is='main-resource' class='resource-tab'>
-    <dom-module id="hw-due-date">
-      <template>
-        <span>{% raw %} {{calc_remain(due)}} {% endraw %}</span>
-      </template>
+<div class="resources">
+    <polymer-element is='main-resource' class='resource-tab'>
+        <dom-module id="hw-due-date">
+          <template>
+            <span>{% raw %} {{calc_remain(due)}} {% endraw %}</span>
+          </template>
 
-      <script>
-        Polymer({
-          is: "hw-due-date",
-          properties: {
-            due: String,
-            remain: String
-          },
-          calc_remain: function(due) {
-            if (due != "") {
-              var time = moment(due+"2200", "YYYY/MM/DDhhmm");
-              return time.format("MMMM Do, h:mm a") + "(" + time.fromNow() + ")";
-            }
-            else
-              return "";
-          }
-        });
-      </script>
+          <script>
+            Polymer({
+              is: "hw-due-date",
+              properties: {
+                due: String,
+                remain: String
+              },
+              calc_remain: function(due) {
+                if (due != "") {
+                  var time = moment(due+"1200", "YYYY/MM/DDhhmm");
+                  return time.format("MMMM Do, h:mm a") + "(" + time.fromNow() + ")";
+                }
+                else
+                  return "";
+              }
+            });
+          </script>
 
-    </dom-module>
+        </dom-module>
 
-    <paper-tabs selected="0" noink>
-        <paper-tab>Notes</paper-tab>
-        <paper-tab>Weekly Resource</paper-tab>
-        <paper-tab>Exams</paper-tab>
-    </paper-tabs>
+        <paper-tabs selected="0" noink>
+            <paper-tab>Notes</paper-tab>
+            <paper-tab>Weekly Resource</paper-tab>
+            <paper-tab>Slides</paper-tab>
+            <paper-tab>Exams</paper-tab>
+        </paper-tabs>
 
-    <iron-pages selected="0">
-        <div>{% include notes.html %}</div>
-        <div>{% include weekly.html %}</div>
-        <div>{% include exam.html %}</div>
-    </iron-pages>
+        <iron-pages selected="0">
+            <div>{% include notes.html %}</div>
+            <div>{% include weekly.html %}</div>
+            <div>{% include slides.html %}</div>
+            <div>{% include exam.html %}</div>
+        </iron-pages>
 
-</polymer-element>
+    </polymer-element>
+</div>
 
 <script>
      var pages = document.querySelector('iron-pages');
