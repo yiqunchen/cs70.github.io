@@ -1,0 +1,610 @@
+\documentclass[11pt]{article}
+\usepackage{../cs70,latexsym,epsf}
+\lecture{11}
+\def\title{Note \the\lecturenumber}
+
+%%% Alistair's Macros
+\makeatletter
+\def\eqalign#1{\,\vcenter{\openup\jot\m@th
+  \ialign{\strut\hfil${##}$&${{}##}$\hfil
+      \crcr#1\crcr}}\,}
+\def\eqalignno#1{\displ@y \tabskip\@centering
+  \halign to\displaywidth{\hfil${##}$\tabskip\z@skip
+    &${{}##}$\hfil\tabskip\@centering
+    &\llap{$##$}\tabskip\z@skip\crcr
+    #1\crcr}}
+\makeatother
+\def\third{{\textstyle{1\over 3}}}
+\def\half{{\textstyle{1\over 2}}}
+\def\quarter{{\textstyle{1\over 4}}}
+\def\ul#1{\underline{#1}}
+
+\def\VarOmega{\mathchar"10A }
+\def\varOmega{\mathchar"10A }
+\newenvironment{proposition}{\par\global\advance\theoremnumber by 1
+{\bf Proposition \the\lecturenumber.\the\theoremnumber}:
+\begingroup\em}%
+{\endgroup}
+\def\ignore#1{}
+%%% End Alistair's Macros
+
+\begin{document}
+\maketitle
+
+\section*{Two Killer Applications: Hashing and Load Balancing}
+
+In this lecture we will see that the simple balls-and-bins process can
+be used to model a surprising range of phenomena. Recall that in 
+this process we distribute $k$ balls in $n$ bins, where each
+ball is independently placed in a uniformly random bin. We can 
+ask questions such as:
+\begin{itemize}
+\item How large can we choose $k$ while ensuring that with probability at least 
+$1/2$, no two balls land in the same bin?
+\item If $k = n$, what is the maximum number of balls that are likely to land in 
+the same bin?
+\end{itemize}
+
+As we shall see, these two simple questions provide important insights into two 
+important computer science applications: hashing and load balancing. 
+Our answers to these two questions are based on the application of a simple 
+technique called the union bound, which states that $P[A \cup B] \leq P[A] + P[B]$. 
+
+One of the basic issues in hashing is the tradeoff between the size of the hash table
+and the number of collisions. Here is a simple question that quantifies the tradeoff:
+
+\begin{itemize}
+\item Suppose a hash function distributes keys evenly over
+a table of size~$n$.  How many keys can
+we hash before the probability of a collision exceeds (say)~$\frac{1}{2}$?
+\end{itemize}
+
+Recall that a hash table is a data structure that supports
+the storage of a set of keys drawn from a large universe~$U$
+(say, the names of all 250m people in the US). The set of keys 
+to be stored changes over time, and so the data structure 
+allows keys to be added and deleted quickly. It also rapidly
+answers given a key whether it is an element in the currently
+stored set. The crucial question is how large must the hash 
+table be to allow these operations (addition, deletion and 
+membership) to be implemented quickly. 
+
+Here is how the hashing works. The hash function~$h$ maps~$U$ to a table~$T$ of modest size.  To
+{\sc add} a key~$x$ to our set, we evaluate $h(x)$ (i.e., apply
+the hash function to the key) and store~$x$ at the location~$h(x)$
+in the table~$T$.  All keys in our set that are mapped to the same 
+table location are stored in a simple linked list.  The operations
+{\sc delete} and {\sc member} are implemented in similar fashion,
+by evaluating $h(x)$ and searching the linked list at~$h(x)$.
+Note that the efficiency of a hash function depends on having
+only few \ul{collisions} --- i.e., keys that map to the same
+location.  This is because the search time for {\sc delete} and
+{\sc member} operations is proportional to the length of the 
+corresponding linked list.
+
+Of course, we could be unlucky and choose keys such that 
+our hash function maps many of them to the same location in the 
+table. But the whole idea behind hashing is that we select our 
+hash function carefully, so that it scrambles up the input key
+and seems to map it to a random location in the table, making it
+unlikely that most of the keys we select are mapped to the same 
+location. To quantitatively understand this phenomenon, we will
+model our hash function as a random function - one that maps 
+each key to a uniformly random location in the table, independently
+of where all other keys are mapped. The question we will answer 
+is the following: what is the largest number, $m$, of keys
+we can store before the probability of a collision reaches~$\frac{1}{2}$?
+Note that there is nothing special about $\frac{1}{2}$. One can ask,
+and answer, the same question with different values of collision probability, and the largest number of keys $m$ 
+will change accordingly. 
+
+
+\subsection*{Balls and Bins}
+Let's begin by seeing how this problem can be put into the balls
+and bins framework.  The balls will be the $m$ keys to be stored, and
+the bins will be the $n$ locations in the hash table~$T$.  
+Since the hash function maps each key to a random location in the 
+table $T$, we can see each key (ball) as choosing a hash table location (bin)
+uniformly and independently from~$T$.  Thus the probability space
+corresponding to this hashing experiment is exactly the same as
+the balls and bins space.
+
+We are interested in the event~$A$ that there is no collision,
+or equivalently, that all $m$ balls land in different bins.  Clearly
+$\Pr[A]$ will decrease as $m$ increases (with $n$ fixed).  Our goal
+is to find the largest value of~$m$ such that $\Pr[A]$ remains above~$\half$.
+[Note: Really we are looking at different sample spaces here, one for
+each value of~$m$.  So it would be more correct to write $\Pr_m$
+rather than just~$\Pr$, to make clear which sample space we are 
+talking about.  However, we will omit this detail.]
+
+
+\subsection*{Using the union bound}
+Let us see how to use the union bound to achieve this goal. We will
+ fix the value of $m$ and try to compute $\Pr[A]$. 
+There are exactly $k={m\choose 2}={{m(m-1)}\over 2}$ possible pairs
+among our $m$ keys.  Imagine these are numbered from~1 to ${m\choose 2}$
+(it doesn't matter how).  Let $A_i$ denote the event that pair~$i$
+has a collision (i.e., both keys in the pair are hashed to the same location).  Then
+the event $\overline A$ that {\it some\/} collision
+occurs can be written $\overline{A}=\bigcup_{i=1}^k A_i$.  What is
+$\Pr[A_i]$?  We claim it is just~$1\over n$ for every~$i$; this is
+just the probability that two particular balls land in the same bin.
+
+So, using the union bound from the last lecture, we have $$
+   \Pr[\overline{A}] \le \sum_{i=1}^k\Pr[A_i] = k\times{1\over n} = 
+                          {{m(m-1)}\over{2n}}\approx{{m^2}\over{2n}}.  $$
+This means that the probability of having a collision is less than~$\half$
+provided $\frac{m^2}{2n}\le\half$, i.e., provided $m\le\sqrt{n}$. Thus, if 
+we wish to suffer no collisions, the size of the hash table must be about the 
+square of the cardinality of the set we are trying to store. We will see in 
+the next section on load balancing that the number of collisions does not
+increase dramatically as we decrease the size of the hash table and make it
+comparable to the size of the set we are trying to store. 
+
+It turns out we can derive a slightly less restrictive bound for $m$ using other techniques
+from the past several lectures. Although this alternate bound is a little better,
+both bounds are the same in terms of dependence on $n$ (both
+are of the form $m = O(\sqrt{n})$). If you are interested in the alternate derivation,
+please read the section at the end of this note. 
+
+
+\subsection*{Birthday Paradox}
+
+Can we do better than the $m = O(\sqrt{n})$ dependence on $n$? It turns out that the answer is 
+no, and this is related to a surprising phenomenon called the birthday paradox. Suppose there
+are $23$ students in class. What is the chance that two of them have the same birthday? 
+Naively one might answer that since there are $365$ days in the year, the chance should be
+roughly 23/365 \~ 6\%. The correct answer is over 50\%!
+
+Suppose there are $k$ people in the room, and let $A = $ ``At least
+two people have the same birthday," and let ${\bar A} = $ ``No two people have the same birthday." 
+It turns out it is easier to calculate $\Pr[{\bar A}]$, and then $\Pr[A] = 1 - \Pr[{\bar A}]$.
+Our sample space is of cardinality $|\Omega| = 365^k$. And the number of sample points such 
+that no two people to have the same birthday can be calculated as follows: 
+there are 365 choices for the first person,
+364 for the second, \ldots, $365-k+1$ choices for the $k^{th}$ person, for a total of
+$365 \times 364 \times \cdots \times (365-k+1)$. 
+Thus $\Pr[{\bar A}] = \frac{|{\bar A}|}{|\Omega|} =
+\frac{365 \times 364 \times \cdots \times (365-k+1)}{365^k}$. And
+$\Pr[A] = 1 - \frac{365 \times 364 \times \cdots \times (365-k+1)}{365^k}$.  
+Substituting $k=23$, we can check that $\Pr[A]$ is over 50\%.
+And with $k=60$ $\Pr[A]$ is larger than 99\%!
+
+The hashing problem we considered above is a closely related
+to the birthday problem. Indeed, the birthday problem is the special 
+case of the chasing problem with $365$ bins. The $k = 23$ solution 
+to the birthday problem can be seen as $k$ being roughly $\sqrt{365}$. 
+
+
+
+
+\section*{Application 2: Load balancing}
+An important practical issue in distributed computing
+is how to spread the workload in a distributed system among its
+processors. 
+Here we investigate an extremely simple scenario that is both fundamental 
+in its own right and also establishes a baseline against which more
+sophisticated methods should be judged.
+
+Suppose we have $m$ identical jobs and $n$ identical processors.
+Our task is to assign the jobs to the processors in such a way that
+no processor is too heavily loaded.  Of course, there is a simple
+optimal solution here: just divide up the jobs as evenly as possible,
+so that each processor receives either $\lceil{m\over n}\rceil$
+or $\lfloor{m\over n}\rfloor$ jobs.  However, this solution requires
+a lot of centralized control, and/or a lot of communication: the
+workload has to be balanced evenly either by a powerful centralized
+scheduler that talks to all the processors, or by the exchange of
+many messages between jobs and processors.  This kind of operation
+is very costly in most distributed systems.  The question therefore
+is: What can we do with little or no overhead in scheduling and
+communication cost?
+
+\subsection*{Back to Balls and Bins}
+The first idea that comes to mind here is$\ldots$ balls and bins!  
+In other words, each job simply selects a processor uniformly at random and
+independently of all others, and goes to that processor.  (Make sure
+you believe that the probability space for this experiment is
+the same as the one for balls and bins.)
+This scheme requires no communication.  However,
+presumably it won't in general achieve an optimal balancing of
+the load.  Let $A_k$ be the event that the load of 
+some processor is at least $k$. 
+\iffalse
+Let $X$ be the maximum loading of any processor under
+our randomized scheme.  Note that $X$ isn't a fixed number:
+its value depends on the outcome of our balls and bins 
+experiment.\footnote{In fact, $X$ is called a \define{random variable}: 
+we'll define this properly in the next lecture.}  
+\fi
+As designers or users of this
+load balancing scheme, here's one question we might care about:
+\begin{description}
+\item[{\bf Question:}] Find the smallest value~$k$ such that
+$\Pr[A_k] \le \half$.
+\end{description}
+
+If we have such a value~$k$, then we'll know that, with good probability
+(at least~$\half$), every processor in our system will have a load at most~$k$.  
+This will give us a good idea about
+the performance of the system.  Of course, as with our hashing application,
+there's nothing special about the value~$\half$; we're just using this
+for illustration.  As you can check later (if you choose to read the optional section below), essentially the same
+analysis can be used to find~$k$ such that $\Pr[A_k]\le 0.05$
+(i.e., 95\% confidence), or any other value we like.  Indeed, we
+can even find the $k$'s for several different confidence levels
+and thus build up a more detailed picture of the behavior of the
+scheme.  To simplify our problem, we'll
+also assume from now on that $m=n$ (i.e., the number of jobs is
+the same as the number of processors).  With a bit more work, we could
+generalize our analysis to other values of~$m$.  
+
+
+\subsection*{Applying the Union Bound}
+From Application~1 we know that we get collisions already when
+$m\approx 1.177\sqrt{n}$.  So when $m=n$ the maximum load will
+certainly be larger than~1 (with good probability).  But how
+large will it be?  If we try to analyze the maximum load directly,
+we run into the problem that it depends on the number
+of jobs at {\it every\/} processor (or equivalently, the number of
+balls in every bin).  Since the load in one bin depends on those in
+the others, this becomes very tricky.  Instead, what we'll do is
+analyze the load in any {\it one\/} bin, say bin~1; this will be
+fairly easy. Let $A_k(1)$ be the event that the load in bin~1
+is at least $k$. What we'll do is find ~$k$ such that 
+\begin{equation}\label{eq20}
+   \Pr[A_k(1)] \le {\textstyle{1\over{2n}}}.
+\end{equation}
+Since all the bins are identical, we will then know that, for the
+same~$k$, $$
+   \Pr[A_k(i)] \le {\textstyle{1\over{2n}}}\qquad\hbox{\rm for $i=1,2,\ldots,n$},  $$
+where $A_k(i)$ is the event that the load in bin~$i$ is at least $k$.  But now, since the
+event $A_k$ is exactly the union of the events $A_k(i)$ (do you see why?),
+we can use the ``Union Bound'' from the previous lecture:
+\begin{align*}
+\Pr[A_k]
+  &= \Pr[{\textstyle\bigcup_{i=1}^n A_k(i)}]\\
+  &\le n\times{1\over{2n}}\\
+  &= {1\over 2}.
+\end{align*}
+
+It's worth standing back to notice what we did here: we wanted to conclude
+that $\Pr[A_k]\le\half$.  We couldn't
+analyze~$A_k$ directly, but we knew that $A_k=\bigcup_{i=1}^n A_k(i)$, for
+much simpler events~$A_k(i)$.  Since there are $n$ events~$A_k(i)$, and all have the
+same probability, it is enough for us to show that $\Pr[A_k(i)]\le {1\over{2n}}$;
+the union bound then guarantees that $\Pr[A_k]\le\half$.  This kind of
+reasoning is very common in applications of probability in Computer
+Science.
+
+Now all that's left to do is find $k$ which satisfies equation~\ref{eq20}. 
+That is, we wish to bound the probability that bin $1$ has at least $k$ balls 
+(and find a value of $k$ so that this probability is smaller than $1/2n$). 
+We start by observing that for the event $A_k(1)$ to occur (that bin $1$ has 
+at least $k$ balls), there must be some subset $S$ of exactly $k$ balls such 
+that all balls in $S$ ended up in bin $1$. We can say this more formally as follows:
+for a subset $S$ (where $|S| = k$), let $B_S$ be the event that
+all balls in $S$ land in bin 1. Then 
+the event $A_k(1)$ is a subset of the event $\cup_{S} B_S$ (where the union is over
+all sets $S$ of cardinality $k$). It follows that: 
+$$
+\Pr[A_k(1)] \leq \Pr[\cup_{S} B_S]
+$$
+We can use the union bound on $\Pr[\cup_S B_S]$:
+$$
+\Pr[\cup_S B_S] \leq \sum\limits_S \Pr[B_S]
+$$
+There are ${n\choose k}$ sets we are summing over, and for each set $S$, $\Pr[B_S]$ is simple: it is just 
+the probability that $k$ balls land in bin 1, or $\frac{1}{n^k}$. Using these observations
+and the above equations, we can compute
+an upper bound on $\Pr[A_k(1)]$:
+$$
+\Pr[A_k(1)]\leq {n\choose k}\frac{1}{n^k}
+$$
+Now to satisfy our original goal (equation~\ref{eq20}), we just need to choose $k$
+so that ${n\choose k}\frac{1}{n^k}\leq\frac{1}{2n}$. But we have 
+$${n\choose k}\frac{1}{n^k} = \frac{n(n-1)\cdots (n-k+1)}{k!}\frac{1}{n^k} \leq \frac{1}{k!}$$ 
+Setting $k! = 2n$, and simplifying we get that $\left ( \frac{k}{e} \right )^k = 2n$.
+Taking logs we get that $k(\ln k - 1) = \ln 2n$. This gives a value of $k$ of roughly $\frac{\ln n}{\ln \ln n}$. 
+
+If you would like to learn more about how to do 
+this, please refer to the additional section on load balancing below.
+
+Finally, here is one punchline from Application~2.  Let's say the total
+US population is about 250~million.  Suppose we mail 250~million items
+of junk mail, each one with a random US address.  Then (see the optional section below for more details)
+with probability at least~$\half$, no one person anywhere will receive
+more than about a dozen items!
+
+
+
+
+\section*{More About Hashing (Optional)}
+\textit{Please read on only if interested. In this section, we will derive the alternate bound described in the hashing section above.}
+
+\subsection*{Main Idea}
+Let's fix the value of~$m$ and try to compute $\Pr[A]$.  Since our
+probability space is uniform (each outcome has probability~$1\over{n^m}$),
+it's enough just to count the number of outcomes in~$A$.  In how many
+ways can we arrange $m$ balls in $n$ bins so that no bin contains more
+than one ball?  Well, this is just the number of ways of choosing $m$
+things out of~$n$ {\it without\/} replacement, which as we saw in Note~10
+is $$
+   n\times(n-1)\times(n-2)\times\cdots\times(n-m+2)\times(n-m+1).  $$
+This formula is valid as long as $m\le n$: if $m>n$ then clearly the
+answer is zero.  From now on, we'll assume that $m\le n$.
+
+Now we can calculate the probability of no collision:
+\begin{eqnarray}
+    \Pr[A] &=& {{n(n-1)(n-2)\ldots(n-m+1)}\over{n^m}}\nonumber\\
+           &=& {n\over n}\times{{n-1}\over n}\times{{n-2}\over n}\times
+                              \cdots\times{{n-m+1}\over n}\nonumber\\
+           &=& \Bigl(1-{1\over n}\Bigr)\times\Bigl(1-{2\over n}\Bigr)\times\cdots\times\Bigl(1-{{m-1}\over n}\Bigr).\label{eq1}
+\end{eqnarray}
+
+Before going on, let's pause to observe that we could compute $\Pr[A]$
+in a different way, as follows.  View the probability space as a sequence
+of choices, one for each ball.  For $1\le i\le m$, let
+$A_i$ be the event that the $i$th ball lands in a different bin from balls
+$1,2,\ldots,i-1$.  Then
+\begin{eqnarray}
+   \Pr[A]=\Pr[{\textstyle\bigcap_{i=1}^n A_i}]
+        &=&\Pr[A_1]\times\Pr[A_2\vert A_1]\times\Pr[A_3\vert A_1\cap A_2]\times\cdots\times\Pr[A_m\vert{\textstyle\bigcap_{i=1}^{m-1}A_i}]\nonumber\\
+        &=&1\times{{n-1}\over n}\times{{n-2}\over n}\times\cdots\times{{n-m+1}\over n}\nonumber\\
+        &=&\Bigl(1-{1\over n}\Bigr)\times\Bigl(1-{2\over n}\Bigr)\times\cdots\times\Bigl(1-{{m-1}\over n}\Bigr).\nonumber
+\end{eqnarray}
+Fortunately, we get the same answer as before!  [You should make sure you
+see how we obtained the conditional probabilities in the second line
+above.  For example, $\Pr[A_3\vert A_1\cap A_2]$ is the probability that the
+third ball lands in a different bin from the first two balls, {\it given
+that\/} those two balls also landed in different bins.  This means that
+the third ball has $n-2$ possible bin choices out of a total of~$n$.]
+
+Essentially, we are now done with our problem: equation~(\ref{eq1}) gives
+an exact formula for the probability of no collision when $m$ keys
+are hashed.  All we need to do now is plug values $m=1,2,3,\ldots$
+into~(\ref{eq1}) until we find that $\Pr[A]$ drops below~$\half$.  The
+corresponding value of~$m$ (minus~1) is what we want.  
+
+We can actually make this bound much more useful by turning it around, as we will
+do below. We will derive an equation which tells us the value of $m$ at which $\Pr[A]$ drops below
+$\frac{1}{2}$. It turns out that if $m$ is smaller than approximately
+$1.177\sqrt{n}$, the probability of a collision will be less than $\frac{1}{2}$. 
+
+\subsection*{Further Simplification}
+The bound we gave above (for the largest number $m$ of keys we can store
+before the probability of a collision reaches $\frac{1}{2}$) is not really satisfactory: it would be much more useful to
+have a formula that gives the ``critical'' value of~$m$ directly, rather 
+than having to compute $\Pr[A]$ for $m=1,2,3,\ldots$.  Note that we
+would have to do this computation separately for each different value
+of~$n$ we are interested in: i.e., whenever we change the size of our 
+hash table.
+
+So what remains is to ``turn equation~(\ref{eq1}) around'', 
+so that it tells us the 
+value of~$m$ at which $\Pr[A]$ drops below~$\half$.  To do this, let's
+take logs: this is a good thing to do because it turns the product into
+a sum, which is easier to handle.  We get
+\begin{equation}\label{eq2}
+   \ln(\Pr[A]) = \ln\Bigl(1-{1\over n}\Bigr) + 
+                 \ln\Bigl(1-{2\over n}\Bigr) + \cdots +
+                 \ln\Bigl(1-{{m-1}\over n}\Bigr),
+\end{equation}
+where ``$\ln$'' denotes natural (base~e) logarithm.  Now we can make use
+of a standard approximation for logarithms: namely, if $x$ is small
+then $\ln(1-x)\approx -x$.  This comes from the Taylor series expansion $$
+   \ln(1-x) = -x -{{x^2}\over 2} -{{x^3}\over 3} - \ldots.  $$
+So by replacing $\ln(1-x)$ by $-x$ we are making an error of at most
+$({{x^2}\over 2}+{{x^3}\over 3}+\cdots)$, which is at most $2x^2$
+when $x\le\half$.  In other words, we have $$
+    -x \ge \ln(1-x) \ge -x -2x^2.  $$
+And if $x$ is small then the error term $2x^2$ will be
+much smaller than the main term~$-x$.
+Rather than carry around the error term~$2x^2$ everywhere,
+in what follows we'll just write $\ln(1-x)\approx -x$, secure in the
+knowledge that we could make this approximation precise if necessary.
+
+Now let's plug this approximation into equation~(\ref{eq2}):
+\begin{eqnarray}
+   \ln(\Pr[A]) &\approx& -{1\over n} -{2\over n} -{3\over n} -\ldots
+                                              -{{m-1}\over n}\nonumber\\
+               &=&       -{1\over n}\sum_{i=1}^{m-1} i\nonumber\\
+               &=&       -{{m(m-1)}\over{2n}}\nonumber\\
+               &\approx& -{{m^2}\over{2n}}.\label{eq3}
+\end{eqnarray}
+Note that we've used the approximation for $\ln(1-x)$ with 
+$x={1\over n},{2\over n},{3\over n},\ldots,{{m-1}\over n}$.  So our
+approximation should be good provided all these are small, i.e., provided
+$n$ is fairly big and $m$ is quite a bit smaller than~$n$.  Once we're
+done, we'll see that the approximation is actually pretty good even for
+modest sizes of~$n$.  
+
+Now we can undo the logs in~(\ref{eq3}) to get our expression for $\Pr[A]$:
+$$    \Pr[A]\approx{\rm e}^{-{{m^2}\over{2n}}}.  $$
+The final step is to figure out for what value of~$m$ this probability
+becomes~$\half$.  So we want the largest~$m$ such that
+${\rm e}^{-{{m^2}\over{2n}}}\ge\half$.  This means we must have
+\begin{eqnarray}
+   -{{m^2}\over{2n}}&\ge&\ln(\half) = -\ln 2,\label{eqadd}\\
+         \noalign{\hbox{\rm or equivalently}}\nonumber\\
+                    m&\le&\sqrt{(2\ln 2)n}\approx 1.177\sqrt{n}.\label{eqadd2}
+\end{eqnarray}
+So the bottom line is that we can hash approximately 
+\ul{$m=\lfloor 1.177\sqrt{n}\rfloor$ keys} 
+before the probability of a collision reaches~$\half$.
+
+Recall that our calculation was only approximate; so we should go back
+and get a feel for how much error we made.  We can do this by 
+using equation~(\ref{eq1}) to compute the exact value 
+$m=m_0$ at which $\Pr[A]$ drops below~$\half$, for a few sample 
+values of~$n$.  Then we can compare these values with our
+estimate $m=1.177\sqrt{n}$.
+\begin{center}\begin{tabular}{|r|ccccccccccc|}
+\hline
+$n$           &10&20&50&100&200&365&500&1000&$10^4$&$10^5$&$10^6$\\\hline
+$1.177\sqrt{n}$&3.7&5.3&8.3&11.8&16.6&22.5&26.3&37.3&118&372&1177\\
+exact $m_0$   &4&5&8&12&16&22&26&37&118&372&1177\\\hline
+\end{tabular}\end{center}
+From the table, we see that our approximation is very good even for 
+small values of~$n$.
+When $n$ is large, the error in the approximation becomes negligible.
+
+\subsection*{Why $\half$?}
+As mentioned above, we could consider values other than $\frac{1}{2}$.
+What we did above was to (approximately) compute $\Pr[A]$ (the probability
+of no collision) as a function of~$m$,
+and then find the largest value of~$m$ for which our estimate is
+smaller than~$\half$.  If instead we were interested in keeping the
+collision probability below (say) 0.05 ($=5\%$), we could derive that
+we could hash at most $m=\sqrt{(2\ln(20/19)) n}\approx 0.32\sqrt{n}$ keys. 
+Of course, this number is a bit smaller than before because our collision probability
+is now smaller.
+But no matter what ``confidence'' probability we specify, our critical
+value of~$m$ will always be $c\sqrt{n}$ for some constant~$c$ (which 
+depends on the confidence).
+
+
+\section*{More About Load Balancing (Optional)}
+In this section, we'll come up with a slightly tighter bound for $k$ and we will also 
+show how to choose $k$ so that the probability of an overloaded processor is less than $\frac{1}{2}$.
+
+We'll start with an alternate calculation of $\Pr[A_k(1)]$. Let
+$C_j(1)$ be the event that the number of balls in bin 1 is exactly $j$. It's not hard to write down 
+an \emph{exact} expression for $\Pr[C_j(1)]]$:
+\begin{equation}\label{eq21}
+   \Pr[C_j(1)] = {n\choose j} \left({\textstyle{1\over n}}\right)^j
+                             \left({\textstyle 1-{1\over n}}\right)^{n-j}.
+\end{equation}              
+This can be seen by viewing each ball as a biased coin toss: Heads
+corresponds to the ball landing in bin~1, Tails to all other outcomes.
+So the Heads probability is~$1\over n$; and all coin tosses are
+(mutually) independent.  As we saw in earlier lectures, (\ref{eq21})~gives
+the probability of exactly $j$ Heads in $n$ tosses.  
+
+Thus we have 
+\begin{equation}\label{eq22}
+   \Pr[A_k(1)] = \sum_{j=k}^n \Pr[C_j(1)] 
+                 = \sum_{j=k}^n{n\choose j} \left({\textstyle{1\over n}}\right)^j\left({\textstyle 1-{1\over n}}\right)^{n-j}.
+\end{equation}
+Now in some sense we are done: we could try plugging values $k=1,2,\ldots$
+into~(\ref{eq22}) until the probability drops below~$1\over{2n}$.  However,
+it is also possible to massage equation~(\ref{eq22}) into a cleaner form from which we can 
+read off the value of~$k$ more directly. We will need to
+do a few calculations and approximations:
+\begin{align}
+\Pr[A_k(1)] &= \sum_{j=k}^n{n\choose j} \left({\textstyle{1\over n}}\right)^j\left({\textstyle 1-{1\over n}}\right)^{n-j}\nonumber\\
+              &\le \sum_{j=k}^n \left({\textstyle{{n\e}\over j}}\right)^j\left({\textstyle{1\over n}}\right)^j\nonumber\\
+              &= \sum_{j=k}^n \left({\textstyle{{\e}\over j}}\right)^j\label{eq23}
+\end{align}
+In the second line here, we used the standard approximation\footnote{Computer
+scientists and mathematicians carry around a little bag of tricks for
+replacing complicated expressions like ${n\choose j}$ with simpler
+approximations.  This is just one of these.  It isn't too hard to
+prove the lower bound, i.e., that ${n\choose j}\ge({n\over j})^j$.
+The upper bound is a bit trickier, and makes use of another approximation
+for $n!$ known as {\it Stirling's approximation}, which implies that
+$j!\ge ({j\over\e})^j$.  We won't discuss the details here.}
+$({n\over j})^j\le{n\choose j}\le ({{n\e}\over j})^j$.
+Also, we tossed away the $(1-{1\over n})^{n-j}$ term,
+which is permissible because doing so can only increase the
+value of the sum (i.e., since $(1-{1\over n})^{n-j} \le 1$).
+It will turn out
+that we didn't lose too much by applying these bounds.
+
+Now we're already down to a much cleaner form in~(\ref{eq23}).
+To finish up, we just need to sum the series.  Again, we'll make an
+approximation to simplify our task, and hope that it doesn't cost
+us too much.  The terms in the series in~(\ref{eq23}) go down at
+each step by a factor of at least~${\e\over k}$.  So we
+can bound the series by a {\it geometric\/} series, which is
+easy to sum:
+\begin{equation}\label{eq24}
+     \sum_{j=k}^n \left({\textstyle{{\e}\over j}}\right)^j
+            \le\left({\textstyle{\e\over k}}\right)^k
+                \left({\textstyle 1+{\e\over k}+\left({\e\over k}\right)^2+\cdots}\right)
+            \le 2\left({\textstyle{\e\over k}}\right)^k,
+\end{equation}
+where the second inequality holds provided we assume that $k\ge 2\e$
+(which it will be, as we shall see in a moment).
+
+So what we have now shown is the following:  
+\begin{equation}\label{eq25}
+   \Pr[A_k(1)] \le 2\left({\textstyle{\e\over k}}\right)^k
+\end{equation}
+(provided $k\ge 2\e$).
+Note that, even though we have made a few approximations, 
+inequality~(\ref{eq25}) is completely valid: all our approximations 
+were ``$\le$'', so we always have an {\it upper\/} bound on 
+$\Pr[X_1\ge k]$.  [You should go back through all the steps and check 
+this.]
+
+Recall from~(\ref{eq20}) that our goal is to make the probability
+in~(\ref{eq25}) less than~$1\over{2n}$.  We can ensure this by choosing~$k$
+so that
+\begin{equation}\label{eq26}
+  \left({\textstyle{\e\over k}}\right)^k \le {\textstyle{1\over{4n}}}.
+\end{equation}
+Now we are in good shape: given any value~$n$ for the number of 
+jobs/processors, we just need to find the smallest value $k=k_0$ that
+satisfies inequality~(\ref{eq26}).  We will then know that, with
+probability at least~$\half$, the maximum load on any processor is 
+at most~$k_0$.  The table below shows the values of~$k_0$ for some
+sample values of~$n$.  It is recommended that you perform
+the experiment and compare these values of~$k_0$ with what
+happens in practice.
+\begin{center}\begin{tabular}{|r|cccccccccccc|}
+\hline
+$n$           &10&20&50&100&500&1000&$10^4$&$10^5$&$10^6$&$10^7$&$10^8$&$10^{15}$\\\hline
+exact $k_0$   &6&6&7&7&8&8&9&10&11&12&13&19\\
+$\ln(4n)$     &3.7&4.4&5.3&6.0&7.6&8.3&10.6&13.9&15.2&17.5&19.8&36\\
+${{2\ln n}\over{\ln\ln n}}$
+              &5.6&5.4&5.8&6.0&6.8&7.2&8.2&9.4&10.6&11.6&12.6&20\\[2pt]\hline
+\end{tabular}\end{center}
+
+Can we come up with a formula for~$k_0$ as a function of~$n$ (as we
+did for the hashing problem)?  Well, let's take logs in~(\ref{eq26}):
+\begin{equation}\label{eq27}
+   k(\ln k -1) \ge \ln(4n).
+\end{equation}
+From this, we might guess that $k=\ln(4n)$ is a good value for~$k_0$.
+Plugging in this value of~$k$ makes the left-hand side of~(\ref{eq27})
+equal to $\ln(4n)(\ln\ln(4n) -1)$, which is certainly bigger than $\ln(4n)$
+provided $\ln\ln(4n)\ge 2$, i.e., $n\ge\quarter\e^{\e^2}\approx 405$.
+So for $n\ge 405$ we can claim that the maximum load is (with probability
+at least~$\half$) no larger than $\ln(4n)$.  The table above plots the
+values of $\ln(4n)$ for comparison with~$k_0$.  As expected, the estimate
+is quite good for small~$n$, but becomes rather pessimistic when $n$ is large.
+
+For large~$n$ we can do better as follows.
+If we plug the value $k={{\ln n}\over{\ln\ln n}}$
+into the left-hand side of~(\ref{eq27}), it becomes
+\begin{equation}\label{eq28}
+   {{\ln n}\over{\ln\ln n}}\left(\ln\ln n - \ln\ln\ln n -1\right)
+            = \ln n\left(1 - {{\ln\ln\ln n + 1}\over{\ln\ln n}}\right).
+\end{equation}
+Now when $n$ is large
+this is {\it just barely\/} smaller than the right-hand side, $\ln(4n)$.
+Why?  Because the second term inside the parentheses goes to zero
+as $n\to\infty$,\footnote{To see this, note that it is of the form 
+${{\ln z + 1}\over{z}}$ where $z=\ln\ln n$, and of course 
+${{\ln z + 1}\over z}\to 0$ as $z\to\infty$.} and because 
+$\ln(4n)=\ln n + \ln 4$, which is very close to $\ln n$ when $n$
+is large (since $\ln 4$ is a fixed small constant).  So we can conclude that,
+for large values of~$n$, the quantity ${{\ln n}\over{\ln\ln n}}$ should
+be a pretty good estimate of~$k_0$.  Actually for this estimate
+to become good $n$ has to be (literally) astronomically large.  
+For more civilized values of~$n$, we get a better estimate by
+taking $k={{2\ln n}\over{\ln\ln n}}$.  The extra factor of~2
+helps to wipe out the lower order terms (i.e., the second term
+in the parenthesis in~(\ref{eq28}) and the $\ln 4$) more quickly.
+The table above also shows the behavior of this estimate for
+various values of~$n$.
+
+
+
+
+
+\end{document}
+
+

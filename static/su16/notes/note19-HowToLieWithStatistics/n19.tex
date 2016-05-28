@@ -1,0 +1,123 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage{../cs70}
+\lecture{19}
+\def\title{Note \the\lecturenumber}
+
+\begin{document}
+\maketitle
+
+\section*{How to Lie with Statistics}
+
+``There are three kinds of lies: lies, damned lies, and 
+statistics,'' as Mark Twain is reputed to have said. 
+In this lecture we will see why 
+statistics are so easy to misuse, and some of the ways 
+we must be careful while evaluating statistical claims. 
+
+First a very simple but important point about statistics.
+Statistics cannot be used to establish causation,
+they can only show correlations. As an example, the 
+governor of a certain state is concerned about the 
+test scores of high school students in the state. 
+One of his aides brings up an interesting statistic:
+there is a very strong link between student test scores
+and the taxes paid by the parents of the student. 
+The parents of high scoring students pay more taxes. 
+The aide's suggestion for increasing student test 
+scores is unusual; sharply increase tax rates. Surely
+student test scores will follow! The fallacy, of 
+course, is that even though there is a correlation 
+between test scores and parents taxes, there is likely 
+no causal connection. A better explanation is that there
+is some hidden variable that explains the correlation. 
+In this case the obvious choice is the income of the 
+parents. This determines the taxes paid. And since 
+the quality of high school that a student attends is 
+to a large extent determined by the parent's income,
+we see a causal link from parent's income to both 
+taxes and test scores. 
+
+Let us now turn to a very important paradox in 
+probability called Simpson's paradox, described by
+Simpson in his 1951 paper. Let us start with an example, 
+which studies the 20 year survival rate of smokers.
+A paper by Appleton, French, and Vanderpump
+(1996, \emph{American Statistician}) surveyed 1314 English women in
+1972--1974 and again after 20 years. Their results are summarized
+in the following table:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+  \hline
+  % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
+  Smoker & Dead & Alive & Total & \% Dead \\ \hline
+  Yes & 139 & 443 & 582 & 24 \\
+  No & 230 & 502 & 732 & 31 \\\hline
+  Total & 369 & 945 & 1314 & 28 \\
+  \hline
+\end{tabular}
+\end{center}
+
+From this data one might conclude that non-smoking kills!
+How does one explain this unusual data? The answer lies
+in the composition of the two groups.
+Smoking was unpopular in the middle of the 20th century
+among women in England, and it increased only in the 1970's;
+but it was mostly young women who started to smoke. 
+Therefore, the sample of smokers in the study was heavily 
+biased towards young women, whose expected lifespan was of
+course much larger than $20$ years. This becomes clearer when 
+we look more closely at the results of the study broken
+down by age group:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+  \hline
+  % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
+  Age group & \multicolumn{2}{|c|}{18--24} & \multicolumn{2}{|c|}{25--34} & \multicolumn{2}{|c|}{35--44} & \multicolumn{2}{|c|}{45--54} & \multicolumn{2}{|c|}{55--54}\\ \hline
+  Smoker & Y & N & Y & N & Y & N & Y & N & Y & N \\ \hline \hline
+  Dead & 2 & 1 & 3 & 5 & 11 & 7 & 27 & 12 & 51 & 40 \\
+  Alive & 53 & 61 & 121 & 152 & 95 & 114 & 103 & 66 & 64 & 81 \\\hline
+  Ratio & \multicolumn{2}{|c|}{2.3}& \multicolumn{2}{|c|}{0.75} & \multicolumn{2}{|c|}{2.4}& \multicolumn{2}{|c|}{1.44} & \multicolumn{2}{|c|}{1.61}\\
+  \hline
+\end{tabular}
+\end{center}
+
+The interesting thing to notice is that the fatality rates are 
+significantly higher for smokers in almost every age group!
+The data could be made even more dramatic by increasing the 
+smoking fatalities in the couple of exceptional groups by 
+one or two, thereby achieving the following strange result:
+in each separate category, the percentage of fatalities among
+smokers is higher, and yet the overall percentage of fatalities
+among smokers is lower.  
+This is an example of a phenomenon known as  \textbf{Simpson's paradox}.
+(For a nice treatment of this topic, and a different example, 
+you may wish to consult the Wikipedia entry.)
+
+A real word example is provided very close to home by the UC Berkeley 
+gender bias case. In 1973, UC Berkeley was sued for bias against women 
+applying to grad school.  Data showed that 44\% of men were admitted 
+and only 30\% of women. Since admission is decided by departments,
+the University decided to investigate which departments were ``discriminating''
+against women.  It turned out that none of them were! Here is some
+admissions data for the four largest departments:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+  \hline
+  % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
+  Department & \#male applicants & \#female applicants & \%male admit & \%female admit \\\hline
+  A & 825 & 108 & 62 & 82 \\
+  B & 560 & 25  & 63 & 68 \\
+  C & 325 & 593 & 37 & 34 \\
+  D & 417 & 375 & 33 & 35 \\
+  \hline
+\end{tabular}
+\end{center}
+
+The explanation is that women applied in larger numbers to departments 
+that had lower admission rates.
+
+\end{document}
+
+
