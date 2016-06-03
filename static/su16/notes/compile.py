@@ -8,6 +8,8 @@ def do_one(fname_base,directory):
     os.system("pdflatex " + fname_base + ".tex")
     print("cp  " + fname_base + ".pdf ../compiled/")
     os.system("cp  " + fname_base + ".pdf ../compiled/")
+    os.system("rm " + fname_base + "*.log")
+    os.system("rm " + fname_base + "*.aux")
     os.chdir("..")
 
 import glob
@@ -22,7 +24,7 @@ def find_dir(name):
 
 if (len(sys.argv) == 1):
     os.system("mkdir compiled")
-    for x in xrange(0,23):
+    for x in xrange(0,24):
         fname_base = "n" + str(x)
         lookup_name = "./note" + str(x)
         directory = find_dir(lookup_name)
