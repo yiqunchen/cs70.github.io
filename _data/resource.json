@@ -25,7 +25,40 @@
             "homework": {
                 "skipped": false,
                 "problem": true,
-                "solution": true,
+                "solution": false,
+                "due_date": "2016/06/23"
+            },
+
+            "discussions": [
+                {
+                    "part": "a",
+                    "skipped": true,
+                    "prob": true,
+                    "sol": true
+                }, {
+                    "part": "b",
+                    "skipped": true,
+                    "prob": true,
+                    "sol": true
+                }, {
+                    "part": "c",
+                    "skipped": true,
+                    "prob": true,
+                    "sol": true
+                }, {
+                    "part": "d",
+                    "skipped": true,
+                    "prob": true,
+                    "sol": true
+                }
+            ]
+        }, {
+            "week": 1,
+            "display": true,
+            "homework": {
+                "skipped": false,
+                "problem": true,
+                "solution": false,
                 "due_date": "2016/06/27"
             },
 

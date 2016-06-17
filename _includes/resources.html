@@ -14,7 +14,7 @@
               },
               calc_remain: function(due) {
                 if (due != "") {
-                  var time = moment(due+"1200", "YYYY/MM/DDhhmm");
+                  var time = moment(due+"1359", "YYYY/MM/DDhhmm");
                   return time.format("MMMM Do, h:mm a") + "(" + time.fromNow() + ")";
                 }
                 else

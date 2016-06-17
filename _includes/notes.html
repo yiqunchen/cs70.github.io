@@ -1,11 +1,11 @@
 <div class="notes">
-    <h3>Notes</h3>
+    <h3>Official Notes</h3>
 
-    There is no textbook for this class. Instead, there is a set of fairly comprehensive lecture notes. The notes are undergoing revisions this semester, so notes posted well in advance of lecture may change closer to the date. So make sure you revisit the notes after lecture. Note 0 is background material that you should make sure you understand before the first lecture. Each note may be covered in one or more lectures.  We are still
-    working on some new notes for late in the semester; they will appear later.
+    There is no textbook for this class. Instead, there is a set of fairly comprehensive lecture notes. Notes posted well in advance of lecture may change closer to the date. So make sure you revisit the notes after lecture. Note 0 is background material that you should make sure you understand before the first lecture. Each note may be covered in one or more lectures.
 
     {% capture static_url %}{{site.baseurl}}{{'/static'}}{{site.term_url}}{% endcapture %}
     {% capture notes_url %}{{static_url}}{{'/notes/compiled/'}}{% endcapture %}
+    {% capture extra_notes_url %}{{static_url}}{{'/extra_note/'}}{% endcapture %}
 
     <ul>
     <li><a href="{{notes_url}}n0.pdf">Note 0: Review of Math Notation</a></li>
@@ -32,5 +32,14 @@
     <li><a href="{{notes_url}}n21.pdf">Note 21: Bijections and RSA</a></li>
     <li><a href="{{notes_url}}n22.pdf">Note 22: Polynomials and Secret Sharing</a></li>
     <li><a href="{{notes_url}}n23.pdf">Note 23: Error Correcting Codes</a></li>
+    </ul>
+
+
+    <h3>Extra Notes</h3>
+    And here are some additional notes compiled by previous TAs:
+
+    <ul>
+        <li> <a href="{{extra_notes_url}}sinho_cs_70_notes.pdf"> Sinho's notes on CS70 </a> </li>
+        <li> <a href="http://alvinwan.com/abcDMPT/"> Alvin's notes on CS70 </a> </li>
     </ul>
 </div>
