@@ -32,21 +32,21 @@
             "profile_img": "default.jpg",
             "email": "sayangul@berkeley.edu",
             "section": "N/A",
-            "office_hours": "TBD"
+            "office_hours": "M Tu 12-1pm @ 651 Soda"
         }, {
             "name": "Nathan Mandi",
             "admin_ta": true,
             "profile_img": "nathan.png",
             "email": "nvmandi7@berkeley.edu",
             "section": "N/A",
-            "office_hours": "N/A"
+            "office_hours": "Tu 4-5pm @ 651 Soda"
         }, {
             "name": "Alex Pearson",
             "admin_ta": false,
             "profile_img": "alex_pearson.jpg",
             "email": "apearson1995@berkeley.edu",
             "section": "105",
-            "office_hours": "TBD"
+            "office_hours": "Tu W 6-7pm @ 411 Soda"
         }, {
             "name": "Yiqun Chen",
             "admin_ta": false,
@@ -54,7 +54,7 @@
             "email": "yiqunchen@berkeley.edu",
             "website": "http://yiqunchen.github.io/",
             "section": "108",
-            "office_hours": "TBD"
+            "office_hours": "Th 12-1pm F 10-11am @ 611 Soda"
         }, {
             "name": "Wan Fung Chui",
             "admin_ta": false,
@@ -62,7 +62,7 @@
             "email": "wanfungchui@gmail.com",
             "website": "http://wanfungchui.github.io",
             "section": "109",
-            "office_hours": "TBD"
+            "office_hours": "Th 11-12 @ 611 Soda"
         }, {
             "name": "Forest Yang",
             "admin_ta": false,
@@ -76,35 +76,35 @@
             "profile_img": "vicenc.jpg",
             "email": "vrubies@berkeley.edu",
             "section": "101",
-            "office_hours": "TBD"
+            "office_hours": "Th 12-2pm @ 337 Cory "
         }, {
             "name": "Hongling Lu",
             "admin_ta": false,
             "profile_img": "hongling.JPG",
             "email": "hongling_lu@berkeley.edu",
             "section": "102",
-            "office_hours": "TBD"
+            "office_hours": "Th 1-2pm @ 611 Soda"
         }, {
             "name": "Albert Pham",
             "admin_ta": false,
             "profile_img": "linh.jpg",
             "email": "linh.pham@berkeley.edu",
             "section": "107",
-            "office_hours": "TBD"
+            "office_hours": "W 9-10am @ 611 Soda"
         }, {
             "name": "Peijie Li",
             "admin_ta": false,
             "profile_img": "PeijieLi.JPG",
             "email": "li_paige@berkeley.edu",
             "section": "103",
-            "office_hours": "TBD"
+            "office_hours": "M 11-12 @ 611 Soda"
         }, {
             "name": "Yijin Wang",
             "admin_ta": false,
             "profile_img": "Yijin",
             "email": "yijinwang@berkeley.edu",
             "section": "106",
-            "office_hours": "TBD"
+            "office_hours": "F 11-12 @ 411 Soda"
         }
     ]
 }
