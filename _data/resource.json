@@ -65,24 +65,24 @@
             "discussions": [
                 {
                     "part": "a",
-                    "skipped": true,
+                    "skipped": false,
                     "prob": true,
-                    "sol": true
+                    "sol": false
                 }, {
                     "part": "b",
-                    "skipped": true,
+                    "skipped": false,
                     "prob": true,
-                    "sol": true
+                    "sol": false
                 }, {
                     "part": "c",
-                    "skipped": true,
+                    "skipped": false,
                     "prob": true,
-                    "sol": true
+                    "sol": false
                 }, {
                     "part": "d",
-                    "skipped": true,
+                    "skipped": false,
                     "prob": true,
-                    "sol": true
+                    "sol": false
                 }
             ]
         }

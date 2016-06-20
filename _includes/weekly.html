@@ -3,17 +3,17 @@
   Slides: <a href="https://www.dropbox.com/sh/0ns6ndk0hypvfbf/AADw1AW4xoBZpjjzZ6H2d2doa?dl=0" target="_blank">Dropbox link</a>
 </p>
 
-<table class="resource_table table table-striped table-hover" border="1" cellpadding="5">
+<table class="table table-striped table-hover" border="1" cellpadding="5">
   <thead>
     <tr>
-      <th align="center">Week number</th>
-      <th align="center">Dis A</th>
-      <th align="center">Dis B</th>
-      <th align="center">Dis C</th>
-      <th align="center">Dis D</th>
-      <th align="center">HW problem</th>
-      <th align="center">HW Due Data</th>
-      <th align="center">HW Sol</th>
+      <th class="text-center">Week number</th>
+      <th class="text-center">Dis A</th>
+      <th class="text-center">Dis B</th>
+      <th class="text-center">Dis C</th>
+      <th class="text-center">Dis D</th>
+      <th class="text-center">HW problem</th>
+      <th class="text-center">HW Due Data</th>
+      <th class="text-center">HW Sol</th>
     </tr>
   </thead>
 
@@ -31,10 +31,10 @@
               N/A
             {% else %}
               {% if dis.prob %}
-                <a href="{{dis_base_url}}q{{week.week}}{{dis.part}}.pdf">{{ week.week }}{{dis.part | upcase}}</a>;
+                <a href="{{dis_base_url}}{{week.week}}/week{{week.week}}{{dis.part}}.pdf">{{ week.week }}{{dis.part | upcase}}</a>;
               {% endif %}
               {% if dis.sol %}
-                <a href="{{dis_base_url}}s{{week.week}}{{dis.part}}.pdf">Sol</a>;
+                <a href="{{dis_base_url}}{{week.week}}/week{{week.week}}{{dis.part}}-sol.pdf">Sol</a>;
               {% endif %}
             {% endif %}
           </td>
