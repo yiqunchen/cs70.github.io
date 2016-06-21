@@ -25,9 +25,9 @@
             {% else %}
                 <a href="{{slides_base_url}}{{lec.number}}/lec-{{lec.number}}.pdf" target="_blank">Lec{{lec.number}}</a>;
                 <a href="{{slides_base_url}}{{lec.number}}/lec-{{lec.number}}-handout.pdf" target="_blank"> Handout</a>;
-                <a href="{{slides_base_url}}{{lec.number}}/lec-{{lec.number}}.6up.pdf" target="_blank"> 6up</a>
+                <a href="{{slides_base_url}}{{lec.number}}/lec-{{lec.number}}.6up.pdf" target="_blank"> 6up</a>;
                 {% if lec.link %}
-                    <a href="{{lec.link}}">Recording</a>
+                    <a href="{{lec.link}}"> Recording</a>
                 {% endif %}
             {% endif %}
           </td>
