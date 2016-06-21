@@ -67,7 +67,7 @@
                     "part": "a",
                     "skipped": false,
                     "prob": true,
-                    "sol": false
+                    "sol": true
                 }, {
                     "part": "b",
                     "skipped": false,
@@ -93,7 +93,7 @@
                     "link": null
                 }, {
                     "number": "2",
-                    "skipped": true,
+                    "skipped": false,
                     "link": null
                 }, {
                     "number": "3",
