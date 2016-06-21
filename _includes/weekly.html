@@ -1,7 +1,4 @@
 <h3>Weekly Resources</h3>
-<p style="font-size:17px;">
-  Slides: <a href="https://www.dropbox.com/sh/z8p2h7b5wdi7qbz/AABNJvuVaObtv-YyYAhdAF4Fa?dl=0" target="_blank">Dropbox link</a>
-</p>
 
 <table class="table table-striped table-hover" border="1" cellpadding="5">
   <thead>
@@ -31,10 +28,10 @@
               N/A
             {% else %}
               {% if dis.prob %}
-                <a href="{{dis_base_url}}{{week.week}}/week{{week.week}}{{dis.part}}.pdf">{{ week.week }}{{dis.part | upcase}}</a>;
+                <a href="{{dis_base_url}}{{week.week}}/week{{week.week}}{{dis.part}}.pdf" target="_blank">{{ week.week }}{{dis.part | upcase}}</a>;
               {% endif %}
               {% if dis.sol %}
-                <a href="{{dis_base_url}}{{week.week}}/week{{week.week}}{{dis.part}}-sol.pdf">Sol</a>;
+                <a href="{{dis_base_url}}{{week.week}}/week{{week.week}}{{dis.part}}-sol.pdf" target="_blank">Sol</a>;
               {% endif %}
             {% endif %}
           </td>
@@ -47,7 +44,7 @@
         {% else %}
           <td align="center">
             {% if week.homework.problem %}
-              <a href="{{ hw_base_url }}hw{{week.week}}.pdf">Homework {{ week.week }}</a>
+              <a href="{{ hw_base_url }}hw{{week.week}}.pdf" target="_blank">Homework {{ week.week }}</a>
             {% endif %}
           </td>
           <td align="center">
@@ -57,7 +54,7 @@
           </td>
           <td align="center">
             {% if week.homework.solution %}
-              <a href="{{ hw_base_url }}hw{{week.week}}-sol.pdf">Solution</a>
+              <a href="{{ hw_base_url }}hw{{week.week}}-sol.pdf" target="_blank">Solution</a>
             {% endif %}
           </td>
         {% endif %}

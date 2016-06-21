@@ -1,0 +1,38 @@
+<h3>Lectures</h3>
+
+<table class="table table-striped table-hover" border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th class="text-center">Week number</th>
+      <th class="text-center">Lecture 1</th>
+      <th class="text-center">Lecture 2</th>
+      <th class="text-center">Lecture 3</th>
+      <th class="text-center">Lecture 4</th>
+    </tr>
+  </thead>
+
+  {% for week in site.data.resource.weekly %}
+    {% if week.week > 0 %}
+      <tr>
+        <td align="center">Week {{week.week}}</td>
+        {% capture static_url %}{{site.baseurl}}{{'/static'}}{{site.term_url}}{% endcapture %}
+        {% capture slides_base_url %}{{static_url}}{{'/slides/'}}{% endcapture %}
+
+        {% for lec in week.lectures %}
+          <td align="center">
+            {% if lec.skipped %}
+              N/A
+            {% else %}
+                <a href="{{slides_base_url}}{{lec.number}}/lec-{{lec.number}}.pdf" target="_blank">Lec{{lec.number}}</a>;
+                <a href="{{slides_base_url}}{{lec.number}}/lec-{{lec.number}}-handout.pdf" target="_blank"> Handout</a>;
+                <a href="{{slides_base_url}}{{lec.number}}/lec-{{lec.number}}.6up.pdf" target="_blank"> 6up</a>
+                {% if lec.link %}
+                    <a href="{{lec.link}}">Recording</a>
+                {% endif %}
+            {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+    {% endif %}
+  {% endfor %}
+</table>

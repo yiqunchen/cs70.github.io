@@ -84,6 +84,26 @@
                     "prob": true,
                     "sol": false
                 }
+            ],
+
+            "lectures": [
+                {
+                    "number": "1",
+                    "skipped": false,
+                    "link": null
+                }, {
+                    "number": "2",
+                    "skipped": true,
+                    "link": null
+                }, {
+                    "number": "3",
+                    "skipped": true,
+                    "link": null
+                }, {
+                    "number": "4",
+                    "skipped": true,
+                    "link": null
+                }
             ]
         }
     ],
